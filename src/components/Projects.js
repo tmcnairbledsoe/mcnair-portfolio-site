@@ -39,6 +39,8 @@ const Projects = () => {
         <br></br>
         - Blog
         <br></br>
+        - Interests layout
+        <br></br>
         - Signin using AD (personal)
         <br></br>
         - Calendar (personal)
