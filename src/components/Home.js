@@ -6,21 +6,6 @@ const Home = () => {
     <div className="container">
       <h2>McNair Bledsoe's Portfolio</h2>
       <p>
-        Thanks for visiting.
-      </p>
-      <p>
-        This is a personal website built for a few objectives. To act as an easy to reach cv along with pages to show past and current works and interests. Also, for the longest time I have
-        wanted a hosted space for my wife and friends to use programs I wrote for our individual needs and organization. I also plan to get a personal blog and ranting space here soon.
-      </p>
-      <p>
-        Resume, Projects, and Personal things are listed on the left sidebar.
-      </p>
-      <p>
-        The current goal is to work on some extra projects for my wife and her career. Revit can have addons custom made for users. I plan to make a few to make her life easier and posting
-        results as I go. BIM has been extremely interesting. I can't help but try to learn more. The industry seems to have plenty of room to grow.
-      </p>
-      <br></br>
-      <p>
         &ensp; About:
       </p>
       <p>
@@ -41,6 +26,21 @@ const Home = () => {
       <p>
         Overall, my career reflects a strong ability to adapt to new challenges, work collaboratively across departments, and continuously innovate to 
         meet business needs with technical solutions.
+      </p>
+      <br></br>
+      <p>
+      &ensp; Thanks for visiting.
+      </p>
+      <p>
+        This is a personal website built for a few objectives. To act as an easy to reach cv along with pages to show past and current works and interests. Also, for the longest time I have
+        wanted a hosted space for my wife and friends to use programs I wrote for our individual needs and organization. I also plan to get a personal blog and ranting space here soon.
+      </p>
+      <p>
+        Resume, Projects, and Personal things are listed on the left sidebar.
+      </p>
+      <p>
+        The current goal is to work on some extra projects for my wife and her career. Revit can have addons custom made for users. I plan to make a few to make her life easier and posting
+        results as I go. BIM has been extremely interesting. I can't help but try to learn more. The industry seems to have plenty of room to grow.
       </p>
     </div>
   );

@@ -20,6 +20,11 @@ const Sidebar = ({ sidebarVisible, handleMouseEnter, handleMouseLeave }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: sidebarVisible ? "flex-start" : "center",
+        top: 0,
+        left: 0,
+        position: "fixed",
+        height: "100vh"
+
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

@@ -13,6 +13,7 @@ function App() {
   const handleSidebarToggle = (width) => {
     setSidebarWidth(width);
   };
+  
   return (
     <Router>
       <div style={{ position: "relative", height: "100vh" }}>
@@ -21,8 +22,8 @@ function App() {
           style={{
             position: "absolute",
             top: 0,
-            left: sidebarWidth,
-            width: `calc(100% - ${sidebarWidth})`,
+            left: window.innerWidth >= 769 ? sidebarWidth : 0,
+            width: window.innerWidth >= 769 ? `calc(100% - ${sidebarWidth})` : "100%",
             zIndex: 2, // Ensures this content is above the pixel drop animation
             color: "#bfbfbf", // White text
             padding: "20px",
