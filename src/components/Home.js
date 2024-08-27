@@ -6,9 +6,6 @@ const Home = () => {
     <div className="container">
       <h2>McNair Bledsoe's Portfolio</h2>
       <p>
-        &ensp; About:
-      </p>
-      <p>
         As a seasoned software developer, I have a strong background in developing, maintaining, and innovating across various technologies and platforms. 
         My expertise spans C#, .NET, SQL, Azure, Python, and modern JavaScript frameworks like React and Angular. I've gained significant experience in both 
         front-end and back-end development, focusing on creating and enhancing web applications, automating workflows, and integrating cloud-based solutions.
@@ -29,7 +26,10 @@ const Home = () => {
       </p>
       <br></br>
       <p>
-      &ensp; Thanks for visiting.
+        &ensp; About:
+      </p>
+      <p>
+        Thanks for visiting.
       </p>
       <p>
         This is a personal website built for a few objectives. To act as an easy to reach cv along with pages to show past and current works and interests. Also, for the longest time I have
