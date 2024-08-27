@@ -8,95 +8,108 @@ const Resume = () => {
       <p style={{ textAlign: 'center' }}>Greenville, SC | tmcnairbledsoe@gmail.com | 864-804-9796</p>
       
       <section>
-        <h2 style={{ color: '#2873bd' }}>Summary</h2>
+        <h2 style={{ color: '#2873bd' }}>Professional Summary</h2>
         <p>
-          Seasoned software developer with expertise in C#, .NET, SQL, Azure, Python, React, APIs, and more. Experienced in developing, maintaining, 
-          and designing applications across various industries. Proven ability to innovate, automate workflows, and enhance system efficiency.
+          Seasoned software developer with proven skills in C#, .Net Framework, .Net Core, SQL, Azure, NoSQL, Python, ReactJS,
+          Angular, Node, R, WPF, MVC, HTML, CSS, and JavaScript. Experienced in maintaining existing systems and
+          designing new applications across various technologies and programming philosophies. Adept at collaborating
+          with team leaders to innovate and automate workflows, reducing human error and improving efficiency. 
         </p>
-      </section>
-
-      <section>
-        <h2 style={{ color: '#2873bd' }}>Skills</h2>
-        <ul>
-          <li><strong>Programming Languages:</strong> C#, SQL, ASP.NET, SQL, NOSQL, Python 3, JSON, JavaScript, R, VB, HTML, CSS</li>
-          <li><strong>Applications:</strong> Visual Studio, VS Code, Azure, SSMS, Power BI, SAS EG, Tableau, R Studio, Access, Excel</li>
-          <li><strong>Tools, Platforms, & Libraries:</strong> .NET Core 8, Azure DevOps, ReactJS, Knockout, Bootstrap, Angular, Jupyter Notebook, 
-          MVC, GitHub, Git, Docker, Kubernetes, WPF, Forms</li>
-        </ul>
+        <p>
+          Expertise in creating and deploying applications on Azure, developing solutions for fixed income trading teams,
+          and creating or enhancing large-scale web applications. Extensive experience with enterprise-level systems, cloud
+          platforms, and modern development practices.
+        </p>
       </section>
 
       <section>
         <h2 style={{ color: '#2873bd' }}>Professional Experience</h2>
 
-        <h3>Software Developer - Metromont, Greenville, SC (08/2023 - 08/2024)</h3>
+        <h3>Software Developer - Metromont, Greenville, SC (Aug 2023 - Aug 2024)</h3>
         <ul>
-          <li>Developed custom applications using Autodesk Platform services and Azure tools.</li>
-          <li>Automated project lifecycle tasks with Azure Functions and Logic Apps, reducing manual work.</li>
-          <li>Maintained Revit Addins using C# and implemented SSO with Active Directory and Entra ID.</li>
+          <li>Created .NET Core 8 C# applications using Autodesk Platform Services.</li>
+          <li>Developed Python scripts for automation tasks and maintained Revit Addins.</li>
+          <li>Utilized Azure Portal features including SQL Databases, Function Apps, Logic Apps, Storage Accounts, Key Vault, and Cosmos DB.</li>
+          <li>Designed and maintained Azure Functions for automating project lifecycle tasks.</li>
+          <li>Implemented SSO using Active Directory and Entra ID.</li>
+          <li>Published and maintained self-refreshing Power BI reports tracking enterprise application usage.</li>
         </ul>
 
-        <h3>Senior Software Developer - Grace Hill, Greenville, SC (04/2021 - 08/2023)</h3>
+        <h3>Senior Software Developer - Grace Hill, Greenville, SC (Apr 2021 - Aug 2023)</h3>
         <ul>
-          <li>Led a small team to enhance a web portal for real estate management, integrating complex user and tenant management features.</li>
-          <li>Developed new React micro front-end components and a survey comparison tool connecting to Qualtrics.</li>
-          <li>Maintained and improved internal tools, ensuring high reliability and performance. Optimized dynamic stored procedures.</li>
+          <li>Maintained web portal for real estate management clients and internal tools.</li>
+          <li>Led a team to develop new pages and features for a complex user and tenant system.</li>
+          <li>Developed React micro front-end components and a new React application for survey comparison using Qualtrics data.</li>
+          <li>Maintained and enhanced numerous .NET Core applications.</li>
         </ul>
 
-        <h3>Web Application Developer - RealPage Contact Center, Greenville, SC (05/2020 - 03/2021)</h3>
+        <h3>Web Application Developer - RealPage Contact Center, Greenville, SC (May 2020 - Mar 2021)</h3>
         <ul>
-          <li>Supported call center operations with web applications, including call automation and reporting tools.</li>
-          <li>Refactored legacy ASP.NET code into modern React and Node applications.</li>
-          <li>Developed Core RESTful APIs to decouple direct SQL calls in legacy applications.</li>
+          <li>Developed and supported applications for Call Center operations including automation and reporting tools.</li>
+          <li>Created core RESTful APIs to decouple SQL calls from legacy systems.</li>
+          <li>Refactored legacy ASP.NET code into modern ReactJS applications.</li>
+          <li>Designed a new external client dashboard using ReactJS.</li>
         </ul>
 
-        <h3>Software Developer - Cass Information Systems, Greenville, SC (12/2019 - 03/2020)</h3>
+        <h3>Web Application Developer - Cass Information Systems, Greenville, SC (Dec 2019 - Mar 2020)</h3>
         <ul>
-          <li>Maintained and developed enterprise and customer-facing sites using ASP.NET and Angular 4.</li>
-          <li>Improved customer experience by implementing SSO and enhancing site functionalities.</li>
+          <li>Developed and maintained ASP.NET applications for enterprise and customer-facing sites.</li>
+          <li>Managed requirements using DevOps ticketing and Agile methodologies.</li>
+          <li>Facilitated SSO connections for external customers and created documentation for new features.</li>
         </ul>
 
-        <h3>Software Developer - Barings, Charlotte, NC (12/2018 - 05/2019)</h3>
+        <h3>Software Developer - Barings, Charlotte, NC (Dec 2018 - May 2019)</h3>
         <ul>
-          <li>Collaborated with a fixed income trading team to develop applications using SSIS, SSRS, and C#.</li>
-          <li>Provided on-call support for large SQL processes and developed data access pages.</li>
+          <li>Collaborated with fixed income trading teams using SSIS, SSRS, and SQL for securities trading applications.</li>
+          <li>Supported large SQL processes and developed data access pages using third-party software.</li>
         </ul>
 
-        <h3>Web Application Developer - Bank of America, Charlotte, NC (07/2017 - 12/2018)</h3>
+        <h3>Web Application Developer - Bank of America, Charlotte, NC (Jul 2017 - Dec 2018)</h3>
         <ul>
-          <li>Maintained and enhanced web applications for the legal department using C#, ASP.NET, and SQL.</li>
-          <li>Designed and built new websites and APIs to modernize legacy systems.</li>
+          <li>Added functionality and maintained web applications for the legal department using C# .NET, SQL, and ASP.NET.</li>
+          <li>Constructed websites and frameworks to facilitate application transitions to new designs.</li>
         </ul>
 
-        <h3>Computer Programmer - C.A. Short, Shelby, NC (01/2016 - 06/2017)</h3>
+        <h3>Computer Programmer - C.A Short, Shelby, NC (Jan 2016 - Jun 2017)</h3>
         <ul>
-          <li>Maintained enterprise code and customer-facing websites using VB.NET, C#, and SQL.</li>
-          <li>Improved process efficiency through multithreading and query optimization.</li>
+          <li>Maintained enterprise applications and websites using VB.Net, C#, WinForms, and SQL.</li>
+          <li>Optimized enterprise code with multithreading and query improvements.</li>
         </ul>
 
-        <h3>Programmer - VectorVest Inc, Cornelius, NC (10/2013 - 01/2015)</h3>
+        <h3>Programmer - VectorVest Inc, Cornelius, NC (Oct 2013 - Jan 2015)</h3>
         <ul>
-          <li>Developed services and clients for real-time streaming stock market data using C# and SQL.</li>
-          <li>Created multi-threaded solutions to optimize client performance.</li>
+          <li>Developed client and employee software for real-time stock market data using C#, VB.NET, and SQL Server.</li>
+          <li>Built multi-threaded solutions for performance issues in client applications.</li>
         </ul>
 
-        <h3>Software Engineer - Wells Fargo Securities, Charlotte, NC (01/2013 - 10/2013)</h3>
+        <h3>Software Engineer - Wells Fargo Securities, Charlotte, NC (Jan 2013 - Oct 2013)</h3>
         <ul>
-          <li>Supported and developed a multi-threaded trading application for fixed income trading.</li>
-          <li>Collaborated with QA and trading floor users to define and prioritize project requirements.</li>
+          <li>Worked on a multi-threaded trading application using C#, WinForms, and SQL.</li>
+          <li>Collaborated with cross-functional teams to clarify project requirements and implemented logging systems for monitoring applications.</li>
         </ul>
 
-        <h3>Build and Release Engineer - Wells Fargo, Charlotte, NC (06/2011 - 06/2012)</h3>
+        <h3>Build and Release Engineer - Wells Fargo, Charlotte, NC (Jun 2011 - Jun 2012)</h3>
         <ul>
-          <li>Coordinated with application teams to optimize build and release processes using automated tools.</li>
-          <li>Supported over 800 applications, providing analysis and troubleshooting for build issues.</li>
+          <li>Coordinated build and release processes for over 800 applications using automated tools.</li>
+          <li>Provided analysis for broken builds across various programming languages.</li>
         </ul>
       </section>
 
       <section>
         <h2 style={{ color: '#2873bd' }}>Education</h2>
         <ul>
-          <li><strong>Professional Science Masters:</strong> Data Science and Business Analytics, University Of North Carolina, Charlotte, NC (December 2018)</li>
-          <li><strong>Bachelor of Science:</strong> Computer Engineering, University Of South Carolina, SC (May 2011)</li>
+          <li><strong>Professional Science Masters:</strong> Data Science and Business Analytics, University Of North Carolina, Charlotte, NC (2018)</li>
+          <li><strong>Bachelor of Science:</strong> Computer Engineering, University Of South Carolina, Columbia, SC (2011)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 style={{ color: '#2873bd' }}>Skills</h2>
+        <ul>
+          <li><strong>Programming:</strong> C#, SQL, ASP.NET, SQL, NOSQL, Python 3, JSON, JavaScript, R, VB, HTML, CSS</li>
+          <li><strong>Applications:</strong> Visual Studio, VS Code, Azure, SSMS, Power BI, SAS EG, Tableau, R Studio, Access, Excel</li>
+          <li><strong>Tools & Platforms:</strong> .NET Core, Azure DevOps, ReactJS, Knockout, Bootstrap, Angular, Jupyter
+          Notebook, MVC, GitHub, Git, Docker, Kubernetes, WPF, Forms </li>
         </ul>
       </section>
     </div>
