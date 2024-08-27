@@ -63,47 +63,81 @@ const PixelDrop = ({ onSidebarToggle }) => {
           overflow: "hidden",
           whiteSpace: "nowrap",
           zIndex: 3,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <h1 style={{ fontWeight: "bold", fontSize: "24px", display: sidebarVisible ? "block" : "none" }}>Links</h1>
-        <nav>
-          <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-            <li>
-              <Link
-                to="/"
-                style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
-              >
-                {sidebarVisible ? "Home" : "H"}
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/resume"
-                style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
-              >
-                {sidebarVisible ? "Resume" : "R"}
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/projects"
-                style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
-              >
-                {sidebarVisible ? "Projects" : "P"}
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/interests"
-                style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
-              >
-                {sidebarVisible ? "Interests" : "I"}
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <div>
+          <h1 style={{ fontWeight: "bold", fontSize: "24px", display: sidebarVisible ? "block" : "none" }}>Links</h1>
+          <nav>
+            <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
+              <li>
+                <Link
+                  to="/"
+                  style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
+                >
+                  {sidebarVisible ? "Home" : "H"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/resume"
+                  style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
+                >
+                  {sidebarVisible ? "Resume" : "R"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/projects"
+                  style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
+                >
+                  {sidebarVisible ? "Projects" : "P"}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/interests"
+                  style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
+                >
+                  {sidebarVisible ? "Interests" : "I"}
+                </Link>
+              </li>
+              <li>
+                {/* Social Media Icons */}
+                <div style={{ textAlign: "center", marginTop: "20px" }}>
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tmcnairbledsoe@gmail.com"
+                    style={{ color: "white", textDecoration: "none", marginRight: "10px" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fas fa-envelope" style={{ fontSize: "20px" }}></i>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/thomas-bledsoe-a1272928a/"
+                    style={{ color: "white", textDecoration: "none", marginRight: "10px" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fab fa-linkedin" style={{ fontSize: "20px" }}></i>
+                  </a>
+                  <a
+                    href="https://github.com/tmcnairbledsoe"
+                    style={{ color: "white", textDecoration: "none" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fab fa-github" style={{ fontSize: "20px" }}></i>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
 
       {/* Pixel drop background */}
