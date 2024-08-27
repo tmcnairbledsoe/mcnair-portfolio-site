@@ -24,6 +24,29 @@ const Projects = () => {
         then able to connect that repo to the azure static web app for CI/CD. Whenever I make a commit to master, the changes are
         automatically uploaded. Gone are the days of FTP and refreshing the site.
       </p>
+      <p style={{ textAlign: "left" }}>
+        ToDo:
+        <br></br>
+        - Secrets in GitHub or Azure for scripts and websites
+        <br></br>
+        - Wedding Site
+        <br></br>
+        - African conflicts R project
+        <br></br>
+        - Stock trader
+        <br></br>
+        - Stock backtrader
+        <br></br>
+        - Blog
+        <br></br>
+        - Signin using AD (personal)
+        <br></br>
+        - Calendar (personal)
+        <br></br>
+        - Journal (personal)
+        <br></br>
+        - Collaboration site (personal)
+      </p>
     </div>
   );
 };
