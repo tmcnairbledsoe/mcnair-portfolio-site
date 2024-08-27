@@ -23,7 +23,7 @@ function App() {
             position: "absolute",
             top: 0,
             left: window.innerWidth >= 769 ? sidebarWidth : 20,
-            width: window.innerWidth >= 769 ? `calc(100% - ${sidebarWidth})` : "100%",
+            width: window.innerWidth >= 769 ? `calc(100% - ${sidebarWidth})` : `calc(100% - 20)`,
             zIndex: 2, // Ensures this content is above the pixel drop animation
             color: "#bfbfbf", // White text
             padding: "20px",
