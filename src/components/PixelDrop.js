@@ -4,13 +4,14 @@ import Sidebar from "./Sidebar";
 const PixelDrop = ({ onSidebarToggle }) => {
   const [pixels, setPixels] = useState([]);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [scrollHeight, setScrollHeight] = useState(window.innerHeight);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const newPixel = {
         id: Date.now(),
         left: Math.random() * window.innerWidth,
-        top: window.innerHeight,
+        top: scrollHeight,
         speed: Math.random() * 2 + 1,
       };
 
@@ -22,7 +23,7 @@ const PixelDrop = ({ onSidebarToggle }) => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [scrollHeight]);
 
   useEffect(() => {
     const animationInterval = setInterval(() => {
@@ -38,6 +39,15 @@ const PixelDrop = ({ onSidebarToggle }) => {
     return () => clearInterval(animationInterval);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollHeight(window.innerHeight + window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleMouseEnter = () => {
     setSidebarVisible(true);
     onSidebarToggle("150px");
@@ -49,7 +59,7 @@ const PixelDrop = ({ onSidebarToggle }) => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", position: "relative" }}>
       <Sidebar
         sidebarVisible={sidebarVisible}
         handleMouseEnter={handleMouseEnter}
@@ -62,10 +72,9 @@ const PixelDrop = ({ onSidebarToggle }) => {
           backgroundColor: "black",
           width: "100%",
           height: "100vh",
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
-          overflow: "hidden",
           zIndex: 1, // Set z-index lower than content area
         }}
       >

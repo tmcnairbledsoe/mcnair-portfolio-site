@@ -35,7 +35,7 @@ const Sidebar = ({ sidebarVisible, handleMouseEnter, handleMouseLeave }) => {
         {/* Sidebar Content */}
         {sidebarVisible && (
           <>
-            <h1 style={{ fontWeight: "bold", fontSize: "24px", marginBottom: "20px" }}>Links</h1>
+            <h1 style={{ fontWeight: "bold", fontSize: "24px", marginBottom: "20px", color: "white", textAlign: "left" }}>Links</h1>
             <nav>
               <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                 <li>

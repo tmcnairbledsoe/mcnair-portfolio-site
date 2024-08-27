@@ -1,14 +1,15 @@
 import React from "react";
+import './Interests.css';
 
 const Interests = () => {
   return (
-    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", marginRight: "50px" }}>
-      <h2 style={{ textAlign: "center" }}>Interests</h2>
-      <p style={{ textAlign: "left" }}>
+    <div className="container">
+      <h2>Interests</h2>
+      <p>
         This is where I am going to post a bunch of things that interest me and my expressions about those things. Could range anywhere from rambling to images and explanations. 
         I will also have a list of current focuses. It will get more organized along with everything else.
       </p>
-      <p style={{ textAlign: "left" }}>
+      <p>
         Book: What Moves the Dead by T. Kingfisher
         <br></br>
         Audiobook: The World Without End by Ken Follett (a.k.a. The Book Without End)

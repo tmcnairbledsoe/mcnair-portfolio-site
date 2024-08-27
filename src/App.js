@@ -5,6 +5,7 @@ import Resume from "./components/Resume";
 import Projects from "./components/Projects";
 import Interests from "./components/Interests";
 import Home from "./components/Home";
+import WeddingSite from "./components/projects/WeddingSite/WeddingSite";
 
 function App() {
   const [sidebarWidth, setSidebarWidth] = useState("50px");
@@ -33,6 +34,7 @@ function App() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/interests" element={<Interests />} />
+            <Route path="/projects/weddingSite/*" element={<WeddingSite />} />
           </Routes>
         </div>
       </div>

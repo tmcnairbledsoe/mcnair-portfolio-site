@@ -1,14 +1,15 @@
 import React from "react";
+import './Resume.css';
 
 const Resume = () => {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', color: '#bfbfbf', transition: "margin-left 0.3s ease", marginRight: "50px" }}>
-      <h1 style={{ textAlign: 'center', color: '#2873bd' }}>Thomas McNair Bledsoe</h1>
-      <h3 style={{ textAlign: 'center', color: '#2873bd' }}>Software Developer</h3>
+    <div className="container">
+      <h1>Thomas McNair Bledsoe</h1>
+      <h3>Software Developer</h3>
       <p style={{ textAlign: 'center' }}>Greenville, SC | tmcnairbledsoe@gmail.com | 864-804-9796</p>
       
       <section>
-        <h2 style={{ color: '#2873bd' }}>Professional Summary</h2>
+        <h2>Professional Summary</h2>
         <p>
           Seasoned software developer with proven skills in C#, .Net Framework, .Net Core, SQL, Azure, NoSQL, Python, ReactJS,
           Angular, Node, R, WPF, MVC, HTML, CSS, and JavaScript. Experienced in maintaining existing systems and
@@ -23,7 +24,7 @@ const Resume = () => {
       </section>
 
       <section>
-        <h2 style={{ color: '#2873bd' }}>Professional Experience</h2>
+        <h2>Professional Experience</h2>
 
         <h3>Software Developer - Metromont, Greenville, SC (Aug 2023 - Aug 2024)</h3>
         <ul>
@@ -96,7 +97,7 @@ const Resume = () => {
       </section>
 
       <section>
-        <h2 style={{ color: '#2873bd' }}>Education</h2>
+        <h2>Education</h2>
         <ul>
           <li><strong>Professional Science Masters:</strong> Data Science and Business Analytics, University Of North Carolina, Charlotte, NC (2018)</li>
           <li><strong>Bachelor of Science:</strong> Computer Engineering, University Of South Carolina, Columbia, SC (2011)</li>
@@ -104,7 +105,7 @@ const Resume = () => {
       </section>
 
       <section>
-        <h2 style={{ color: '#2873bd' }}>Skills</h2>
+        <h2>Skills</h2>
         <ul>
           <li><strong>Programming:</strong> C#, SQL, ASP.NET, SQL, NOSQL, Python 3, JSON, JavaScript, R, VB, HTML, CSS</li>
           <li><strong>Applications:</strong> Visual Studio, VS Code, Azure, SSMS, Power BI, SAS EG, Tableau, R Studio, Access, Excel</li>

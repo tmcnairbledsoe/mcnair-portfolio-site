@@ -1,0 +1,14 @@
+.container {
+    padding: 20px;
+    color: #bfbfbf;
+    transition: margin-left 0.3s ease;
+    margin-right: 50px;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  p {
+    text-align: left;
+  }
