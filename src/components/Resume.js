@@ -2,7 +2,7 @@ import React from "react";
 
 const Resume = () => {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', color: '#bfbfbf', transition: "margin-left 0.3s ease", margin: "50px" }}>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', color: '#bfbfbf', transition: "margin-left 0.3s ease", marginRight: "50px" }}>
       <h1 style={{ textAlign: 'center', color: '#2873bd' }}>Thomas McNair Bledsoe</h1>
       <h3 style={{ textAlign: 'center', color: '#2873bd' }}>Software Developer</h3>
       <p style={{ textAlign: 'center' }}>Greenville, SC | tmcnairbledsoe@gmail.com | 864-804-9796</p>

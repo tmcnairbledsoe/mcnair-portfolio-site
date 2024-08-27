@@ -2,7 +2,7 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", margin: "50px" }}>
+    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", marginRight: "50px" }}>
       <h2 style={{ textAlign: "center" }}>McNair Bledsoe's Portfolio</h2>
       <p style={{ textAlign: "left" }}>
         Thanks for visiting.

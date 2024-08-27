@@ -2,7 +2,7 @@ import React from "react";
 
 const Projects = () => {
   return (
-    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", margin: "50px" }}>
+    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", marginRight: "50px" }}>
       <h2 style={{ textAlign: "center" }}>Projects</h2>
       <p style={{ textAlign: "left" }}>
         This is the projects page.

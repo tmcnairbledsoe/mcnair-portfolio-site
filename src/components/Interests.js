@@ -2,7 +2,7 @@ import React from "react";
 
 const Interests = () => {
   return (
-    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", margin: "50px" }}>
+    <div style={{ padding: "20px", color: "#bfbfbf", transition: "margin-left 0.3s ease", marginRight: "50px" }}>
       <h2 style={{ textAlign: "center" }}>Interests</h2>
       <p style={{ textAlign: "left" }}>
         This is where I am going to post a bunch of things that interest me and my expressions about those things. Could range anywhere from rambling to images and explanations. 
