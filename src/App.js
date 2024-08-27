@@ -1,33 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PixelDrop from "./components/PixelDrop";
 import Resume from "./components/Resume";
 import Projects from "./components/Projects";
-import Contact from "./components/Contact";
+import Interests from "./components/Interests";
 import Home from "./components/Home";
 
 function App() {
+  const [sidebarWidth, setSidebarWidth] = useState("50px");
+
+  const handleSidebarToggle = (width) => {
+    setSidebarWidth(width);
+  };
   return (
     <Router>
       <div style={{ position: "relative", height: "100vh" }}>
-        <PixelDrop />
+      <PixelDrop onSidebarToggle={handleSidebarToggle} />
         <div
           style={{
             position: "absolute",
             top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
+            left: sidebarWidth,
+            width: `calc(100% - ${sidebarWidth})`,
             zIndex: 2, // Ensures this content is above the pixel drop animation
-            color: "white", // White text
+            color: "#bfbfbf", // White text
             padding: "20px",
+            transition: "left 0.3s ease, width 0.3s ease",
           }}
         >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/interests" element={<Interests />} />
           </Routes>
         </div>
       </div>

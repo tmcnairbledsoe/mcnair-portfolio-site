@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const PixelDrop = () => {
+const PixelDrop = ({ onSidebarToggle }) => {
   const [pixels, setPixels] = useState([]);
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
@@ -40,10 +40,12 @@ const PixelDrop = () => {
 
   const handleMouseEnter = () => {
     setSidebarVisible(true);
+    onSidebarToggle("250px");
   };
 
   const handleMouseLeave = () => {
     setSidebarVisible(false);
+    onSidebarToggle("50px");
   };
 
   return (
@@ -65,7 +67,7 @@ const PixelDrop = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <h1 style={{ fontWeight: "bold", fontSize: "24px", display: sidebarVisible ? "block" : "none" }}>My Portfolio</h1>
+        <h1 style={{ fontWeight: "bold", fontSize: "24px", display: sidebarVisible ? "block" : "none" }}>Links</h1>
         <nav>
           <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
             <li>
@@ -94,10 +96,10 @@ const PixelDrop = () => {
             </li>
             <li>
               <Link
-                to="/contact"
+                to="/interests"
                 style={{ color: "white", textDecoration: "none", fontSize: "18px" }}
               >
-                {sidebarVisible ? "Contact" : "C"}
+                {sidebarVisible ? "Interests" : "I"}
               </Link>
             </li>
           </ul>
