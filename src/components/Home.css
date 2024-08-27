@@ -12,3 +12,9 @@
   p {
     text-align: left;
   }
+  
+  a {
+    color: white;
+    text-decoration: underline;
+    font-size: 18px;
+  }

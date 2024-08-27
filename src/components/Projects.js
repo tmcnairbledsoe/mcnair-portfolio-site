@@ -26,7 +26,7 @@ const Projects = () => {
         automatically uploaded. Gone are the days of FTP and refreshing the site.
       </p>
       <p>
-        Also, take a look at another project I created for a wedding website: <a href="https://mcnairscode.com/projects/weddingSite">Wedding Site</a>
+        Also, take a look at another project I created for a wedding website: (Coming Soon)
       </p>
       <p>
         ToDo:
