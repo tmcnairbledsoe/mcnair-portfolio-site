@@ -19,10 +19,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Set up Node.js 16.14.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.14.x'
       - name: Create .env file
         run: |
           echo "REACT_APP_APIKEY=${{ secrets.REACT_APP_APIKEY }}" >> .env
