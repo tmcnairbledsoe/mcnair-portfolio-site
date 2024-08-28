@@ -11,12 +11,12 @@ const Projects = () => {
       <p>
         Anything I make is usually open for anyone to view on my GitHub unless it has private info in it, which can now easily
         be handled by secrets. I'll update all of that sometime so i can show bots I made in python and websites. Everything else 
-        is open on my <a href="https://github.com/tmcnairbledsoe">GitHub</a>.
+        is open on my <a href="https://github.com/tmcnairbledsoe" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
       <h2>Websites</h2>
       <p>
         I'll have a lot more coming into here once I get time to set up and host some stuff I made. In the mean time check out my 
-        wife's site I made in React. <a href="https://clt-art.com/">clt-art.com/</a>
+        wife's site I made in React. <a href="https://clt-art.com/" target="_blank" rel="noopener noreferrer">clt-art.com/</a>
       </p>
       <p>
         The first thing I should talk about is this site. It's public on my github and is ued for CI/CD. The site is hosted on Azure
