@@ -33,8 +33,6 @@ const Projects = () => {
         <br></br>
         - Secrets in GitHub or Azure for scripts and websites
         <br></br>
-        - Wedding Site
-        <br></br>
         - African conflicts R project
         <br></br>
         - Stock trader
