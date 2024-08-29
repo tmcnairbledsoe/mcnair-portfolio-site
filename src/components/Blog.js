@@ -32,7 +32,7 @@ const Blog = () => {
   useEffect(() => {
     createTableIfNotExists();
     loadPosts();
-  }, []);
+  }, );
 
   const loadPosts = async () => {
     const entities = tableClient.listEntities({

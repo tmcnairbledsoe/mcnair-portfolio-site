@@ -34,7 +34,7 @@ const Journal = () => {
       createTableIfNotExists();
       loadPosts();
     }
-  }, [isOwner]);
+  }, );
 
   const loadPosts = async () => {
     const entities = tableClient.listEntities({
