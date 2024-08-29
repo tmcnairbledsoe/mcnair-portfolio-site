@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import Journal from "./components/Journal";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Blog from "./components/Blog";
 
 // Initialize MSAL instance
 const msalInstance = new PublicClientApplication(msalConfig);
@@ -45,6 +46,7 @@ function App() {
               <Route path="/resume" element={<Resume />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/interests" element={<Interests />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="/login" element={<Login />} />
               <Route path="/calendar" element={<ProtectedRoute roles={['OwnerRole', 'WifeRole']} element={<Calendar />} />} />
               <Route path="/journal" element={<ProtectedRoute roles={['OwnerRole']} element={<Journal />} />} />
