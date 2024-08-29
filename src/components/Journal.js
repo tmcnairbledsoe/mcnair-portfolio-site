@@ -12,7 +12,7 @@ const Journal = () => {
   const [newPost, setNewPost] = useState({ title: "", text: "" });
   const [showPostForm, setShowPostForm] = useState(false);
 
-  const tableName = "Posts";
+  const tableName = "Posts"; 
   const accountName = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT_NAME;
   const sasToken = process.env.REACT_APP_AZURE_STORAGE_SAS_TOKEN;
   const tableClient = new TableClient(
