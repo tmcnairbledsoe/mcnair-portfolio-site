@@ -25,6 +25,8 @@ jobs:
           echo "REACT_APP_AZURE_AD_CLIENT_SECRET=${{ secrets.REACT_APP_AZURE_AD_CLIENT_SECRET }}" >> .env
           echo "REACT_APP_AZURE_AD_TENANT_ID=${{ secrets.REACT_APP_AZURE_AD_TENANT_ID }}" >> .env
           echo "REACT_APP_REDIRECT_URI=${{ secrets.REACT_APP_REDIRECT_URI }}" >> .env
+          echo "REACT_APP_AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.REACT_APP_AZURE_STORAGE_ACCOUNT_NAME }}" >> .env
+          echo "REACT_APP_AZURE_STORAGE_SAS_TOKEN=${{ secrets.REACT_APP_AZURE_STORAGE_SAS_TOKEN }}" >> .env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
