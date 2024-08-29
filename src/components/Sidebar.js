@@ -79,6 +79,37 @@ const Sidebar = ({ sidebarVisible, handleMouseEnter, handleMouseLeave }) => {
               <Link to="/login" style={{ color: "white", textDecoration: "none" }}>Login</Link>
             </li>
           )}
+          <li>
+              {/* Social Media Icons */}
+              {sidebarVisible && (
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tmcnairbledsoe@gmail.com"
+                    style={{ color: "white", textDecoration: "none", marginRight: "10px" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i className="fas fa-envelope" style={{ fontSize: "20px" }}></i>
+                  </a>
+                  <a
+                  href="https://www.linkedin.com/in/thomas-bledsoe-a1272928a/"
+                  style={{ color: "white", textDecoration: "none", marginRight: "10px" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >
+                  <i className="fab fa-linkedin" style={{ fontSize: "20px" }}></i>
+                  </a>
+                  <a
+                  href="https://github.com/tmcnairbledsoe"
+                  style={{ color: "white", textDecoration: "none" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >
+                  <i className="fab fa-github" style={{ fontSize: "20px" }}></i>
+                  </a>
+              </div>
+              )}
+          </li>
         </ul>
       </nav>
           </>
