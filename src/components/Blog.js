@@ -6,7 +6,7 @@ const Blog = () => {
   const { accounts } = useMsal();
   const account = accounts[0];
   const roles = account?.idTokenClaims.roles || [];
-  const isOwner = roles.includes("OwnerRole");
+  const isOwner = roles.includes("OwnerRole"); 
 
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", text: "" });
