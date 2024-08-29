@@ -11,7 +11,6 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Calendar from "./components/Calendar";
 import Journal from "./components/Journal";
-import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Initialize MSAL instance
