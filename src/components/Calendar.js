@@ -77,7 +77,7 @@ const Calendar = () => {
     const initializeCalendar = async () => {
       if (canViewData) {
         await checkAndCreateTable();
-        await loadMonthEvents(selectedDate);
+        await loadMonthEvents(new Date());
       }
     };
 
