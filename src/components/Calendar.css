@@ -23,14 +23,13 @@
 }
 
 .calendar-day {
-    background-color: #333;
-    padding-top: 60%; /* Height is 60% of the width */
-    position: relative;
-    border-radius: 5px;
-    cursor: pointer;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column; /* Allow content to flow vertically */
+  background-color: #333;
+  padding-top: 25px;
+  position: relative;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  height: 60px;
 }
 
 .calendar-day:hover {
@@ -46,15 +45,10 @@
 }
 
 .events-mini {
-  margin-top: 5px; /* Adjust this to position events closer to the top */
   font-size: 10px;
-  line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-grow: 1; /* Ensures the events take up available vertical space */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Align events to the top */
+  justify-content: flex-start;
 }
 
 .event-mini {
@@ -63,6 +57,7 @@
   margin-bottom: 2px;
   padding: 2px;
   border-radius: 3px;
+  max-height: 15px;
 }
 
 .events-container {
