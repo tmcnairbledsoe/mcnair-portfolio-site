@@ -24,47 +24,45 @@ const Blog = () => {
   }, [accountName, sasToken]);
 
   useEffect(() => {
-    if (isOwner) {
-      const checkAndCreateTable = async () => {
-        try {
-          // Check if the table exists by listing entities (this throws an error if the table doesn't exist)
-          await tableClient.listEntities().next();
-        } catch (error) {
-          if (error.statusCode === 404) {
-            // If the table doesn't exist, create it
-            try {
-              await tableClient.createTable();
-              console.log("Table created successfully.");
-            } catch (creationError) {
-              console.error("Error creating table: ", creationError);
-            }
-          } else {
-            console.error("Error checking table existence: ", error);
+    const checkAndCreateTable = async () => {
+      try {
+        // Check if the table exists by listing entities (this throws an error if the table doesn't exist)
+        await tableClient.listEntities().next();
+      } catch (error) {
+        if (error.statusCode === 404) {
+          // If the table doesn't exist, create it
+          try {
+            await tableClient.createTable();
+            console.log("Table created successfully.");
+          } catch (creationError) {
+            console.error("Error creating table: ", creationError);
           }
+        } else {
+          console.error("Error checking table existence: ", error);
         }
-      };
+      }
+    };
 
-      const loadPosts = async () => {
-        try {
-          const entities = tableClient.listEntities({
-            queryOptions: {
-              filter: `PostType eq 'blog'`,
-            },
-          });
-          const loadedPosts = [];
-          for await (const entity of entities) {
-            loadedPosts.push(entity);
-          }
-          setPosts(loadedPosts.sort((a, b) => new Date(b.DatePosted) - new Date(a.DatePosted)));
-        } catch (error) {
-          console.error("Error loading posts: ", error);
+    const loadPosts = async () => {
+      try {
+        const entities = tableClient.listEntities({
+          queryOptions: {
+            filter: `PostType eq 'blog'`,
+          },
+        });
+        const loadedPosts = [];
+        for await (const entity of entities) {
+          loadedPosts.push(entity);
         }
-      };
+        setPosts(loadedPosts.sort((a, b) => new Date(b.DatePosted) - new Date(a.DatePosted)));
+      } catch (error) {
+        console.error("Error loading posts: ", error);
+      }
+    };
 
-      checkAndCreateTable();
-      loadPosts();
-    }
-  }, [isOwner, tableClient]);
+    checkAndCreateTable();
+    loadPosts();
+  }, [tableClient]);
 
   const handleCreatePost = async () => {
     const datePosted = new Date().toISOString();
@@ -130,17 +128,15 @@ const Blog = () => {
           </div>
         </div>
       )}
-      {isOwner && (
-        <div>
-          {posts.map((post) => (
-            <div key={post.RowKey} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
-              <h2>{post.Title}</h2>
-              <p>{post.Text}</p>
-              <p><small>{new Date(post.DatePosted).toLocaleDateString()}</small></p>
-            </div>
-          ))}
-        </div>
-      )}
+      <div>
+        {posts.map((post) => (
+          <div key={post.RowKey} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
+            <h2>{post.Title}</h2>
+            <p>{post.Text}</p>
+            <p><small>{new Date(post.DatePosted).toLocaleDateString()}</small></p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
