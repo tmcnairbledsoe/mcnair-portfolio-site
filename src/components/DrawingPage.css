@@ -1,0 +1,51 @@
+.drawing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .palette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .selected-color {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #000;
+    margin-top: 10px;
+  }
+  
+  .color-options {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .color-swatch {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px solid #000;
+  }
+  
+  .line-width-selector {
+    margin-bottom: 10px;
+  }
+  
+  canvas {
+    border: 1px solid #000;
+    background-color: #fff;
+  }
+  
+  .reset-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
