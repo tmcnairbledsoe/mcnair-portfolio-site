@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useMsal } from "@azure/msal-react";
-import { TableClient, AzureSASCredential } from "@azure/data-tables";
+import { CosmosClient } from "@azure/cosmos";
+import { BlobServiceClient } from "@azure/storage-blob";
 
 const Blog = () => {
   const { accounts } = useMsal();
@@ -9,78 +10,99 @@ const Blog = () => {
   const isOwner = roles.includes("OwnerRole");
 
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState({ title: "", text: "" });
+  const [newPost, setNewPost] = useState({ title: "", content: "" });
   const [showPostForm, setShowPostForm] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  const accountName = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT_NAME;
-  const sasToken = process.env.REACT_APP_AZURE_STORAGE_SAS_TOKEN;
+  // Cosmos DB and Blob Storage configuration
+  const endpoint = process.env.REACT_APP_COSMOS_DB_ENDPOINT;
+  const key = process.env.REACT_APP_COSMOS_DB_KEY;
+  const blobAccountName = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT_NAME;
+  const blobSasToken = process.env.REACT_APP_AZURE_STORAGE_SAS_TOKEN;
 
-  const tableClient = useMemo(() => {
-    return new TableClient(
-      `https://${accountName}.table.core.windows.net`,
-      "Posts",
-      new AzureSASCredential(sasToken)
-    );
-  }, [accountName, sasToken]);
+  const cosmosClient = useMemo(() => new CosmosClient({ endpoint, key }), [endpoint, key]);
+  const container = cosmosClient.database("Posts").container("Posts");
+
+  const blobServiceClient = useMemo(() => new BlobServiceClient(
+    `https://${blobAccountName}.blob.core.windows.net?${blobSasToken}`
+  ), [blobAccountName, blobSasToken]);
+
+  const blobContainerClient = useMemo(() => blobServiceClient.getContainerClient("posts"), [blobServiceClient]);
 
   useEffect(() => {
-    const checkAndCreateTable = async () => {
+    const createContainerIfNotExists = async () => {
       try {
-        // Check if the table exists by listing entities (this throws an error if the table doesn't exist)
-        await tableClient.listEntities().next();
-      } catch (error) {
-        if (error.statusCode === 404) {
-          // If the table doesn't exist, create it
-          try {
-            await tableClient.createTable();
-            console.log("Table created successfully.");
-          } catch (creationError) {
-            console.error("Error creating table: ", creationError);
-          }
-        } else {
-          console.error("Error checking table existence: ", error);
+        const exists = await blobContainerClient.exists();
+        if (!exists) {
+          await blobContainerClient.create();
+          console.log("Container 'posts' created successfully.");
         }
+      } catch (error) {
+        console.error("Error creating container:", error);
       }
     };
 
-    const loadPosts = async () => {
+    const fetchPosts = async () => {
       try {
-        const entities = tableClient.listEntities({
-          queryOptions: {
-            filter: `PostType eq 'blog'`,
-          },
-        });
-        const loadedPosts = [];
-        for await (const entity of entities) {
-          loadedPosts.push(entity);
-        }
-        setPosts(loadedPosts.sort((a, b) => new Date(b.DatePosted) - new Date(a.DatePosted)));
+        const { resources: items } = await container.items.query("SELECT * FROM c ORDER BY c.datePosted DESC").fetchAll();
+        setPosts(items);
+        setDataLoaded(true);
       } catch (error) {
-        console.error("Error loading posts: ", error);
+        console.error("Error fetching blog posts:", error);
       }
     };
 
-    checkAndCreateTable();
-    loadPosts();
-  }, [tableClient]);
+    createContainerIfNotExists();
+    if (!dataLoaded) {
+      fetchPosts();
+    }
+  }, [container, blobContainerClient, dataLoaded]);
 
   const handleCreatePost = async () => {
     const datePosted = new Date().toISOString();
-    const newEntity = {
-      PartitionKey: "blog",
-      RowKey: datePosted,
-      Title: newPost.title,
-      Text: newPost.text,
-      DatePosted: datePosted,
-      PostType: "blog",
+
+    const newDocument = {
+      id: datePosted,
+      partitionKey: "blog",
+      title: newPost.title,
+      content: newPost.content,
+      datePosted: datePosted,
+      postType: "blog",
     };
+
     try {
-      await tableClient.createEntity(newEntity);
-      setPosts([newEntity, ...posts]); // Update the state with the new post
+      await container.items.create(newDocument);
+      setPosts([newDocument, ...posts]);
       setShowPostForm(false);
-      setNewPost({ title: "", text: "" });
+      setNewPost({ title: "", content: "" });
     } catch (error) {
-      console.error("Error creating post: ", error);
+      console.error("Error creating blog post:", error);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const datePosted = new Date().toISOString();
+      const fileName = `${datePosted}-${file.name}`;
+      try {
+        const blobClient = blobContainerClient.getBlockBlobClient(fileName);
+        await blobClient.uploadData(file, {
+          blobHTTPHeaders: { blobContentType: file.type },
+        });
+        const fileUrl = blobClient.url;
+        setNewPost((prevPost) => ({
+          ...prevPost,
+          content: `${prevPost.content}<img src="${fileUrl}" alt="${file.name}" />`,
+        }));
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
@@ -98,42 +120,57 @@ const Blog = () => {
         )}
       </div>
       {isOwner && showPostForm && (
-        <div style={{ marginBottom: "20px", padding: "0 20px", textAlign: "left" }}>
-          <input
-            type="text"
-            placeholder="Title"
-            value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            style={{ width: "60%", padding: "10px", marginBottom: "10px", boxSizing: "border-box" }}
-          />
-          <textarea
-            placeholder="Write your post..."
-            value={newPost.text}
-            onChange={(e) => setNewPost({ ...newPost, text: e.target.value })}
-            style={{ width: "60%", padding: "10px", marginBottom: "10px", boxSizing: "border-box", resize: "vertical" }}
-          />
-          <div>
-            <button
-              style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
-              onClick={handleCreatePost}
-            >
-              Submit Post
-            </button>
-            <button
-              style={{ padding: "10px 15px", cursor: "pointer" }}
-              onClick={() => setShowPostForm(false)}
-            >
-              Cancel
-            </button>
+        <div style={{ marginBottom: "20px", padding: "0 20px", textAlign: "left", display: "flex", gap: "20px" }}>
+          <div
+            style={{ flex: "1", padding: "10px", border: "1px solid #ccc", minHeight: "400px" }}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <input
+              type="text"
+              placeholder="Title"
+              value={newPost.title}
+              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+              style={{ width: "100%", padding: "10px", marginBottom: "10px", boxSizing: "border-box" }}
+            />
+            <textarea
+              placeholder="Write your HTML content here..."
+              value={newPost.content}
+              onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+              style={{ width: "100%", height: "300px", padding: "10px", boxSizing: "border-box" }}
+            />
           </div>
+          <div
+            style={{ flex: "1", padding: "10px", border: "1px solid #ccc", minHeight: "400px", backgroundColor: "#f9f9f9" }}
+            dangerouslySetInnerHTML={{ __html: newPost.content }}
+          />
+        </div>
+      )}
+      {isOwner && showPostForm && (
+        <div>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
+            onClick={handleCreatePost}
+          >
+            Submit Post
+          </button>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer" }}
+            onClick={() => setShowPostForm(false)}
+          >
+            Cancel
+          </button>
         </div>
       )}
       <div>
         {posts.map((post) => (
-          <div key={post.RowKey} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
-            <h2>{post.Title}</h2>
-            <p>{post.Text}</p>
-            <p><small>{new Date(post.DatePosted).toLocaleDateString()}</small></p>
+          <div key={post.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
+            <h2>{post.title}</h2>
+            <div
+              className="blog-content"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+            <p><small>{new Date(post.datePosted).toLocaleDateString()}</small></p>
           </div>
         ))}
       </div>

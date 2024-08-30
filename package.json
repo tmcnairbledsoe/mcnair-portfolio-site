@@ -3,6 +3,7 @@
   "version": "1",
   "private": true,
   "dependencies": {
+    "@azure/cosmos": "^4.1.0",
     "@azure/data-tables": "^13.2.2",
     "@azure/msal-browser": "^3.21.0",
     "@azure/msal-react": "^2.0.22",

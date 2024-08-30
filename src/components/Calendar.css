@@ -1,5 +1,6 @@
 .calendar-container {
   padding: 20px;
+  margin-right: 30px;
   color: #bfbfbf;
 }
 
@@ -22,12 +23,14 @@
 }
 
 .calendar-day {
-  background-color: #333;
-  padding: 10px;
-  position: relative;
-  border-radius: 5px;
-  cursor: pointer;
-  overflow: hidden;
+    background-color: #333;
+    padding-top: 60%; /* Height is 60% of the width */
+    position: relative;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; /* Allow content to flow vertically */
 }
 
 .calendar-day:hover {
@@ -43,12 +46,15 @@
 }
 
 .events-mini {
-  margin-top: 20px;
+  margin-top: 5px; /* Adjust this to position events closer to the top */
   font-size: 10px;
   line-height: 1.2;
-  height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-grow: 1; /* Ensures the events take up available vertical space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align events to the top */
 }
 
 .event-mini {
@@ -69,9 +75,18 @@
   margin-top: 5px;
   border-radius: 5px;
 }
-
-@media (max-width: 768px) {
-  .calendar-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  
+.past-event {
+  background-color: rgba(255, 0, 0, 0.2);
 }
+
+.future-event {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+/* Rotate Calendar for Mobile */
+@media (max-width: 768px) {
+    .calendar-container {
+        margin-right: 10px;
+    }
+  }
