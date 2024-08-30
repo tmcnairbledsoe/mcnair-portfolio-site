@@ -44,7 +44,7 @@ const Blog = () => {
 
     const fetchPosts = async () => {
       try {
-        const { resources: items } = await container.items.query("SELECT * FROM c ORDER BY c.datePosted DESC").fetchAll();
+        const { resources: items } = await container.items.query("SELECT * FROM c WHERE c.postType = 'blog' ORDER BY c.datePosted DESC").fetchAll();
         setPosts(items);
         setDataLoaded(true);
       } catch (error) {
