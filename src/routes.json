@@ -1,0 +1,50 @@
+{
+    "routes": [
+      {
+        "route": "/blog",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/journal",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/calendar",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/interests",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/resume",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/login",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/projects",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/blog",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/journal",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/drawingpage",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/*",
+        "serve": "/index.html",
+        "statusCode": 200
+      }
+    ]
+  }
+  
