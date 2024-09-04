@@ -29,10 +29,6 @@
         "serve": "/index.html"
       },
       {
-        "route": "/blog",
-        "serve": "/index.html"
-      },
-      {
         "route": "/journal",
         "serve": "/index.html"
       },
