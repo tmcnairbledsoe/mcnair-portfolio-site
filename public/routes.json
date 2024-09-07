@@ -29,10 +29,6 @@
         "serve": "/index.html"
       },
       {
-        "route": "/journal",
-        "serve": "/index.html"
-      },
-      {
         "route": "/drawingpage",
         "serve": "/index.html"
       },
