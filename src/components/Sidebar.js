@@ -83,6 +83,9 @@ const Sidebar = ({ sidebarVisible, handleMouseEnter, handleMouseLeave }) => {
                 <li>
                   <Link to="/drawing" style={{ color: "white", textDecoration: "none" }}>Drawing Page</Link>
                 </li>
+                <li>
+                  <Link to="/chessgame" style={{ color: "white", textDecoration: "none" }}>Chess Game</Link>
+                </li>
                 {availableLinks.includes("Calendar") && (
                   <li>
                     <Link to="/calendar" style={{ color: "white", textDecoration: "none" }}>Calendar</Link>

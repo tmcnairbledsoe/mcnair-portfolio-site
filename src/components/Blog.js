@@ -11,6 +11,7 @@ const Blog = () => {
 
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", content: "" });
+  const [editPost, setEditPost] = useState(null); // Track the post being edited
   const [showPostForm, setShowPostForm] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -30,18 +31,6 @@ const Blog = () => {
   const blobContainerClient = useMemo(() => blobServiceClient.getContainerClient("posts"), [blobServiceClient]);
 
   useEffect(() => {
-    const createContainerIfNotExists = async () => {
-      try {
-        const exists = await blobContainerClient.exists();
-        if (!exists) {
-          await blobContainerClient.create();
-          console.log("Container 'posts' created successfully.");
-        }
-      } catch (error) {
-        console.error("Error creating container:", error);
-      }
-    };
-
     const fetchPosts = async () => {
       try {
         const { resources: items } = await container.items.query("SELECT * FROM c WHERE c.postType = 'blog' ORDER BY c.datePosted DESC").fetchAll();
@@ -52,15 +41,13 @@ const Blog = () => {
       }
     };
 
-    createContainerIfNotExists();
     if (!dataLoaded) {
       fetchPosts();
     }
-  }, [container, blobContainerClient, dataLoaded]);
+  }, [container, dataLoaded]);
 
   const handleCreatePost = async () => {
     const datePosted = new Date().toISOString();
-
     const newDocument = {
       id: datePosted,
       partitionKey: "blog",
@@ -78,6 +65,33 @@ const Blog = () => {
     } catch (error) {
       console.error("Error creating blog post:", error);
     }
+  };
+
+  const handleUpdatePost = async () => {
+    const updatedPost = {
+      ...editPost,
+      title: newPost.title,
+      content: newPost.content,
+    };
+
+    try {
+      await container.item(editPost.id, editPost.partitionKey).replace(updatedPost);
+      setPosts(posts.map((post) => (post.id === editPost.id ? updatedPost : post)));
+      setEditPost(null);
+      setNewPost({ title: "", content: "" });
+    } catch (error) {
+      console.error("Error updating blog post:", error);
+    }
+  };
+
+  const handleEditPost = (post) => {
+    setEditPost(post);
+    setNewPost({ title: post.title, content: post.content });
+  };
+
+  const handleCancelEdit = () => {
+    setEditPost(null);
+    setNewPost({ title: "", content: "" });
   };
 
   const handleDragOver = (e) => {
@@ -109,17 +123,9 @@ const Blog = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h2 style={{ textAlign: "center" }}>Blog</h2>
-      <div style={{ textAlign: "left", marginBottom: "10px" }}>
-        {isOwner && !showPostForm && (
-          <button
-            style={{ padding: "10px 15px", marginRight: "20px", cursor: "pointer" }}
-            onClick={() => setShowPostForm(true)}
-          >
-            Create New Post
-          </button>
-        )}
-      </div>
-      {isOwner && showPostForm && (
+
+      {/* Create or Edit Post Form */}
+      {(isOwner && showPostForm) || editPost ? (
         <div style={{ marginBottom: "20px", padding: "0 20px", textAlign: "left", display: "flex", gap: "20px" }}>
           <div
             style={{ flex: "1", padding: "10px", border: "1px solid #ccc", minHeight: "400px" }}
@@ -145,8 +151,9 @@ const Blog = () => {
             dangerouslySetInnerHTML={{ __html: newPost.content }}
           />
         </div>
-      )}
-      {isOwner && showPostForm && (
+      ) : null}
+
+      {(isOwner && showPostForm) && (
         <div>
           <button
             style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
@@ -162,18 +169,43 @@ const Blog = () => {
           </button>
         </div>
       )}
+
+      {/* Post Listing */}
       <div>
         {posts.map((post) => (
           <div key={post.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
             <h2>{post.title}</h2>
-            <div
-              className="blog-content"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+            <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
             <p><small>{new Date(post.datePosted).toLocaleDateString()}</small></p>
+            {isOwner && (
+              <button
+                style={{ padding: "5px 10px", cursor: "pointer", marginRight: "10px" }}
+                onClick={() => handleEditPost(post)}
+              >
+                Edit
+              </button>
+            )}
           </div>
         ))}
       </div>
+
+      {/* Edit controls */}
+      {editPost && (
+        <div>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
+            onClick={handleUpdatePost}
+          >
+            Save Changes
+          </button>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer" }}
+            onClick={handleCancelEdit}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
     </div>
   );
 };

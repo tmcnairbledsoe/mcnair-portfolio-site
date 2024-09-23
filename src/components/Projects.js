@@ -28,6 +28,20 @@ const Projects = () => {
       <p>
         Also, take a look at another project I created for my wedding: <a href="https://wedding.mcnairscode.com" target="_blank" rel="noopener noreferrer">Wedding Page</a>
       </p>
+      <h2>Data Science</h2>
+      <p>
+        Here is a project I am trying out for fun. I am making a chess game using a Convolutional Neural Network that is trained on all of my games in LiChess. Essentially,
+        I hope to make a computer player that plays like I do. Check it out on the left hand side of the page. I am still working on how to make it actually play 
+        in ReactJS. But the model is made and works well: <a href="https://github.com/tmcnairbledsoe/chessModels" target="_blank" rel="noopener noreferrer">Chess Model Repo.</a>
+      </p>
+      <h2>Revit Add-in</h2>
+      <p>
+        I am working on a Revit Addin that will be a pattern manager. It will show and preview all fill patterns. Metric, Empirical, Model, Drafting, etc. It draws out the pattern 
+        For a viewer. I also have a pattern MAKER almost made. You can create a pattern in drafting view and then save it as a pattern in the format you need it to be in, 
+        model, in inches, etc. This is a tough one. Much harder than I thought. I plan to write up a tutorial soon and place it here and in the blog. For now here is 
+        The viewer. It cant do much else but it can at least save, import, export, etc: 
+        <a href="https://github.com/tmcnairbledsoe/McNairAddin" target="_blank" rel="noopener noreferrer">McNair's Add-in</a>
+      </p>
       <p>
         ToDo:
         <br></br>
