@@ -16,7 +16,7 @@ const Login = () => {
   }, [accounts, navigate]);
 
   const handleLogin = () => {
-    instance.loginPopup(loginRequest).catch(e => {
+    instance.loginRedirect(loginRequest).catch(e => {
       alert(e);
     });
   };
