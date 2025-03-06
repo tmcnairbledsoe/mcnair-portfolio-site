@@ -122,7 +122,7 @@ const Journal = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h2 style={{ textAlign: "center" }}>Journal</h2>
-      
+
       {/* Create or Edit Post Form */}
       <div style={{ textAlign: "left", marginBottom: "10px" }}>
         {isOwner && !showPostForm && (
@@ -184,9 +184,9 @@ const Journal = () => {
       <div>
         {posts.map((post) => (
           <div key={post.id} style={{ marginBottom: "20px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
+            <p><small>{new Date(post.datePosted).toLocaleDateString()}</small></p>
             <h2>{post.title}</h2>
             <div className="journal-content" dangerouslySetInnerHTML={{ __html: post.content }} />
-            <p><small>{new Date(post.datePosted).toLocaleDateString()}</small></p>
             {isOwner && (
               <button
                 style={{ padding: "5px 10px", cursor: "pointer", marginRight: "10px" }}
