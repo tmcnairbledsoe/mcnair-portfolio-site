@@ -163,6 +163,24 @@ const Journal = () => {
         </div>
       ) : null}
 
+      {/* Edit controls */}
+      {editPost && (
+        <div>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
+            onClick={handleUpdatePost}
+          >
+            Save Changes
+          </button>
+          <button
+            style={{ padding: "10px 15px", cursor: "pointer" }}
+            onClick={handleCancelEdit}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {(isOwner && showPostForm) && (
         <div>
           <button
@@ -198,24 +216,6 @@ const Journal = () => {
           </div>
         ))}
       </div>
-
-      {/* Edit controls */}
-      {editPost && (
-        <div>
-          <button
-            style={{ padding: "10px 15px", cursor: "pointer", marginRight: "20px" }}
-            onClick={handleUpdatePost}
-          >
-            Save Changes
-          </button>
-          <button
-            style={{ padding: "10px 15px", cursor: "pointer" }}
-            onClick={handleCancelEdit}
-          >
-            Cancel
-          </button>
-        </div>
-      )}
     </div>
   );
 };
