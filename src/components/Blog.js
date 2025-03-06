@@ -125,6 +125,17 @@ const Blog = () => {
       <h2 style={{ textAlign: "center" }}>Blog</h2>
 
       {/* Create or Edit Post Form */}
+      <div style={{ textAlign: "left", marginBottom: "10px" }}>
+        {isOwner && !showPostForm && (
+          <button
+            style={{ padding: "10px 15px", marginRight: "20px", cursor: "pointer" }}
+            onClick={() => setShowPostForm(true)}
+          >
+            Create New Post
+          </button>
+        )}
+      </div>
+      
       {(isOwner && showPostForm) || editPost ? (
         <div style={{ marginBottom: "20px", padding: "0 20px", textAlign: "left", display: "flex", gap: "20px" }}>
           <div
