@@ -1,0 +1,31 @@
+.recovery-container input,
+.recovery-container select,
+.recovery-container textarea {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.checkbox-item {
+    margin-right: 12px;
+    font-size: 0.95rem;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}

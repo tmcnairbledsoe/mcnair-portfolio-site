@@ -1,6 +1,10 @@
 {
     "routes": [
       {
+        "route": "/recovery",
+        "serve": "/index.html"
+      },
+      {
         "route": "/blog",
         "serve": "/index.html"
       },

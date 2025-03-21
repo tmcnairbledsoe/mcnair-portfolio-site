@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Blog from "./components/Blog";
 import DrawingPage from "./components/DrawingPage";
 import ChessGame from "./components/ChessGame";
+import Recovery from "./components/Recovery";
 
 // Initialize MSAL instance
 const msalInstance = new PublicClientApplication(msalConfig);
@@ -48,6 +49,7 @@ function App() {
               <Route path="/resume" element={<Resume />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/interests" element={<Interests />} />
+              <Route path="/recovery" element={<ProtectedRoute roles={['UserRole', 'OwnerRole', 'WifeRole']} element={<Recovery />} />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/drawing" element={<DrawingPage />} />
               <Route path="/chessgame" element={<ChessGame />} />

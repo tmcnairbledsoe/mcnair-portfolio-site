@@ -16,7 +16,8 @@ export const loginRequest = {
 };
 
 export const roleMapping = {
-  OwnerRole: ["Calendar", "Journal"],
-  WifeRole: ["Calendar"],
-  FriendRole: []
+  OwnerRole: ["Calendar", "Journal", "Recovery"],
+  WifeRole: ["Calendar", "Recovery"],
+  UserRole: ["Recovery"],
+  FriendRole: ["Recovery"]
 };
