@@ -35,7 +35,6 @@ const Recovery = () => {
         journalEntry: ""
     });
 
-    const [score, setScore] = useState(null);
     const [advice, setAdvice] = useState([]);
     const [viewingHistory, setViewingHistory] = useState(false);
 
@@ -45,7 +44,7 @@ const Recovery = () => {
     });
     const container = cosmosClient.database("RecoveryData").container("UserEntries");
 
-    const fetchUserData = async () => {
+    const fetchUserData = useCallback(async () => {
         try {
             const { resources } = await container.items.query({
                 query: "SELECT * FROM c WHERE c.userId = @userId ORDER BY c.date DESC",
@@ -57,11 +56,12 @@ const Recovery = () => {
             console.error("Error fetching user data:", error);
             setUserData([]);
         }
-    };
+    }, [account]);
+
 
     useEffect(() => {
         if (account) fetchUserData();
-    }, [account]);
+    }, [account, fetchUserData]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -133,20 +133,20 @@ const Recovery = () => {
         return Math.min(100, risk);
     };
 
-    const generateAdvice = () => {
+    const generateAdvice = useCallback(() => {
         const messages = [];
         if (formData.exercise < 5) messages.push("Exercise is low. Consider moving more.");
         if (formData.nutrition < 5) messages.push("Eat nutritious meals to help stabilize your recovery.");
         if (formData.recoveryWork < 5) messages.push("Engage more with your recovery routine.");
         if (formData.triggersToday > 7) messages.push("Today was high in triggers. Stay alert.");
         if (calculateRelapseRisk() > 50) messages.push("Your relapse risk is high. Reach out if needed.");
-
         setAdvice(messages);
-    };
+    }, [formData]); // formData is a dependency
 
     useEffect(() => {
         generateAdvice();
-    }, [formData]);
+    }, [generateAdvice]);
+
     return (
         <div className="recovery-container" style={{ padding: "2rem", maxWidth: "900px", margin: "0 auto" }}>
             <h2 style={{ marginBottom: "1.5rem" }}>Daily Recovery Tracker</h2>
