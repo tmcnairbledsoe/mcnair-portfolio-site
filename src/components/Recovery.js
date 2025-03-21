@@ -45,6 +45,12 @@ const Recovery = () => {
     const container = cosmosClient.database("RecoveryData").container("UserEntries");
 
     const fetchUserData = useCallback(async () => {
+        const cosmosClient = new CosmosClient({
+            endpoint: process.env.REACT_APP_COSMOS_DB_ENDPOINT,
+            key: process.env.REACT_APP_COSMOS_DB_KEY
+        });
+        const container = cosmosClient.database("RecoveryData").container("UserEntries");
+
         try {
             const { resources } = await container.items.query({
                 query: "SELECT * FROM c WHERE c.userId = @userId ORDER BY c.date DESC",
@@ -57,7 +63,6 @@ const Recovery = () => {
             setUserData([]);
         }
     }, [account]);
-
 
     useEffect(() => {
         if (account) fetchUserData();
@@ -134,14 +139,22 @@ const Recovery = () => {
     };
 
     const generateAdvice = useCallback(() => {
+        let risk = 0;
+        if (formData.triggersToday > 7) risk += 10;
+        if (formData.cravings > 7) risk += 15;
+        if (formData.coping < 4) risk += 20;
+        if (formData.selfCare < 4) risk += 10;
+        if (formData.phasesOfRelapse.length > 5) risk += 25;
+
         const messages = [];
         if (formData.exercise < 5) messages.push("Exercise is low. Consider moving more.");
         if (formData.nutrition < 5) messages.push("Eat nutritious meals to help stabilize your recovery.");
         if (formData.recoveryWork < 5) messages.push("Engage more with your recovery routine.");
         if (formData.triggersToday > 7) messages.push("Today was high in triggers. Stay alert.");
-        if (calculateRelapseRisk() > 50) messages.push("Your relapse risk is high. Reach out if needed.");
+        if (risk > 50) messages.push("Your relapse risk is high. Reach out if needed.");
+
         setAdvice(messages);
-    }, [formData]); // formData is a dependency
+    }, [formData]);
 
     useEffect(() => {
         generateAdvice();
