@@ -11,8 +11,10 @@ import Sidebar from "./components/Sidebar";
 import PixelDrop from "./components/PixelDrop";
 
 import ContentPage from "./content/ContentPage";
+import Calendar from "./calendar/Calendar";
 
 const titles = {
+  "/calendar": "Shared Calendar",
   "/blog": "Blog",
   "/journal": "Private Journal",
   "/": "Home",
@@ -108,6 +110,7 @@ export default function App() {
           <Route path="/blog" element={<ContentPage kind="blog" />} />
           <Route path="/blog/:id" element={<ContentPage kind="blog" />} />
           <Route path="/journal" element={<ContentPage kind="journal" />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
