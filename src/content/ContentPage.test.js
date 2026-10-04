@@ -31,7 +31,8 @@ test('no-role account has own journal editor without publish switch; owner contr
   const page=render(view('journal'));
   fireEvent.click(await screen.findByRole('button',{name:'New entry'}));
   expect(await screen.findByRole('textbox',{name:'Title'})).toBeInTheDocument();expect(screen.queryByRole('button',{name:'Publish'})).not.toBeInTheDocument();
-  expect(fetch.mock.calls[0][1].headers.Authorization).toBe('Bearer API_ACCESS_TOKEN');
+  expect(fetch.mock.calls[0][1].headers['X-Portfolio-Authorization']).toBe('Bearer API_ACCESS_TOKEN');
+  expect(fetch.mock.calls[0][1].headers.Authorization).toBeUndefined();
   page.rerender(view('blog'));expect(await screen.findByRole('button',{name:'New blog post'})).toBeInTheDocument();
 });
 test('account switch synchronously removes previous entries/editor and aborts pending fetches; late response cannot leak',async()=>{
@@ -75,7 +76,7 @@ test('private media uses bearer fetch and object URLs, aborts and revokes on unm
   fetch.mockResolvedValue(response(null));
   const page=render(<MediaContext.Provider value={{kind:'journal',token}}><AssetImage assetId={post.id} alt="Private photo" /></MediaContext.Provider>);
   expect(await screen.findByRole('img',{name:'Private photo'})).toBeInTheDocument();await waitFor(()=>expect(URL.createObjectURL).toHaveBeenCalled());
-  expect(screen.getByRole('img',{name:'Private photo'})).toHaveAttribute('src','blob:private');expect(fetch.mock.calls[0][1].headers.Authorization).toBe('Bearer PRIVATE_ACCESS_TOKEN');
+  expect(screen.getByRole('img',{name:'Private photo'})).toHaveAttribute('src','blob:private');expect(fetch.mock.calls[0][1].headers['X-Portfolio-Authorization']).toBe('Bearer PRIVATE_ACCESS_TOKEN');
   const signal=fetch.mock.calls[0][1].signal;page.unmount();expect(signal.aborted).toBe(true);expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:private');
 });
 test('creating an entry waits for database success, then refreshes persisted content; nonOwner blog hides writes',async()=>{

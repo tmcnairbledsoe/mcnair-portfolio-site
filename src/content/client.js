@@ -6,7 +6,7 @@ export async function request(path, { token, signal, body, version, method = 'GE
   if (token) {
     const value = await token();
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-    headers.Authorization = `Bearer ${value}`;
+    headers['X-Portfolio-Authorization'] = `Bearer ${value}`;
   }
   if (version !== undefined) headers['If-Match'] = `"${version}"`;
   if (body instanceof Blob) headers['Content-Type'] = body.type;

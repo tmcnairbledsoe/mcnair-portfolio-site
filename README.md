@@ -10,7 +10,7 @@ The restored writing features use Supabase Free: Postgres stores titles and rich
 
 The Supabase Free project is provisioned, the database migration is applied, and the backend connection and private image bucket were verified. Server credentials are configured in Azure backend settings. The detailed setup below covers the migration, server settings, free-plan quotas, inactivity pausing and backups. Creating this integration does not enable a paid storage plan. Production deployment and signed-in account checks are verified separately from database provisioning.
 
-This README documents setting names and placeholders only. Database passwords, Supabase secret keys, OpenAI keys, access tokens and private journal content must never appear in source, commits, pull requests, screenshots or logs. Supabase credentials belong only in the Azure backend application settings; the browser receives no database credential. Do not connect the optional Supabase GitHub integration for this setup: the existing workflow deploys the application, and the documented migration prepares the database separately.
+This README documents setting names and placeholders only. Database passwords, Supabase secret keys, access tokens and private journal content must never appear in source, commits, pull requests, screenshots or logs. Supabase credentials belong only in the Azure backend application settings; the browser receives no database credential. The existing workflow deploys the application, and the documented migration prepares the database separately.
 
 ## Local development
 
@@ -44,8 +44,6 @@ The sidebar silently renews the account's ID token on startup and near expiry (o
 Portfolio CSP allows connections and frames only to the tenant login origin `https://login.microsoftonline.com` in addition to self. Redirect navigation uses normal top-level navigation; no script/style relaxation or wildcard is needed. Wedding CSP and other security headers stay unchanged. Existing anti-embedding headers may prevent an iframe-based silent fallback from loading the root callback; use the offered top-level sign-in again if silent renewal cannot complete. Browser privacy policies and Entra session policy can also require reauthentication.
 
 **Frontend role display is not backend authorization.** The content API verifies scoped Entra access tokens. Blog editor capability comes from the API response, never the sidebar’s ID-token role display. ID tokens are rejected by the API.
-
-For the optional development agent, see [agent setup and task profiles](agent-config/README.md). It reuses local credentials, supports separate maintenance/review/resume/photo-edit tasks, and does not run model inference during setup.
 
 ## Delivery
 
@@ -85,7 +83,7 @@ Account identity keys the entire content view. Switching account/unmounting clea
 1. Create/select a **Supabase Free** project in the operator account; keep the organization on Free with no paid upgrade. No Azure database/storage provisioning is required.
 2. Apply [001_portfolio_content.sql](supabase/migrations/001_portfolio_content.sql) using Supabase’s SQL editor. It can be reapplied. It creates UUID posts/assets, namespace/owner/status constraints, feed and asset-reference indexes, RLS-enabled tables, a transaction RPC for asset validation and optimistic writes, and a private 5 MB JPEG/PNG/WebP bucket. PUBLIC/anon/authenticated have no content-table grants or write/read policies. Only service_role receives table access and RPC execution. A restrictive Storage policy denies this bucket to anon/authenticated even if permissive policies exist for other buckets. Audit any custom database/storage grants before deployment; do not add public object policies.
 3. In the same existing single-tenant Entra application, expose delegated scope `api://<clientId>/access_as_user`, set `api.requestedAccessTokenVersion=2`, and configure consent/preauthorization for this SPA. Assign OwnerRole for blog management. Register the production/local root SPA redirect URIs separately. Journal access does not require an app role; tenant app assignment/access settings must allow the intended accounts.
-4. Set the following **backend-only SWA application settings** in the operator account. The agent never needs their values:
+4. Set the following **backend-only SWA application settings** in the operator account:
 
 | Setting | Exact contract |
 | --- | --- |
@@ -98,19 +96,9 @@ Account identity keys the entire content view. Switching account/unmounting clea
 
 The only frontend build configuration remains the existing public `REACT_APP_AZURE_AD_CLIENT_ID` and `REACT_APP_AZURE_AD_TENANT_ID`. The frontend computes `api://<REACT_APP_AZURE_AD_CLIENT_ID>/access_as_user`; no Supabase URL/key/anon key or extra public settings are needed. The API pins the tenant’s HTTPS JWKS, verifies RS256 signature, issuer `https://login.microsoftonline.com/<tenant>/v2.0`, exact GUID audience, lifetime, tid, oid, ver=2.0 and delegated scp. Graph tokens, ID tokens, wrong tenants/audiences, expired tokens and forged roles fail with 401. Supplying invalid authorization never downgrades a public request to anonymous. Generic errors do not expose raw SDK responses or credentials.
 
-### Optional operator connection in Codex
-
-The operator can connect Supabase's hosted MCP server to Codex, scoped to this project's reference. This is a local administration connection, separate from the website's backend credential and from the OpenAI development agent. It is not bundled into the website. Replace the placeholder locally; no actual project reference or OAuth credential is needed in this README.
-
-```sh
-codex mcp add supabase --url 'https://mcp.supabase.com/mcp?project_ref=<project-ref>&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching'
-codex mcp login supabase
-codex mcp list
-```
-
-Adding the server may start OAuth automatically; log in only if authentication is still pending. Complete the authorization in the operator's browser and verify the connection is enabled with OAuth. OAuth credentials stay in Codex's local credential storage, outside this repository. Approve only the intended organization and permissions. The optional Supabase agent-skills installation is not required. See [Codex MCP configuration](https://developers.openai.com/codex/mcp) for the supported connection workflow.
-
 ### API contract
+
+Authenticated content requests send the verified Entra bearer token in `X-Portfolio-Authorization`. Azure's managed Functions proxy controls the standard `Authorization` header, so the application does not use it for user identity. Requests without the application header are anonymous; malformed or invalid application tokens still return 401. The API continues to verify signatures, issuer, audience, account and scope, and never trusts hosting principal headers or browser role hints.
 
 | Endpoint | Behavior |
 | --- | --- |

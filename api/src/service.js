@@ -53,7 +53,7 @@ function createService({ authenticate, getStore }) {
   return async function handle(request) {
     try {
       // Even public requests reject a supplied malformed/expired token rather than downgrade.
-      const user = await authenticate(request.headers.get('authorization'));
+      const user = await authenticate(request.headers.get('x-portfolio-authorization'));
       const parts = new URL(request.url).pathname.replace(/^\/api\//, '').split('/');
       let [resource, kind, id] = parts;
       const media = resource === 'media';
