@@ -420,15 +420,63 @@ export function SharedCalendar({ session }) {
                 </label>
               )}
               <label>
-                Reminder time (
-                {Intl.DateTimeFormat().resolvedOptions().timeZone})
                 <input
-                  type="datetime-local"
+                  type="checkbox"
                   disabled={busy || !emailReady}
-                  value={editor.reminderLocal}
-                  onChange={(e) => field("reminderLocal", e.target.value)}
-                />
+                  checked={!!editor.reminderLocal}
+                  onChange={(e) =>
+                    field(
+                      "reminderLocal",
+                      e.target.checked
+                        ? localReminder(
+                            new Date(Date.now() + 5 * 60000).toISOString(),
+                          )
+                        : "",
+                    )
+                  }
+                />{" "}
+                Email reminder
               </label>
+              {editor.reminderLocal && (
+                <>
+                  <label>
+                    Reminder date
+                    <input
+                      type="date"
+                      required
+                      disabled={busy}
+                      min={dayKey(new Date())}
+                      value={editor.reminderLocal.split("T")[0]}
+                      onChange={(e) =>
+                        field(
+                          "reminderLocal",
+                          `${e.target.value}T${editor.reminderLocal.split("T")[1]}`,
+                        )
+                      }
+                    />
+                  </label>
+                  <label>
+                    Reminder time
+                    <input
+                      type="time"
+                      required
+                      disabled={busy}
+                      step="60"
+                      value={editor.reminderLocal.split("T")[1] || ""}
+                      onChange={(e) =>
+                        field(
+                          "reminderLocal",
+                          `${editor.reminderLocal.split("T")[0]}T${e.target.value}`,
+                        )
+                      }
+                    />
+                  </label>
+                  <p>
+                    Reminder date and time use{" "}
+                    {Intl.DateTimeFormat().resolvedOptions().timeZone}.
+                  </p>
+                </>
+              )}
               {editor.reminderLocal && (
                 <label>
                   Email reminder to
