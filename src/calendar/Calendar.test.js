@@ -38,6 +38,18 @@ beforeEach(() => {
 afterEach(() => {
   delete global.fetch;
 });
+test("calendar waits for Microsoft session restoration before requesting private data", async () => {
+  const session = useContentSession();
+  useContentSession.mockReturnValue({ ...session, ready: false });
+  const view = render(<Calendar />);
+  expect(fetch).not.toHaveBeenCalled();
+  expect(session.token).not.toHaveBeenCalled();
+  useContentSession.mockReturnValue({ ...session, ready: true });
+  view.rerender(<Calendar />);
+  await screen.findByRole("button", { name: "Edit Appointment" });
+  expect(session.token).toHaveBeenCalled();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+});
 test.each([[[]], [["FriendRole"]]])(
   "calendar hides private data and makes no request without Owner/Wife role: %j",
   (roles) => {

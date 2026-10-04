@@ -88,7 +88,7 @@ export function ContentSession({ children }) {
       value={{
         account,
         accountKey,
-        ready: true,
+        ready: inProgress === InteractionStatus.None,
         journalAllowed: recognizedRoles(account).length > 0,
         token,
         signIn,
