@@ -43,7 +43,7 @@
 .resume-role { font-size: 22px; color: #2873bd; text-align: center; }
 .resume-contact { display: flex; justify-content: center; flex-wrap: wrap; gap: 0 10px; text-align: center; }
 .resume-contact a { overflow-wrap: anywhere; }
-.resume-location { display: block; font-size: 18px; font-weight: normal; }
+.resume-location { display: block; font-size: 16px; font-weight: normal; }
 .resume-job { margin: 30px 0; }
 .resume-skills li, .resume-job li { margin-bottom: 8px; }
 .resume-page ul { padding-left: 24px; }

@@ -1,0 +1,143 @@
+
+html {
+  font: normal 16px;
+  color: var(--darkgrey);
+  background-color: var(--pearlgrey);
+  --blue1: rgb(55,119,193);
+  --blue2: rgb(146,177,172);
+  --blue3: rgb(127,149,173);
+  --blue4: rgb(95,108,125);
+  --green1: rgb(29,95,34);
+  --green2: rgb(141,172,32);
+  --green3: rgb(151,174,83);
+  --green4: rgb(212,226,177);
+  --green5: rgb(183,197,174);
+  --green6: rgb(108, 123, 104);
+  --green7: rgb(108, 123, 104);
+  --yellow1: rgb(254,253,77);
+  --yellow2: rgb(254,252,116);
+  --yellow3: rgb(255,235,102);
+  --orange1: rgb(246,185,78);
+  --orange2: rgb(254,199,116);
+  --orange3: rgb(242,206,66);
+  --cream1: rgb(246,247,231);
+  --cream2: rgb(255,252,235);
+  --cream3: rgb(253,249,222);
+  --cream4: rgb(250,247,194);
+  --peach1: rgb(254,199,116);
+  --peach2: rgb(246,185,78);
+  --darkgrey: rgb(94, 96, 97);
+  --lightgrey: rgb(244,248,247);
+  --lightblue: rgb(227,238,234);
+  --lightgreen: rgb(241, 242, 214);
+  --pearlgrey: rgb(235, 234, 233);
+
+  --pink: rgb(237, 190, 173);
+  --palepink: rgb(244, 223, 207);
+  --olivegreen: rgb(108, 123, 104);
+}
+
+p,
+li,
+span {
+  font-family: "Lato", sans-serif;
+  color: var(--darkgrey);
+  font-size: 1rem;
+}
+
+h1 {
+  font-family: "Cookie", cursive;
+  font-size: 4rem;
+}
+
+h2 {
+  font-family: "Cookie", cursive;
+  font-size: 2.5rem;
+  color: var(--green3);
+}
+
+h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+}
+
+h4 {
+  font-family: "Playfair Display", serif;
+  font-weight: bold;
+}
+
+a {
+  opacity: 0.75;
+  text-decoration: none;
+  color: var(--green3);
+  font-weight: bold;
+}
+
+a:hover {
+  opacity: 1;
+  color: var(--peach1);
+  text-decoration: none;
+}
+
+.section {
+  padding: 15px 0;
+  box-sizing: border-box;
+  margin-top: 1.5rem;
+}
+
+.section p {
+  max-width: 50rem;
+  margin: 1rem auto;
+  padding: 10px 20px;
+  text-align: center;
+  line-height: 2;
+}
+
+.section h2 {
+  text-transform: capitalize;
+  text-align: center;
+}
+
+#loading,
+#notfound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#loading p,
+#notfound p {
+  font-size: 2rem;
+  color: var(--green3);
+  padding: 1rem;
+}
+
+#loading i {
+  color: var(--peach1);
+}
+
+#notfound button {
+  border-radius: 20px;
+  padding: 15px 60px;
+  margin-top: 2rem;
+  border: 1px solid var(--darkgrey);
+  font-size: 1em;
+  letter-spacing: 2px;
+  color: var(--darkgrey);
+  background-color: var(--pearlgrey);
+  cursor: pointer;
+  outline: none;
+}
+
+/* vertical mobile display */
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+}

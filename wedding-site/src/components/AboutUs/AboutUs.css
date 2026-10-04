@@ -1,0 +1,67 @@
+#info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+#info div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#info a {
+  opacity: 1;
+}
+
+#brideandgroom,
+#groom,
+#bride {
+  flex: 1;
+}
+
+#info img {
+  max-width: 350px;
+  border-radius: 10px;
+}
+
+#bride img {
+  max-width: 300px;
+}
+
+#carousel {
+  margin: auto;
+  height: 850px;
+  width: 850px;
+  margin-bottom: 150px;
+}
+
+#bridemaidinfo {
+  max-width: 100rem;
+}
+
+@media only screen and (max-width: 600px) {
+
+  #info {
+      flex-wrap: wrap;
+  }
+
+  #brideandgroom,
+  #bride {
+    flex-basis: 50%;
+  }
+
+  #carousel {
+    margin: auto;
+    height: 400px;
+    width: 400px;
+    margin-bottom: 150px;
+  }
+
+  #carousel img {
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+}

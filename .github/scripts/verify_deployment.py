@@ -53,6 +53,18 @@ for asset in assets.paths:
 for route in ("/resume", "/projects", "/interests", "/tools", "/drawing", "/focus"):
     content, _ = read(base + route)
     assert b'<div id="root"' in content, "Missing SPA route: " + route
+wedding, _ = read(base + "/weddingsite")
+assert b"Charlotte" in wedding, "Wedding archive is missing"
+wedding_assets = Assets()
+wedding_assets.feed(wedding.decode())
+assert wedding_assets.paths, "Wedding bundles are missing"
+for asset in wedding_assets.paths:
+    # Google Fonts supplies presentation only; verify our deployed app assets.
+    if asset.startswith("/weddingsite/"):
+        content, _ = read(urljoin(base, asset))
+        assert content, "Empty wedding bundle"
+photo, _ = read(base + "/weddingsite/images/1.jpg")
+assert photo.startswith(b"\xff\xd8"), "Wedding photos are missing"
 for route in ("/not-a-page", "/journal", "/calendar", "/static/missing.js"):
     try:
         read(base + route)

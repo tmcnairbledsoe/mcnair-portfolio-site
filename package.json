@@ -7,8 +7,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test"
+    "build": "npm run build:portfolio && npm run build:wedding && node scripts/merge-wedding-build.js",
+    "test": "react-scripts test",
+    "build:portfolio": "react-scripts build",
+    "build:wedding": "npm run build --workspace wedding-site",
+    "test:wedding": "npm test --workspace wedding-site -- --watchAll=false --runInBand"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -39,5 +42,8 @@
       "react-app",
       "react-app/jest"
     ]
-  }
+  },
+  "workspaces": [
+    "wedding-site"
+  ]
 }

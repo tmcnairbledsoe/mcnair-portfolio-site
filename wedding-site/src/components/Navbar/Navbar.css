@@ -1,0 +1,77 @@
+nav {
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index: 9;
+}
+
+#menu {
+  margin-left: 2rem;
+}
+
+#menu li,
+link {
+  line-height: 4.1;
+  list-style: none;
+  display: none;
+}
+
+.description {
+  color: var(--lightgreen);
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+}
+
+.fas {
+  color: var(--lightgreen);
+  margin-right: 1rem;
+}
+
+#menu {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--olivegreen);
+  width: 100%;
+  height: auto;
+  justify-content: space-around;
+}
+
+#menu > li,
+link {
+  display: block;
+}
+
+@media only screen and (max-width: 600px) {
+  #menu li,
+  link {
+    line-height: 3.5;
+    padding: 0 0.2rem;
+  }
+
+  #menu {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .description {
+    font-size: 0.6rem;
+  }
+
+  .description {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 850px) {
+  #menu li:first-of-type,
+  link:first-of-type {
+    margin-left: 3rem;
+  }
+}
+@media (max-width:600px) { #menu { justify-content:space-around; } .description { display:inline; font-size: .85rem; } }
+:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
+section[id], #aboutUs { scroll-margin-top:75px; }

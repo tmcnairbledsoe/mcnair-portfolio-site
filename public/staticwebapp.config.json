@@ -31,6 +31,19 @@
     {
       "route": "/focus",
       "rewrite": "/index.html"
+    },
+    {
+      "route": "/weddingsite",
+      "rewrite": "/weddingsite/index.html",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'"
+      }
+    },
+    {
+      "route": "/weddingsite/*",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'"
+      }
     }
   ],
   "navigationFallback": {
