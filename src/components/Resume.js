@@ -1,120 +1,273 @@
 import React from "react";
-import './Resume.css';
+import "./Resume.css";
 
-const Resume = () => {
+const resume = {
+  "headline": "Senior Software Engineer | Full-Stack, Cloud & AI Security",
+  "summary": "Senior software engineer with 13+ years of experience building and modernizing enterprise applications across AI security, finance, real estate technology, construction, and operations. At AiRisk, leads development of LLM security capabilities, including prompt injection detection, jailbreak testing, risk scanning, and policy enforcement. Builds C#/.NET APIs, integrates AI services, and develops Azure and AWS deployment patterns, with attention to authentication, observability, and customer delivery.",
+  "skills": [
+    {
+      "category": "Programming Languages",
+      "items": [
+        "C#",
+        "Python",
+        "SQL",
+        "JavaScript",
+        "TypeScript",
+        "R",
+        "VB.NET",
+        "HTML",
+        "CSS",
+        "JSON"
+      ]
+    },
+    {
+      "category": "Frameworks",
+      "items": [
+        ".NET Core",
+        "ASP.NET",
+        "MVC",
+        "Blazor",
+        "React",
+        "Angular",
+        "Knockout",
+        "Node.js",
+        "WPF",
+        "WinForms",
+        "Bootstrap"
+      ]
+    },
+    {
+      "category": "Cloud Platforms & Services",
+      "items": [
+        "Azure",
+        "AWS",
+        "Azure App Service",
+        "Azure Functions",
+        "Logic Apps",
+        "Key Vault",
+        "Cosmos DB",
+        "Azure SQL",
+        "Azure Storage",
+        "Redis",
+        "SignalR",
+        "Application Insights",
+        "Managed Identity",
+        "S3",
+        "AWS Bedrock",
+        "AWS Agents",
+        "OpenSearch"
+      ]
+    },
+    {
+      "category": "AI, ML & Security",
+      "items": [
+        "LLM Security",
+        "Prompt Injection Detection",
+        "Jailbreak Testing",
+        "AI Risk Scanning",
+        "Policy Enforcement",
+        "PII Detection",
+        "Toxicity Scanning",
+        "ML.NET",
+        "TensorFlow",
+        "Azure AI Foundry",
+        "OpenAI",
+        "Mistral",
+        "Google AI",
+        "Perplexity",
+        "AI Tool Execution",
+        "MCP Integrations",
+        "Authentication",
+        "Role-Based Authorization"
+      ]
+    },
+    {
+      "category": "DevOps, Data & Development Tools",
+      "items": [
+        "Azure DevOps",
+        "Git",
+        "GitHub",
+        "Docker",
+        "Kubernetes",
+        "REST APIs",
+        "SQL Server",
+        "SSIS",
+        "SSRS",
+        "SSMS",
+        "Power BI",
+        "Tableau",
+        "Jupyter Notebook",
+        "RStudio",
+        "Visual Studio",
+        "VS Code"
+      ]
+    },
+    {
+      "category": "Construction & Engineering Integrations",
+      "items": [
+        "Autodesk Platform Services",
+        "Revit API",
+        "Revit Add-In Development"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "title": "Senior Software Developer",
+      "employer": "AiRisk",
+      "location": "Remote / Greenville, SC",
+      "dates": "Aug 2024 - Present",
+      "bullets": [
+        "Lead development of an AI security platform for LLM risk evaluation, prompt injection detection, jailbreak testing, and policy enforcement.",
+        "Built C#/.NET scanner APIs with endpoint authorization, Redis caching, SQL Server access, and Cosmos DB audit logging.",
+        "Implemented asynchronous checks for PII, toxicity, language, geographic, topic, regex, and substring policy violations.",
+        "Integrated OpenAI, Azure AI Foundry, AWS Bedrock, Google AI, Perplexity, Mistral, AWS Agents, OpenSearch, and S3 workflows.",
+        "Built custom AI tool execution for database queries, API calls, web search, file and image uploads, and MCP calls.",
+        "Designed Azure and AWS deployment patterns using App Services, SQL, Cosmos DB, Redis, SignalR, Application Insights, Storage, Key Vault, and managed identity.",
+        "Worked with leadership and customers to deliver changing AI security requirements; improved product readiness through UI refinements, onboarding, demos, installation flows, licensing support, authentication, and observability."
+      ]
+    },
+    {
+      "title": "Software Developer",
+      "employer": "Metromont",
+      "location": "Greenville, SC",
+      "dates": "Aug 2023 - Aug 2024",
+      "bullets": [
+        "Developed .NET 8, C#, and React applications using Autodesk Platform Services for construction and engineering workflows.",
+        "Automated alerts, data gathering, authorization, and recurring tasks with Python.",
+        "Maintained Revit add-ins using .NET 6, C#, and the Revit API for design and project delivery teams.",
+        "Built Azure-hosted applications using Web Apps, SQL Databases, Function Apps, Logic Apps, Storage Accounts, Key Vault, and Cosmos DB.",
+        "Configured Azure DevOps pipelines to standardize deployments and application notifications."
+      ]
+    },
+    {
+      "title": "Senior Software Developer",
+      "employer": "Grace Hill",
+      "location": "Greenville, SC",
+      "dates": "Apr 2021 - Aug 2023",
+      "bullets": [
+        "Enhanced customer-facing real estate management portals using C#, .NET Core 6, SQL Server, Knockout JS, and role-based authorization.",
+        "Led feature development for a complex user and tenant management system.",
+        "Built React micro-frontends for the flagship product ecosystem and a React application for comparing Qualtrics survey data.",
+        "Improved SQL Server reliability by replacing dynamic query strings and implementing hot/cold logging with triggers.",
+        "Developed stored procedures, functions, and Python monitoring scripts for reporting and operational visibility."
+      ]
+    },
+    {
+      "title": "Web Application Developer",
+      "employer": "RealPage Contact Center",
+      "location": "Greenville, SC",
+      "dates": "May 2020 - Mar 2021",
+      "bullets": [
+        "Developed operational applications, automation tools, dashboards, and reporting features for call center teams.",
+        "Created REST APIs to separate SQL access from legacy systems.",
+        "Modernized legacy ASP.NET functionality into React applications and designed an external client dashboard."
+      ]
+    },
+    {
+      "title": "Software Developer",
+      "employer": "Barings",
+      "location": "Charlotte, NC",
+      "dates": "2019",
+      "bullets": [
+        "Supported fixed income trading applications using SSIS, SSRS, SQL, and data access pages.",
+        "Resolved overnight SQL process issues and maintained trading operations data workflows."
+      ]
+    },
+    {
+      "title": "Web Application Developer",
+      "employer": "Bank of America",
+      "location": "Charlotte, NC",
+      "dates": "Jul 2017 - Dec 2018",
+      "bullets": [
+        "Enhanced legal department web applications using C#, .NET, SQL Server, ASP.NET, and Angular.",
+        "Supported application redesign and modernization within an agile development team."
+      ]
+    },
+    {
+      "title": "Computer Programmer",
+      "employer": "C.A. Short",
+      "location": "Shelby, NC",
+      "dates": "Jan 2016 - Jun 2017",
+      "bullets": [
+        "Maintained enterprise applications, client-facing websites, and reporting services using VB.NET, C#, WinForms, SQL Server, and SSRS.",
+        "Improved application performance through multithreading, query tuning, and reporting enhancements."
+      ]
+    },
+    {
+      "title": "Independent Consultant",
+      "employer": "Self Employed",
+      "location": "Charlotte, NC",
+      "dates": "Jan 2015 - Dec 2015",
+      "bullets": [
+        "Developed stock information and analysis web services using data science techniques.",
+        "Collaborated on community technology projects while continuing advanced education in statistics and analytics."
+      ]
+    },
+    {
+      "title": "Programmer",
+      "employer": "VectorVest Inc.",
+      "location": "Cornelius, NC",
+      "dates": "Oct 2013 - Jan 2015",
+      "bullets": [
+        "Built client and employee software for real-time stock market data using C#, VB.NET, SQL Server, and service-based architecture.",
+        "Implemented multithreaded solutions to address client application performance issues.",
+        "Strengthened testing processes for service-based application development."
+      ]
+    },
+    {
+      "title": "Software Engineer",
+      "employer": "Wells Fargo Securities",
+      "location": "Charlotte, NC",
+      "dates": "Jan 2013 - Oct 2013",
+      "bullets": [
+        "Developed features for a high-priority, multithreaded fixed income trading application using C#, WinForms, and SQL Server.",
+        "Worked with cross-functional teams to clarify requirements.",
+        "Implemented logging for application monitoring and debugging."
+      ]
+    }
+  ],
+  "education": [
+    "University of North Carolina at Charlotte | Professional Science Master, Data Science and Business Analytics | 2018",
+    "University of South Carolina | Bachelor of Science, Computer Engineering | 2011"
+  ]
+};
+
+export default function Resume() {
   return (
-    <div className="container">
+    <div className="container resume-page">
       <h1>Thomas McNair Bledsoe</h1>
-      <h3>Software Developer</h3>
-      <p style={{ textAlign: 'center' }}>Greenville, SC | tmcnairbledsoe@gmail.com | 864-804-9796</p>
-
-      <section>
-        <h2>Professional Summary</h2>
-        <p>
-          Seasoned software developer with proven skills in C#, .Net Framework, .Net Core, SQL, Azure, NoSQL, Python, ReactJS,
-          Angular, Node, R, WPF, MVC, HTML, CSS, and JavaScript. Experienced in maintaining existing systems and
-          designing new applications across various technologies and programming philosophies. Adept at collaborating
-          with team leaders to innovate and automate workflows, reducing human error and improving efficiency.
-        </p>
-        <p>
-          Expertise in creating and deploying applications on Azure, developing solutions for fixed income trading teams,
-          and creating or enhancing large-scale web applications. Extensive experience with enterprise-level systems, cloud
-          platforms, and modern development practices.
-        </p>
+      <h2 className="resume-role">{resume.headline}</h2>
+      <p className="resume-contact">
+        <span>Greenville, SC</span><span aria-hidden="true">|</span>
+        <a href="tel:+18648049796">864-804-9796</a><span aria-hidden="true">|</span>
+        <a href="mailto:tmcnairbledsoe@gmail.com">tmcnairbledsoe@gmail.com</a>
+      </p>
+      <section aria-labelledby="profile-heading">
+        <h2 id="profile-heading">Professional Profile</h2>
+        <p>{resume.summary}</p>
       </section>
-
-      <section>
-        <h2>Professional Experience</h2>
-
-        <h3>Software Developer - Metromont, Greenville, SC (Aug 2023 - Aug 2024)</h3>
-        <ul>
-          <li>Created .NET Core 8 C# applications using Autodesk Platform Services.</li>
-          <li>Developed Python scripts for automation tasks and maintained Revit Addins.</li>
-          <li>Utilized Azure Portal features including SQL Databases, Function Apps, Logic Apps, Storage Accounts, Key Vault, and Cosmos DB.</li>
-          <li>Designed and maintained Azure Functions for automating project lifecycle tasks.</li>
-          <li>Implemented SSO using Active Directory and Entra ID.</li>
-          <li>Published and maintained self-refreshing Power BI reports tracking enterprise application usage.</li>
-        </ul>
-
-        <h3>Senior Software Developer - Grace Hill, Greenville, SC (Apr 2021 - Aug 2023)</h3>
-        <ul>
-          <li>Maintained web portal for real estate management clients and internal tools.</li>
-          <li>Led a team to develop new pages and features for a complex user and tenant system.</li>
-          <li>Developed React micro front-end components and a new React application for survey comparison using Qualtrics data.</li>
-          <li>Maintained and enhanced numerous .NET Core applications.</li>
-        </ul>
-
-        <h3>Web Application Developer - RealPage Contact Center, Greenville, SC (May 2020 - Mar 2021)</h3>
-        <ul>
-          <li>Developed and supported applications for Call Center operations including automation and reporting tools.</li>
-          <li>Created core RESTful APIs to decouple SQL calls from legacy systems.</li>
-          <li>Refactored legacy ASP.NET code into modern ReactJS applications.</li>
-          <li>Designed a new external client dashboard using ReactJS.</li>
-        </ul>
-
-        <h3>Web Application Developer - Cass Information Systems, Greenville, SC (Dec 2019 - Mar 2020)</h3>
-        <ul>
-          <li>Developed and maintained ASP.NET applications for enterprise and customer-facing sites.</li>
-          <li>Managed requirements using DevOps ticketing and Agile methodologies.</li>
-          <li>Facilitated SSO connections for external customers and created documentation for new features.</li>
-        </ul>
-
-        <h3>Software Developer - Barings, Charlotte, NC (Dec 2018 - May 2019)</h3>
-        <ul>
-          <li>Collaborated with fixed income trading teams using SSIS, SSRS, and SQL for securities trading applications.</li>
-          <li>Supported large SQL processes and developed data access pages using third-party software.</li>
-        </ul>
-
-        <h3>Web Application Developer - Bank of America, Charlotte, NC (Jul 2017 - Dec 2018)</h3>
-        <ul>
-          <li>Added functionality and maintained web applications for the legal department using C# .NET, SQL, and ASP.NET.</li>
-          <li>Constructed websites and frameworks to facilitate application transitions to new designs.</li>
-        </ul>
-
-        <h3>Computer Programmer - C.A Short, Shelby, NC (Jan 2016 - Jun 2017)</h3>
-        <ul>
-          <li>Maintained enterprise applications and websites using VB.Net, C#, WinForms, and SQL.</li>
-          <li>Optimized enterprise code with multithreading and query improvements.</li>
-        </ul>
-
-        <h3>Programmer - VectorVest Inc, Cornelius, NC (Oct 2013 - Jan 2015)</h3>
-        <ul>
-          <li>Developed client and employee software for real-time stock market data using C#, VB.NET, and SQL Server.</li>
-          <li>Built multi-threaded solutions for performance issues in client applications.</li>
-        </ul>
-
-        <h3>Software Engineer - Wells Fargo Securities, Charlotte, NC (Jan 2013 - Oct 2013)</h3>
-        <ul>
-          <li>Worked on a multi-threaded trading application using C#, WinForms, and SQL.</li>
-          <li>Collaborated with cross-functional teams to clarify project requirements and implemented logging systems for monitoring applications.</li>
-        </ul>
-
-        <h3>Build and Release Engineer - Wells Fargo, Charlotte, NC (Jun 2011 - Jun 2012)</h3>
-        <ul>
-          <li>Coordinated build and release processes for over 800 applications using automated tools.</li>
-          <li>Provided analysis for broken builds across various programming languages.</li>
+      <section aria-labelledby="skills-heading">
+        <h2 id="skills-heading">Technical Skills</h2>
+        <ul className="resume-skills">
+          {resume.skills.map(({ category, items }) => (
+            <li key={category}><strong>{category}:</strong> {items.join(", ")}</li>
+          ))}
         </ul>
       </section>
-
-      <section>
-        <h2>Education</h2>
-        <ul>
-          <li><strong>Professional Science Masters:</strong> Data Science and Business Analytics, University Of North Carolina, Charlotte, NC (2018)</li>
-          <li><strong>Bachelor of Science:</strong> Computer Engineering, University Of South Carolina, Columbia, SC (2011)</li>
-        </ul>
+      <section aria-labelledby="experience-heading">
+        <h2 id="experience-heading">Professional Experience</h2>
+        {resume.experience.map((job) => (
+          <article className="resume-job" key={job.employer}>
+            <h3>{job.title} - {job.employer}<span className="resume-location">{job.location} | {job.dates}</span></h3>
+            <ul>{job.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>
+          </article>
+        ))}
       </section>
-
-      <section>
-        <h2>Skills</h2>
-        <ul>
-          <li><strong>Programming:</strong> C#, SQL, ASP.NET, SQL, NOSQL, Python 3, JSON, JavaScript, R, VB, HTML, CSS</li>
-          <li><strong>Applications:</strong> Visual Studio, VS Code, Azure, SSMS, Power BI, SAS EG, Tableau, R Studio, Access, Excel</li>
-          <li><strong>Tools & Platforms:</strong> .NET Core, Azure DevOps, ReactJS, Knockout, Bootstrap, Angular, Jupyter
-          Notebook, MVC, GitHub, Git, Docker, Kubernetes, WPF, Forms </li>
-        </ul>
+      <section aria-labelledby="education-heading">
+        <h2 id="education-heading">Education</h2>
+        <ul>{resume.education.map((degree) => <li key={degree}>{degree}</li>)}</ul>
       </section>
     </div>
   );
-};
-
-export default Resume;
+}
