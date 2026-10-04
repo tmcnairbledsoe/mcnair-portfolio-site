@@ -10,10 +10,10 @@ body { background: black; color: #bfbfbf; font-size: 16px; line-height: 1.45; }
 .expanded .menu-toggle img { width: 110px; height: auto; }
 .sidebar h2 { color: white; font-size: 24px; text-align: left; margin: 0 0 20px; }
 .sidebar nav { display: flex; flex-direction: column; gap: 10px; }
-.sidebar nav a { color: white; text-decoration: none; font-size: 16px; }
+.sidebar nav a { color: white; text-decoration: none; font-size: inherit; }
 .sidebar nav a.active { text-decoration: underline; }
 .social-links { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-.social-links a { font-size: 14px; }
+.social-links a { font-size: inherit; }
 .site-shell main { position: relative; z-index: 1; margin-left: 76px; width: calc(100% - 76px); padding: 20px; transition: margin-left .3s ease, width .3s ease; min-height: 100vh; }
 .sidebar-open main { margin-left: 240px; width: calc(100% - 240px); }
 .skip-link { position: fixed; top: -100px; left: 86px; z-index: 5; background: black; padding: 10px; }

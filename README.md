@@ -2,7 +2,7 @@
 
 The existing JavaScript Create React App website, repaired while retaining its original black background, moving pixels, logo, sidebar, and public page layouts. Includes résumé, projects, interests, a local drawing canvas, and a focus timer.
 
-The original wedding website is preserved as a public keepsake at `/weddingsite`, with its photos and layout. Its historical RSVP and guest database features are closed. Its source lives in `wedding-site`; the build combines both applications into one deployable artifact.
+The original wedding website is preserved as a public keepsake at `/weddingsite`, with its photos and layout. Any username can sign in and select a guest, wedding party, rehearsal, or brunch layout. Guest choices and RSVP responses stay in the current browser tab; no guest database is connected. Its source lives in `wedding-site`; the build combines both applications into one deployable artifact.
 
 ## Local development
 

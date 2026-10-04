@@ -141,3 +141,15 @@ a:hover {
     font-size: 1rem;
   }
 }
+.guest-actions { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+.guest-actions button { padding:.75rem 1.5rem; border:1px solid var(--olivegreen); color:var(--darkgrey); background:white; border-radius:5px; cursor:pointer; font:inherit; }
+.event-schedule { display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; max-width:70rem; margin:2rem auto; padding:0 1rem; }
+.event-schedule section { flex:1 1 18rem; max-width:28rem; }
+.event-schedule li { line-height:1.7; margin:.5rem 0; }
+.map-heading { text-align:center; }
+.printable-map { display:block; max-width:1000px; margin:1rem auto; padding:0 1rem; }
+.printable-map img { display:block; width:100%; height:auto; }
+.register-wrapper label { font:inherit; }
+.register-wrapper textarea { line-height:1.5 !important; padding:.5rem; }
+.register-wrapper input:focus-visible, .register-wrapper select:focus-visible, .register-wrapper textarea:focus-visible { outline:2px solid var(--olivegreen); outline-offset:3px; }
+@media(max-width:600px) { #menu { position:static; } nav { position:sticky; } section[id] { scroll-margin-top:100px; } }
