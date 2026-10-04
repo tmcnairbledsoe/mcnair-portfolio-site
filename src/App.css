@@ -14,6 +14,10 @@ body { background: black; color: #bfbfbf; font-size: 16px; line-height: 1.45; }
 .sidebar nav a.active { text-decoration: underline; }
 .social-links { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
 .social-links a { font-size: inherit; }
+.sidebar-auth { margin-top: 28px; border-top: 1px solid #555; padding-top: 20px; overflow-wrap: anywhere; }
+.sidebar-auth h2 { margin-bottom: 12px; }
+.sidebar-auth p { font-size: 14px; }
+.sidebar-auth button { margin: 0 0 8px; width: 100%; }
 .site-shell main { position: relative; z-index: 1; margin-left: 76px; width: calc(100% - 76px); padding: 20px; transition: margin-left .3s ease, width .3s ease; min-height: 100vh; }
 .sidebar-open main { margin-left: 240px; width: calc(100% - 240px); }
 .skip-link { position: fixed; top: -100px; left: 86px; z-index: 5; background: black; padding: 10px; }

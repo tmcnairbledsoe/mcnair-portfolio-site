@@ -6,7 +6,6 @@ import Drawing from "./components/Drawing";
 import FocusTimer from "./components/FocusTimer";
 import Home from "./components/Home";
 import Projects from "./components/Projects";
-import Interests from "./components/Interests";
 import PageHeading from "./components/PageHeading";
 import Sidebar from "./components/Sidebar";
 import PixelDrop from "./components/PixelDrop";
@@ -15,7 +14,6 @@ const titles = {
   "/": "Home",
   "/resume": "Résumé",
   "/projects": "Projects",
-  "/interests": "Interests",
   "/tools": "Browser tools",
   "/drawing": "Sketchpad",
   "/drawingpage": "Sketchpad",
@@ -100,7 +98,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/interests" element={<Interests />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/drawing" element={<Drawing />} />
           <Route path="/drawingpage" element={<Drawing />} />

@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import mbcLogo from "../assets/mbc.png";
+import SidebarAuth from "../auth/SidebarAuth";
 
-const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/interests", "Interests"], ["/tools", "Browser tools"]];
+const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"]];
 export default function Sidebar({ expanded, setExpanded }) {
   const closeOnMobile = () => { if (window.innerWidth <= 768) setExpanded(false); };
   const hover = (open) => {
@@ -25,6 +26,7 @@ export default function Sidebar({ expanded, setExpanded }) {
           <a href="https://www.linkedin.com/in/thomas-bledsoe-a1272928a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://github.com/tmcnairbledsoe" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
+        <SidebarAuth />
       </div>
     </aside>
   );

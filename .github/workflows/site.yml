@@ -31,6 +31,8 @@ jobs:
         env:
           CI: 'true'
           GENERATE_SOURCEMAP: 'false'
+          REACT_APP_AZURE_AD_CLIENT_ID: ${{ vars.AZURE_AD_CLIENT_ID }}
+          REACT_APP_AZURE_AD_TENANT_ID: ${{ vars.AZURE_AD_TENANT_ID }}
       - name: Record deployed source version
         run: node -e "require('fs').writeFileSync('build/version.json', JSON.stringify({commit:process.env.GITHUB_SHA}))"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
