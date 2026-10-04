@@ -12,12 +12,32 @@ const post={id:'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',title:'Private A',document
 function response(data,status=200){return {ok:status<400,status,json:async()=>data,blob:async()=>new Blob(['x'],{type:'image/png'})};}
 function view(kind){return <MemoryRouter><ContentPage kind={kind} /></MemoryRouter>;}
 beforeEach(()=>{
-  session={account:null,accountKey:'public',ready:true,signIn:jest.fn().mockResolvedValue(),token:jest.fn().mockResolvedValue('API_ACCESS_TOKEN')};
+  session={account:null,accountKey:'public',ready:true,journalAllowed:true,signIn:jest.fn().mockResolvedValue(),token:jest.fn().mockResolvedValue('API_ACCESS_TOKEN')};
   useContentSession.mockImplementation(()=>session);
   global.fetch=jest.fn().mockResolvedValue(response({items:[],cursor:null,canWrite:false}));
   window.confirm=jest.fn().mockReturnValue(true);
 });
 afterEach(()=>{delete global.fetch;});
+
+test('no-role accounts cannot open or fetch journals but can read published blog posts',async()=>{
+  session={...session,account:{homeAccountId:'A'},accountKey:'A',journalAllowed:false};
+  const page=render(view('journal'));
+  expect(screen.getByText(/Journal access requires an Owner/)).toBeInTheDocument();
+  expect(fetch).not.toHaveBeenCalled();expect(screen.queryByRole('button',{name:'New entry'})).not.toBeInTheDocument();
+  fetch.mockResolvedValue(response({items:[{...post,title:'Public post',status:'published'}],canWrite:false,cursor:null}));
+  page.rerender(view('blog'));
+  expect(await screen.findByText('Public post')).toBeInTheDocument();
+  expect(screen.queryByRole('button',{name:'Edit'})).not.toBeInTheDocument();
+});
+
+test('losing the journal role clears existing private content for the same account',async()=>{
+  session={...session,account:{homeAccountId:'A'},accountKey:'A',journalAllowed:true};
+  fetch.mockResolvedValue(response({items:[post],canWrite:true,cursor:null}));
+  const page=render(view('journal'));expect(await screen.findByText('Private A')).toBeInTheDocument();
+  session={...session,journalAllowed:false};page.rerender(view('journal'));
+  expect(screen.queryByText('Private A')).not.toBeInTheDocument();expect(screen.queryByText('Only account A')).not.toBeInTheDocument();
+  expect(screen.getByText(/Journal access requires an Owner/)).toBeInTheDocument();
+});
 test('signed-out journal gates sign in and performs no private fetch; public blog fetches without bearer and no owner controls',async()=>{
   const page=render(view('journal'));
   expect(screen.getByText(/Sign in with Microsoft to open/)).toBeInTheDocument();expect(fetch).not.toHaveBeenCalled();
@@ -25,7 +45,7 @@ test('signed-out journal gates sign in and performs no private fetch; public blo
   page.rerender(view('blog'));
   expect(await screen.findByText('No published posts yet.')).toBeInTheDocument();expect(fetch.mock.calls[0][1].headers.Authorization).toBeUndefined();expect(screen.queryByRole('button',{name:'New blog post'})).not.toBeInTheDocument();
 });
-test('no-role account has own journal editor without publish switch; owner controls derive from API capability',async()=>{
+test('role-bearing account has own journal editor without publish switch; owner controls derive from API capability',async()=>{
   session={...session,account:{homeAccountId:'A'},accountKey:'A'};
   fetch.mockResolvedValue(response({items:[],cursor:null,canWrite:true}));
   const page=render(view('journal'));
@@ -54,8 +74,8 @@ test('conflict keeps edits, disables overwrite, and reloads with confirmation; p
   fetch.mockResolvedValueOnce(response({items:[draft],cursor:null,canWrite:true})).mockResolvedValueOnce(response(draft)).mockResolvedValueOnce(response({},412));
   render(view('blog'));fireEvent.click(await screen.findByRole('button',{name:'Edit'}));
   const title=await screen.findByDisplayValue('Private A');fireEvent.change(title,{target:{value:'My unsaved title'}});
-  fireEvent.click(screen.getByRole('button',{name:'Publish',exact:true}));
-  expect(await screen.findByRole('alert')).toHaveTextContent('Your edits are still here');expect(screen.getByDisplayValue('My unsaved title')).toBeInTheDocument();expect(screen.getByRole('button',{name:'Publish',exact:true})).toBeDisabled();
+  fireEvent.click(screen.getByRole('button',{name:'Publish post',exact:true}));
+  expect(await screen.findByRole('alert')).toHaveTextContent('Your edits are still here');expect(screen.getByDisplayValue('My unsaved title')).toBeInTheDocument();expect(screen.getByRole('button',{name:'Publish post',exact:true})).toBeDisabled();
   expect(fetch.mock.calls[2][1].headers['If-Match']).toBe('"1"');expect(JSON.parse(fetch.mock.calls[2][1].body).status).toBe('published');
   fetch.mockResolvedValueOnce(response({...draft,title:'Current',version:2,status:'published'}));
   fireEvent.click(screen.getByRole('button',{name:/Reload current version/}));expect(await screen.findByDisplayValue('Current')).toBeInTheDocument();expect(window.confirm).toHaveBeenCalled();

@@ -6,6 +6,7 @@ const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosnif
 const maxImage = 5 * 1024 * 1024;
 const scopeFor = (kind, user) => ({ kind, namespace: kind === 'blog' ? 'blog' : `journal:${user.tid}:${user.oid}`, tid: user?.tid, oid: user?.oid });
 const requireUser = user => { if (!user) throw new HttpError(401, 'Sign in to access your private journal.'); };
+function requireJournalRole(user) { requireUser(user); if (!user.journalAllowed) throw new HttpError(403, 'Journal access requires an Owner, Wife, or Friend role.'); }
 function writable(kind, user) { requireUser(user); if (kind === 'blog' && !user.owner) throw new HttpError(403, 'Only the owner can change blog posts.'); }
 function belongs(item, scope) {
   return item && item.namespace === scope.namespace && item.kind === scope.kind && (scope.kind === 'blog' || (item.owner_tid === scope.tid && item.owner_oid === scope.oid));
@@ -59,7 +60,7 @@ function createService({ authenticate, getStore }) {
       const media = resource === 'media';
       if (!media) { id = kind; kind = resource; }
       if (!['blog', 'journal'].includes(kind) || parts.length > (media ? 3 : 2) || (id !== undefined && !UUID.test(id))) throw new HttpError(404, 'Content not found.');
-      if (kind === 'journal') requireUser(user);
+      if (kind === 'journal') requireJournalRole(user);
       const scope = scopeFor(kind, user);
       const publicOnly = kind === 'blog' && !user?.owner;
       const method = request.method.toUpperCase();

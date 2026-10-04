@@ -48,7 +48,7 @@ function fixture() {
   return { ...mock, call, seed, asset, store };
 }
 test('real signed access token validates tenant/issuer/audience/expiry/scope/oid/version; ID/Graph tokens and fake signatures fail', async t => {
-  assert.deepEqual(await verify(`Bearer ${await token(a, ['OwnerRole'])}`), { tid, oid: a, owner: true });
+  assert.deepEqual(await verify(`Bearer ${await token(a, ['OwnerRole'])}`), { tid, oid: a, owner: true, journalAllowed: true });
   for (const changes of [{ aud: 'https://graph.microsoft.com' }, { aud: [clientId, 'other'] }, { iss: 'https://evil.example/v2.0' }, { tid: b }, { exp: Math.floor(Date.now()/1000)-60 }, { scp: undefined }, { scp: 'User.Read' }, { oid: undefined }, { oid: 'user@example.com' }, { ver: '1.0' }, { nbf: Math.floor(Date.now()/1000) + 3600 }]) {
     await t.test(JSON.stringify(changes), async () => assert.rejects(verify(`Bearer ${await token(a, ['OwnerRole'], changes)}`), e => e.status === 401));
   }
@@ -68,7 +68,7 @@ test('public published-only feed excludes all journal metadata/drafts; optional 
   for (const path of ['journal', `journal/${idA}`, `media/journal/${assetA}`]) assert.equal((await f.call(path)).status, 401);
 });
 test('A and Owner cannot list/get/edit/delete/reference/view B journals or media; namespace and metadata filters are applied', async () => {
-  for (const roles of [[], ['OwnerRole'], ['WifeRole'], ['FriendRole']]) {
+  for (const roles of [['OwnerRole'], ['WifeRole'], ['FriendRole']]) {
     const f = fixture(); const bearer = await token(a, roles); f.seed('journal', a, idA); f.seed('journal', b, idB); f.asset('journal', b, assetB);
     const list = await f.call('journal', { bearer }); assert.equal(list.status, 200); assert.deepEqual(list.jsonBody.items.map(p => p.id), [idA]);
     for (const method of ['GET','PUT','DELETE']) assert.equal((await f.call(`journal/${idB}`, { bearer, method, match: '"1"', ...(method === 'PUT' ? { body: { title: 'Steal', document: doc, status: 'private' } } : {}) })).status, 404);
@@ -78,8 +78,40 @@ test('A and Owner cannot list/get/edit/delete/reference/view B journals or media
     assert.equal(f.tables.posts.find(p => p.id === idB).version, 1);
   }
 });
-test('journal permits own CRUD and images for noRole/Wife/Friend; ignores/rejects client identity and never publishes journal', async () => {
-  for (const roles of [[], ['WifeRole'], ['FriendRole']]) {
+
+test('no-role and unrecognized-role accounts can read published blogs but cannot access any journal endpoint', async () => {
+  for (const roles of [[], ['UnrelatedRole'], ['ownerrole']]) {
+    const f = fixture(); const bearer = await token(a, roles);
+    f.seed('blog', a, idA, 'published'); f.seed('blog', a, idB);
+    const feed = await f.call('blog', { bearer });
+    assert.equal(feed.status, 200); assert.deepEqual(feed.jsonBody.items.map(p => p.id), [idA]);
+    assert.equal(feed.jsonBody.canWrite, false);
+    assert.equal((await f.call(`blog/${idA}`, { bearer })).status, 200);
+    const before = f.calls.length;
+    for (const [path, method] of [['journal','GET'], ['journal','POST'], [`journal/${idA}`,'GET'], [`journal/${idA}`,'PUT'], [`journal/${idA}`,'DELETE'], ['media/journal','POST'], [`media/journal/${assetA}`,'GET']]) {
+      const result = await f.call(path, { bearer, method });
+      assert.equal(result.status, 403);
+    }
+    assert.equal(f.calls.length, before); // Denial occurs before database or storage access.
+  }
+});
+
+test('publishing an Owner draft makes the post visible to signed-out and no-role readers', async () => {
+  const f = fixture(); const bearer = await token(a, ['OwnerRole']);
+  const body = { title: 'Public writing', document: doc, status: 'draft' };
+  const created = await f.call('blog', { bearer, method: 'POST', body });
+  assert.equal(created.status, 201);
+  assert.equal((await f.call('blog')).jsonBody.items.length, 0);
+  assert.equal((await f.call(`blog/${created.jsonBody.id}`, { bearer, method: 'PUT', match: '"1"', body: { ...body, status: 'published' } })).status, 200);
+  for (const reader of [undefined, await token(b, [])]) {
+    const feed = await f.call('blog', { bearer: reader });
+    assert.equal(feed.status, 200); assert.equal(feed.jsonBody.items[0].id, created.jsonBody.id);
+    assert.equal(feed.jsonBody.canWrite, false);
+    assert.equal((await f.call(`blog/${created.jsonBody.id}`, { bearer: reader })).status, 200);
+  }
+});
+test('journal permits own CRUD and images for Owner/Wife/Friend; ignores/rejects client identity and never publishes journal', async () => {
+  for (const roles of [['OwnerRole'], ['WifeRole'], ['FriendRole']]) {
     const f = fixture(); const bearer = await token(a, roles);
     const upload = await f.call('media/journal', { bearer, method: 'POST', body: png, type: 'image/png' }); assert.equal(upload.status, 201);
     const assetId = upload.jsonBody.assetId; const metadata = f.tables.assets[0]; assert.equal(metadata.namespace, `journal:${tid}:${a}`); assert.equal(metadata.storage_path, `${metadata.namespace}/${assetId}`);
@@ -134,7 +166,7 @@ test('blog assets stay private until CURRENT published references; unpublish/del
   assert.equal(f.tables.assets.length, 2); // No unrelated asset/post deletion.
 });
 test('optimistic updates/deletes reject stale and missing versions, including concurrent RPC race', async () => {
-  const f = fixture(); const bearer = await token(a); f.seed('journal', a, idA);
+  const f = fixture(); const bearer = await token(a, ['FriendRole']); f.seed('journal', a, idA);
   const path = `journal/${idA}`, body = { title: 'Changed', document: doc, status: 'private' };
   assert.equal((await f.call(path, { bearer, method: 'PUT', body })).status, 428);
   assert.equal((await f.call(path, { bearer, method: 'PUT', body, match: '"9"' })).status, 412);
@@ -143,7 +175,7 @@ test('optimistic updates/deletes reject stale and missing versions, including co
   assert.equal((await f.call(path, { bearer, method: 'DELETE', match: '"1"' })).status, 412); assert.equal(f.tables.posts.length, 1);
 });
 test('strict schema rejects malicious nodes/attrs/src/links/unknown body fields and bounded depth/size/count', async () => {
-  const f = fixture(); const bearer = await token(a);
+  const f = fixture(); const bearer = await token(a, ['FriendRole']);
   const invalid = [
     { type: 'doc', content: [{ type: 'script', content: [] }] },
     { type: 'doc', content: [{ type: 'iframe', attrs: { src: 'https://evil' } }] },
@@ -162,7 +194,7 @@ test('strict schema rejects malicious nodes/attrs/src/links/unknown body fields 
   assert.deepEqual(validateDocument(doc), []); // Text is rendered as escaped React text.
 });
 test('uploads reject SVG/GIF/HTML, MIME disagreement, oversized bytes, path IDs; headers private no-store/nosniff and safe errors', async () => {
-  const f = fixture(); const bearer = await token(a);
+  const f = fixture(); const bearer = await token(a, ['FriendRole']);
   for (const [body,type] of [[Buffer.from('<svg/>'),'image/svg+xml'], [Buffer.from('GIF89a'),'image/gif'], [png,'image/jpeg'], [Buffer.from('<html>'),'image/png'], [Buffer.alloc(5242881),'image/png']]) {
     const result = await f.call('media/journal',{bearer,method:'POST',body,type}); assert.ok([400,413].includes(result.status));
   }
@@ -172,17 +204,17 @@ test('uploads reject SVG/GIF/HTML, MIME disagreement, oversized bytes, path IDs;
   const failure = await f.call('journal',{bearer}); assert.equal(failure.status,503); assert.ok(!JSON.stringify(failure).includes('TOPSECRET'));
 });
 test('pagination bounded, opaque cursor is namespace/visibility scoped and filters date+id without interpolating unvalidated data', async () => {
-  const f = fixture(); const bearer = await token(a); f.seed('journal',a,idA); f.seed('journal',a,idB);
+  const f = fixture(); const bearer = await token(a, ['FriendRole']); f.seed('journal',a,idA); f.seed('journal',a,idB);
   const first = await f.call('journal?limit=1',{bearer}); assert.equal(first.jsonBody.items.length,1); assert.ok(first.jsonBody.cursor);
   const second = await f.call(`journal?limit=1&cursor=${first.jsonBody.cursor}`,{bearer}); assert.equal(second.jsonBody.items.length,1); assert.notEqual(second.jsonBody.items[0].id,first.jsonBody.items[0].id);assert.equal(second.jsonBody.cursor,null);
-  assert.equal((await f.call(`journal?cursor=${first.jsonBody.cursor}`,{bearer:await token(b)})).status,400);
+  assert.equal((await f.call(`journal?cursor=${first.jsonBody.cursor}`,{bearer:await token(b,['FriendRole'])})).status,400);
   assert.equal((await f.call(`blog?cursor=${first.jsonBody.cursor}`)).status,400);
   for (const path of ['journal?limit=21','journal?limit=0','journal?limit=1e2','journal?cursor=evil,sql','journal?cursor='+ 'x'.repeat(1025)]) assert.equal((await f.call(path,{bearer})).status,400);
   assert.ok(f.calls.filter(c => c.limit).every(c => c.limit <= 21));
 });
 
 test('real raster decode accepts JPEG/PNG/WebP and rejects corrupt signature-only images', async () => {
-  const sharp = require('sharp'); const f = fixture(); const bearer = await token(a);
+  const sharp = require('sharp'); const f = fixture(); const bearer = await token(a, ['FriendRole']);
   for (const format of ['jpeg','png','webp']) {
     const bytes = await sharp({create:{width:2,height:2,channels:3,background:'#ffffff'}}).toFormat(format).toBuffer();
     assert.equal((await f.call('media/journal',{bearer,method:'POST',body:bytes,type:`image/${format}`})).status,201);

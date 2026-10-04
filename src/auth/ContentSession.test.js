@@ -5,7 +5,7 @@ import { InteractionRequiredAuthError, InteractionStatus } from '@azure/msal-bro
 import { ContentSession, useContentSession } from './ContentSession';
 import { getAuthConfig } from './config';
 jest.mock('@azure/msal-react',()=>({useMsal:jest.fn()}));
-jest.mock('./config',()=>({getAuthConfig:jest.fn()}));
+jest.mock('./config',()=>({getAuthConfig:jest.fn(),recognizedRoles:jest.requireActual('./config').recognizedRoles}));
 let instance, account;
 function Probe(){const {token,signIn,accountKey}=useContentSession();const [result,setResult]=React.useState('');return <><p>{accountKey}</p><p>{result}</p><button onClick={()=>token().then(setResult,e=>setResult(e.message))}>Token</button><button onClick={signIn}>Sign in again</button></>;}
 beforeEach(()=>{
@@ -34,8 +34,8 @@ test('account switches during silent acquisition reject the previous account tok
 
 test('SDK active-account event updates identity even when MSAL accounts array is unchanged',async()=>{
   let notify;instance.addEventCallback=jest.fn(fn=>{notify=fn;return 'subscription';});instance.removeEventCallback=jest.fn();
-  const page=render(<ContentSession><Probe /></ContentSession>);expect(screen.getByText('A:oidA')).toBeInTheDocument();
+  const page=render(<ContentSession><Probe /></ContentSession>);expect(screen.getByText('A:oidA:')).toBeInTheDocument();
   account={homeAccountId:'B',localAccountId:'oidB'};
-  act(()=>notify({eventType:'msal:activeAccountChanged'}));expect(screen.getByText('B:oidB')).toBeInTheDocument();expect(screen.queryByText('A:oidA')).not.toBeInTheDocument();
+  act(()=>notify({eventType:'msal:activeAccountChanged'}));expect(screen.getByText('B:oidB:')).toBeInTheDocument();expect(screen.queryByText('A:oidA:')).not.toBeInTheDocument();
   page.unmount();expect(instance.removeEventCallback).toHaveBeenCalledWith('subscription');
 });

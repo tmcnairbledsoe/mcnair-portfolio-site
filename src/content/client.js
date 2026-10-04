@@ -21,7 +21,7 @@ export async function request(path, { token, signal, body, version, method = 'GE
   if (!response.ok) {
     // Do not display arbitrary upstream content, HTML error pages, or SDK errors.
     const message = response.status === 401 ? 'Your API session needs sign-in again.'
-      : response.status === 403 ? 'Only the owner can change blog posts.'
+      : response.status === 403 ? /^(journal|media\/journal)(\/|\?|$)/.test(path) ? 'Journal access requires an Owner, Wife, or Friend role.' : 'Only the owner can change blog posts.'
       : [409, 412].includes(response.status) ? 'This entry changed elsewhere. Your edits are still here. Reload the current version before trying again.'
       : response.status === 413 ? 'Choose an image under 5 MB or shorten the document.'
       : response.status === 400 ? 'Check the title, document, and image file type, then retry.'

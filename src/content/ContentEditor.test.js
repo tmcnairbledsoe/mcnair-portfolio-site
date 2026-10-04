@@ -36,8 +36,9 @@ test('real editor UI previews safely and saves distinct draft/published document
   render(<ContentEditor initial={initial} kind="blog" save={save} cancel={cancel} upload={jest.fn()} />);
   expect(await screen.findByRole('textbox',{name:'Entry body'})).toHaveAttribute('contenteditable','true');
   fireEvent.click(screen.getByRole('button',{name:'Preview'})); expect(screen.getByRole('region',{name:'Entry preview'})).toHaveTextContent('Hello world');
-  fireEvent.click(screen.getByRole('button',{name:'Save draft'})); expect(save).toHaveBeenLastCalledWith(expect.objectContaining({status:'draft',title:'Hello'}));
-  fireEvent.click(screen.getByRole('button',{name:'Publish',exact:true})); expect(save).toHaveBeenLastCalledWith(expect.objectContaining({status:'published'}));
+  fireEvent.click(screen.getByRole('button',{name:'Save private draft'})); expect(save).toHaveBeenLastCalledWith(expect.objectContaining({status:'draft',title:'Hello'}));
+  fireEvent.click(screen.getByRole('button',{name:'Publish post',exact:true})); expect(save).toHaveBeenLastCalledWith(expect.objectContaining({status:'published'}));
+  expect(screen.getByText(/Private drafts are visible only to you/)).toBeInTheDocument();
   fireEvent.change(screen.getByLabelText('Link URL'),{target:{value:'javascript:alert(1)'}});
   fireEvent.click(screen.getByRole('button',{name:'Apply link to selection'})); expect(screen.getByRole('alert')).toHaveTextContent(/http, https/);
   fireEvent.click(screen.getByRole('button',{name:'Cancel'})); expect(cancel).toHaveBeenCalled();

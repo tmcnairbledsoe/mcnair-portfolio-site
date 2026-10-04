@@ -14,7 +14,8 @@ function createVerifier({ tenantId, clientId, scope = 'access_as_user', keyResol
         algorithms: ['RS256'], requiredClaims: ['exp', 'iat', 'tid', 'oid', 'ver', 'scp'],
       });
       if (payload.aud !== clientId || payload.tid !== tenantId || !UUID.test(payload.oid || '') || payload.ver !== '2.0' || typeof payload.scp !== 'string' || !payload.scp.split(' ').includes(scope)) throw new Error('Invalid access claims');
-      return { tid: tenantId, oid: payload.oid, owner: Array.isArray(payload.roles) && payload.roles.includes('OwnerRole') };
+      const roles = Array.isArray(payload.roles) ? payload.roles : [];
+      return { tid: tenantId, oid: payload.oid, owner: roles.includes('OwnerRole'), journalAllowed: ['OwnerRole', 'WifeRole', 'FriendRole'].some(role => roles.includes(role)) };
     } catch { throw new HttpError(401, 'Sign in with a valid API access token.'); }
   };
 }
