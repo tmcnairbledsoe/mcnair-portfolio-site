@@ -69,7 +69,7 @@ test("navigation contains only public pages and a useful skip link", () => {
   fireEvent.click(screen.getByRole("button", { name: "Toggle navigation" }));
   expect(
     within(screen.getByRole("navigation")).getAllByRole("link"),
-  ).toHaveLength(8);
+  ).toHaveLength(7);
   expect(screen.getByRole("link", { name: "Skip to content" })).toHaveAttribute(
     "href",
     "#main",

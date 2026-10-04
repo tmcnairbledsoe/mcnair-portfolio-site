@@ -2,9 +2,11 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import mbcLogo from "../assets/mbc.png";
 import SidebarAuth from "../auth/SidebarAuth";
+import { useContentSession } from "../auth/ContentSession";
 
-const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"], ["/blog", "Blog"], ["/journal", "Journal"]];
+const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"], ["/blog", "Blog"]];
 export default function Sidebar({ expanded, setExpanded }) {
+  const { journalAllowed } = useContentSession();
   const closeOnMobile = () => { if (window.innerWidth <= 768) setExpanded(false); };
   const hover = (open) => {
     if (window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches) setExpanded(open);
@@ -18,6 +20,7 @@ export default function Sidebar({ expanded, setExpanded }) {
         <h2>Links</h2>
         <nav id="portfolio-navigation" aria-label="Main navigation">
           {links.map(([to, label]) => <NavLink key={to} to={to} end={to === "/"} onClick={closeOnMobile}>{label}</NavLink>)}
+          {journalAllowed && <NavLink to="/journal" onClick={closeOnMobile}>Journal</NavLink>}
           <NavLink to="/drawing" onClick={closeOnMobile}>Drawing Page</NavLink>
           <NavLink to="/focus" onClick={closeOnMobile}>Focus timer</NavLink>
         </nav>

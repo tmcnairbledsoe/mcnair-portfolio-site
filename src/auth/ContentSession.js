@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useRef, useSyncExternalStore } from 'react';
 import { useMsal } from '@azure/msal-react';
 import { InteractionRequiredAuthError, InteractionStatus } from '@azure/msal-browser';
-import { getAuthConfig } from './config';
+import { getAuthConfig, recognizedRoles } from './config';
 
-const SessionContext = createContext({ account: null, accountKey: 'public', ready: false });
+const SessionContext = createContext({ account: null, accountKey: 'public', ready: false, journalAllowed: false });
 export const useContentSession = () => useContext(SessionContext);
 export function ContentSession({ children }) {
   const { instance, accounts, inProgress } = useMsal();
@@ -16,7 +16,7 @@ export function ContentSession({ children }) {
   }, [instance]);
   const snapshot = useCallback(() => {
     const current = instance.getActiveAccount() || (instance.getAllAccounts ? instance.getAllAccounts()[0] : accounts[0]);
-    return current ? `${current.homeAccountId}:${current.localAccountId}` : 'public';
+    return current ? `${current.homeAccountId}:${current.localAccountId}:${recognizedRoles(current).join(',')}` : 'public';
   }, [instance, accounts]);
   const accountKey = useSyncExternalStore(subscribe, snapshot, snapshot);
   const current = useRef(accountKey);
@@ -36,5 +36,5 @@ export function ContentSession({ children }) {
     }
   }, [account, accountKey, instance, inProgress, scope]);
   const signIn = useCallback(() => instance.loginRedirect({ scopes: [scope] }), [instance, scope]);
-  return <SessionContext.Provider value={{ account, accountKey, ready: true, token, signIn }}>{children}</SessionContext.Provider>;
+  return <SessionContext.Provider value={{ account, accountKey, ready: true, journalAllowed: recognizedRoles(account).length > 0, token, signIn }}>{children}</SessionContext.Provider>;
 }

@@ -12,11 +12,11 @@ import './content.css';
 export default function ContentPage({ kind }) {
   const session = useContentSession();
   const { id } = useParams();
-  return <AccountContent key={`${kind}:${session.accountKey}:${id || ''}`} kind={kind} id={id} session={session} />;
+  return <AccountContent key={`${kind}:${session.accountKey}:${session.journalAllowed}:${id || ''}`} kind={kind} id={id} session={session} />;
 }
 export function AccountContent({ kind, id, session }) {
   const { status } = useAuthStartup();
-  const { account, token, signIn, ready } = session;
+  const { account, token, signIn, ready, journalAllowed } = session;
   const [items, setItems] = useState([]);
   const [cursor, setCursor] = useState(null);
   const [canWrite, setCanWrite] = useState(false);
@@ -40,9 +40,9 @@ export function AccountContent({ kind, id, session }) {
       return result;
     } finally { state.controllers.delete(controller); }
   }, [account, token]);
-  const showError = useCallback(failure => { if (lifecycle.current.live && failure.name !== 'AbortError') { setError(failure.message); if ([409, 412].includes(failure.status)) setConflict(true); } }, []);
+  const showError = useCallback(failure => { if (lifecycle.current.live && failure.name !== 'AbortError') { setError(failure.message); if ([409, 412].includes(failure.status)) setConflict(true); if (kind === 'journal' && [401, 403].includes(failure.status)) { setItems([]); setEditor(null); setCursor(null); setCanWrite(false); } } }, [kind]);
   const load = useCallback(async (next = null) => {
-    if (kind === 'journal' && !account) return;
+    if (kind === 'journal' && (!account || !journalAllowed)) return;
     setLoading(true); setError('');
     try {
       const data = await call(id ? `${kind}/${id}` : `${kind}?limit=10${next ? `&cursor=${encodeURIComponent(next)}` : ''}`);
@@ -50,7 +50,7 @@ export function AccountContent({ kind, id, session }) {
       setCursor(id ? null : data.cursor); setCanWrite(data.canWrite === true && !!account);
     } catch (failure) { showError(failure); }
     finally { if (lifecycle.current.live) setLoading(false); }
-  }, [account, call, id, kind, showError]);
+  }, [account, call, id, kind, journalAllowed, showError]);
   useEffect(() => { load(); }, [load, attempt]);
   async function signInAgain() {
     try { await signIn(); } catch { setError('Could not start sign-in. Please retry.'); }
@@ -85,7 +85,7 @@ export function AccountContent({ kind, id, session }) {
     {kind === 'journal' && !account ? <>
       <p>Sign in with Microsoft to open your journal.</p>
       {ready ? <button onClick={signInAgain}>Sign in with Microsoft</button> : <p>{status === 'starting' ? 'Preparing sign-in…' : 'Sign-in is unavailable. Check Account in the sidebar for setup or retry.'}</p>}
-    </> : <MediaContext.Provider value={media}>
+    </> : kind === 'journal' && !journalAllowed ? <p>Journal access requires an Owner, Wife, or Friend role.</p> : <MediaContext.Provider value={media}>
       {canWrite && !editor && <button disabled={busy} onClick={() => { setEditor({}); setConflict(false); setError(''); }}>New {kind === 'blog' ? 'blog post' : 'entry'}</button>}
       {editor && <ContentEditor key={`${editor.id || 'new'}:${editor.version || 0}`} initial={editor} kind={kind} busy={busy} conflict={conflict} save={save} upload={file => call(`media/${kind}`, { method: 'POST', body: file })} cancel={() => { setEditor(null); setError(''); setConflict(false); }} reload={() => { if (window.confirm('Discard your edits and load the current version?')) edit(editor); }} />}
       {loading && <p role="status">Loading entries…</p>}

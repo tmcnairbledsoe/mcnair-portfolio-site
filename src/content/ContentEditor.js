@@ -83,9 +83,10 @@ export default function ContentEditor({ initial, kind, upload, save, cancel, bus
     <button disabled={disabled || !editor.isActive('image')} onClick={() => editor.chain().focus().updateAttributes('image', { alt }).run()}>Update selected image alt text</button>
     <div className="editor-toolbar">
       <button disabled={disabled} onClick={() => setPreview(!preview)}>{preview ? 'Hide preview' : 'Preview'}</button>
-      {kind === 'blog' ? <><button disabled={disabled || conflict} onClick={() => submit('draft')}>{initial?.status === 'published' ? 'Unpublish and save draft' : 'Save draft'}</button><button disabled={disabled || conflict} onClick={() => submit('published')}>{initial?.status === 'published' ? 'Save published post' : 'Publish'}</button></> : <button disabled={disabled || conflict} onClick={() => submit('private')}>Save entry</button>}
+      {kind === 'blog' ? <><button disabled={disabled || conflict} onClick={() => submit('published')}>{initial?.status === 'published' ? 'Save published post' : 'Publish post'}</button><button disabled={disabled || conflict} onClick={() => submit('draft')}>{initial?.status === 'published' ? 'Unpublish and save draft' : 'Save private draft'}</button></> : <button disabled={disabled || conflict} onClick={() => submit('private')}>Save entry</button>}
       <button disabled={disabled} onClick={cancel}>Cancel</button>
     </div>
+    {kind === 'blog' && <p>Publish post makes this visible to everyone, including signed-out visitors. Private drafts are visible only to you.</p>}
     {conflict && <button onClick={reload} disabled={disabled}>Reload current version (discard edits)</button>}
     {error && <p role="alert">{error}</p>}
     {preview && <section aria-label="Entry preview"><h2>{title}</h2><DocumentView document={document} /></section>}
