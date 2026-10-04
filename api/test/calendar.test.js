@@ -7,8 +7,37 @@ const { HttpRequest } = require("@azure/functions");
 const {
   createCalendarService,
   createReminderService,
+  createSenderReadiness,
   validateEntry,
 } = require("../src/calendar");
+test("email controls follow verified sender status and fail closed on provider errors", async () => {
+  const env = {
+    RESEND_API_KEY: "re_test",
+    REMINDER_FROM: "calendar@example.com",
+    CALENDAR_OWNER_EMAIL: "owner@example.com",
+    CALENDAR_WIFE_EMAIL: "wife@example.com",
+    CALENDAR_REMINDER_SECRET: "s".repeat(64),
+    RESEND_DOMAIN_ID: "aaaaaaaa-1111-4111-8111-111111111111",
+  };
+  let domain = { status: "pending", name: "example.com" };
+  const ready = createSenderReadiness({
+    env,
+    cacheMs: 0,
+    get: async () => ({ ok: true, json: async () => domain }),
+  });
+  assert.equal(await ready(), false);
+  domain.status = "verified";
+  assert.equal(await ready(), true);
+  domain.name = "different.example.com";
+  assert.equal(await ready(), false);
+  const unavailable = createSenderReadiness({
+    env,
+    get: async () => {
+      throw new Error("offline");
+    },
+  });
+  assert.equal(await unavailable(), false);
+});
 const id = "aaaaaaaa-1111-4111-8111-111111111111";
 const entry = {
   id,
@@ -22,6 +51,77 @@ const entry = {
   reminderAt: new Date(Date.now() + 86400000).toISOString(),
   remindTo: "both",
 };
+test("minute scheduler only triggers due work with a private Vault secret", async () => {
+  const db = new PGlite();
+  try {
+    await db.exec(`create role anon;create role authenticated;create role service_role;
+      create schema cron;create schema net;create schema vault;
+      create table cron.jobs(name text primary key,schedule text,command text);
+      create function cron.schedule(text,text,text) returns bigint language sql as $$
+        insert into cron.jobs values($1,$2,$3) on conflict(name) do update set schedule=$2,command=$3 returning 1::bigint $$;
+      create table net.http_request_queue(id bigint generated always as identity,url text,headers jsonb);
+      create function net.http_post(url text,headers jsonb,body jsonb,timeout_milliseconds int) returns bigint language sql as $$
+        insert into net.http_request_queue(url,headers) values($1,$2) returning id $$;
+      create table vault.decrypted_secrets(name text,decrypted_secret text);`);
+    await db.exec(
+      fs.readFileSync(
+        path.resolve(
+          __dirname,
+          "../../supabase/migrations/003_shared_calendar.sql",
+        ),
+        "utf8",
+      ),
+    );
+    const migration = fs
+      .readFileSync(
+        path.resolve(
+          __dirname,
+          "../../supabase/migrations/004_calendar_schedule.sql",
+        ),
+        "utf8",
+      )
+      .replace(/^create extension.*$/gm, "");
+    await db.exec(migration);
+    await db.exec(migration);
+    const trigger = async () =>
+      (await db.query("select public.trigger_calendar_reminders() as id"))
+        .rows[0].id;
+    assert.equal(await trigger(), null);
+    await db.query("select public.save_calendar($1::jsonb,null)", [
+      JSON.stringify(entry),
+    ]);
+    await db.exec(
+      "update calendar_reminders set due_at=now()-interval '1 minute'",
+    );
+    assert.equal(await trigger(), null);
+    await db.exec(
+      "insert into vault.decrypted_secrets values('calendar_reminder_trigger',repeat('test',16))",
+    );
+    assert.equal(await trigger(), 1);
+    const request = (await db.query("select * from net.http_request_queue"))
+      .rows[0];
+    assert.equal(request.url, "https://mcnairscode.com/api/calendar-reminders");
+    assert.equal(request.headers["X-Reminder-Secret"], "test".repeat(16));
+    assert.deepEqual((await db.query("select * from cron.jobs")).rows, [
+      {
+        name: "calendar-reminders-every-minute",
+        schedule: "* * * * *",
+        command: "select public.trigger_calendar_reminders();",
+      },
+    ]);
+    await db.exec("set role anon");
+    await assert.rejects(
+      db.query("select public.trigger_calendar_reminders()"),
+      /permission denied/,
+    );
+    await assert.rejects(
+      db.query("select * from net.http_request_queue"),
+      /permission denied/,
+    );
+  } finally {
+    await db.close();
+  }
+});
 test("calendar migration protects private tables and atomically versions entries, reminders, completion and concurrent claims", async () => {
   const db = new PGlite();
   try {

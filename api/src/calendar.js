@@ -145,7 +145,7 @@ function createCalendarService({
         return {
           status: 200,
           headers,
-          jsonBody: { items: data.map(dto), emailReady: emailReady() },
+          jsonBody: { items: data.map(dto), emailReady: await emailReady() },
         };
       }
       if (
@@ -162,7 +162,7 @@ function createCalendarService({
           throw new HttpError(400, "Invalid calendar JSON.");
         }
         const entry = validateEntry(body);
-        if (entry.reminderAt && !emailReady())
+        if (entry.reminderAt && !(await emailReady()))
           throw new HttpError(
             503,
             "Email reminders are not connected yet. Save without a reminder for now.",
@@ -214,7 +214,54 @@ function reminderSettings(env = process.env) {
     env.CALENDAR_REMINDER_SECRET?.length >= 32
   );
 }
-function createReminderService({ getClient, env = process.env, send = fetch }) {
+function createSenderReadiness({
+  env = process.env,
+  get = fetch,
+  cacheMs = 30000,
+}) {
+  let checkedAt = 0,
+    ready = false,
+    checking;
+  return async () => {
+    if (
+      !reminderSettings(env) ||
+      !/^[a-f0-9-]{36}$/.test(env.RESEND_DOMAIN_ID || "")
+    )
+      return false;
+    if (checking) return checking;
+    if (Date.now() - checkedAt < cacheMs) return ready;
+    checking = (async () => {
+      try {
+        const response = await get(
+          `https://api.resend.com/domains/${env.RESEND_DOMAIN_ID}`,
+          {
+            headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` },
+            signal: AbortSignal.timeout(5000),
+          },
+        );
+        const domain = response.ok ? await response.json() : null;
+        ready =
+          domain?.status === "verified" &&
+          domain.name === env.REMINDER_FROM.split("@")[1];
+      } catch {
+        ready = false;
+      }
+      checkedAt = Date.now();
+      return ready;
+    })();
+    try {
+      return await checking;
+    } finally {
+      checking = null;
+    }
+  };
+}
+function createReminderService({
+  getClient,
+  env = process.env,
+  send = fetch,
+  emailReady = () => reminderSettings(env),
+}) {
   return async (request) => {
     const secret = request.headers.get("x-reminder-secret") || "",
       wanted = env.CALENDAR_REMINDER_SECRET || "";
@@ -226,7 +273,7 @@ function createReminderService({ getClient, env = process.env, send = fetch }) {
       !timingSafeEqual(actualBytes, wantedBytes)
     )
       return { status: 403, headers, jsonBody: { error: "Not authorized." } };
-    if (!reminderSettings(env))
+    if (!(await emailReady()))
       return {
         status: 503,
         headers,
@@ -317,5 +364,6 @@ module.exports = {
   createReminderService,
   validateEntry,
   reminderSettings,
+  createSenderReadiness,
   dto,
 };

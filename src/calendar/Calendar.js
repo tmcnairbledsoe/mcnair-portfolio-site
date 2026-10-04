@@ -447,8 +447,8 @@ export function SharedCalendar({ session }) {
               )}
               {!emailReady && (
                 <p>
-                  Email reminders are waiting for sender setup. Events and tasks
-                  can still be saved.
+                  Email reminders will become available automatically when the
+                  sender is verified. Events and tasks can still be saved.
                 </p>
               )}
               <div className="actions">
@@ -505,7 +505,8 @@ export function SharedCalendar({ session }) {
           <p className="footnote">
             Only Owner and Wife can read or change this calendar. Reminders are
             sent to the configured email addresses, even when this page is
-            closed. Delivery may be a few minutes after the selected time.
+            closed. Reminders are checked every minute; email delivery may take
+            additional time.
           </p>
         </>
       )}
