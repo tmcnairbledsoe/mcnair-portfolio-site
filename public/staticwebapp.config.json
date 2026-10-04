@@ -29,6 +29,18 @@
       "rewrite": "/index.html"
     },
     {
+      "route": "/blog",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/blog/*",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/journal",
+      "rewrite": "/index.html"
+    },
+    {
       "route": "/weddingsite",
       "rewrite": "/weddingsite/index.html",
       "headers": {
@@ -60,5 +72,8 @@
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Strict-Transport-Security": "max-age=31536000"
+  },
+  "platform": {
+    "apiRuntime": "node:22"
   }
 }

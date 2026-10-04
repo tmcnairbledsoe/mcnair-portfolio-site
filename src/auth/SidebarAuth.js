@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { InteractionRequiredAuthError, InteractionStatus } from "@azure/msal-browser";
-import { MsalProvider, useMsal } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 import { useAuthStartup } from "./AuthBootstrap";
 import { loginRequest, recognizedRoles } from "./config";
 
@@ -105,14 +105,14 @@ function AccountControls() {
 }
 
 export default function SidebarAuth() {
-  const { status, instance, retry } = useAuthStartup();
+  const { status, retry } = useAuthStartup();
   return (
     <section className="sidebar-auth" aria-label="Microsoft account">
       <h2>Account</h2>
       {status === "unavailable" && <p>Sign-in is unavailable: public Entra client and tenant IDs are missing or invalid. Public pages remain available.</p>}
       {status === "starting" && <><button disabled>Sign in with Microsoft</button><p role="status">Preparing sign-in…</p></>}
       {status === "failed" && <><p role="alert">Could not prepare sign-in or complete the login response. Please retry.</p><button onClick={retry}>Retry sign-in setup</button></>}
-      {status === "ready" && <MsalProvider instance={instance}><AccountControls /></MsalProvider>}
+      {status === "ready" && <AccountControls />}
     </section>
   );
 }

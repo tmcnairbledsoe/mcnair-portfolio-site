@@ -53,7 +53,7 @@ for asset in assets.paths:
     assert urlparse(asset_url).netloc == urlparse(base).netloc, "Unexpected external bundle"
     content, _ = read(asset_url)
     assert content, "Empty application asset"
-for route in ("/resume", "/projects", "/tools", "/drawing", "/focus"):
+for route in ("/resume", "/projects", "/tools", "/drawing", "/focus", "/blog", "/journal"):
     content, _ = read(base + route)
     assert b'<div id="root"' in content, "Missing SPA route: " + route
 wedding, wedding_headers = read(base + "/weddingsite")
@@ -69,7 +69,7 @@ for asset in wedding_assets.paths:
         assert content, "Empty wedding bundle"
 photo, _ = read(base + "/weddingsite/images/1.jpg")
 assert photo.startswith(b"\xff\xd8"), "Wedding photos are missing"
-for route in ("/interests", "/interests/", "/not-a-page", "/journal", "/calendar", "/static/missing.js"):
+for route in ("/interests", "/interests/", "/not-a-page", "/calendar", "/static/missing.js"):
     try:
         read(base + route)
     except HTTPError as error:
@@ -77,3 +77,15 @@ for route in ("/interests", "/interests/", "/not-a-page", "/journal", "/calendar
     else:
         raise AssertionError("Missing 404 for " + route)
 print("Verified production commit", expected_commit, "and", len(assets.paths), "bundles")
+
+feed, feed_headers = read(base + "/api/blog?limit=1")
+assert isinstance(json.loads(feed).get("items"), list), "Blog API is unavailable"
+assert feed_headers.get("Cache-Control") == "no-store", "Blog must revoke unpublished content"
+try:
+    read(base + "/api/journal")
+except HTTPError as error:
+    assert error.code == 401, "Anonymous journal must return 401"
+    assert error.headers.get("Cache-Control") == "no-store", "Private error may be cached"
+else:
+    raise AssertionError("Anonymous journal unexpectedly accessible")
+print("Verified public blog API and unauthorized journal protection")

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import mbcLogo from "../assets/mbc.png";
 import SidebarAuth from "../auth/SidebarAuth";
 
-const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"]];
+const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"], ["/blog", "Blog"], ["/journal", "Journal"]];
 export default function Sidebar({ expanded, setExpanded }) {
   const closeOnMobile = () => { if (window.innerWidth <= 768) setExpanded(false); };
   const hover = (open) => {
