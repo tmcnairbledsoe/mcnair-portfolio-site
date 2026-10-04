@@ -37,8 +37,6 @@ test("public navigation reaches factual pages and moves focus to the main conten
   expect(
     screen.getByRole("link", { name: /Chess Model Repo/ }),
   ).toHaveAttribute("href", "https://github.com/tmcnairbledsoe/chessModels");
-  act(() => userEvent.click(nav.getByRole("link", { name: "Interests" })));
-  expect(screen.getByText(/What Moves the Dead/)).toBeInTheDocument();
   act(() => userEvent.click(nav.getByRole("link", { name: "Browser tools" })));
   act(() =>
     userEvent.click(screen.getByRole("link", { name: /Open focus timer/ })),
@@ -48,6 +46,8 @@ test("public navigation reaches factual pages and moves focus to the main conten
   ).toBeInTheDocument();
 });
 test.each([
+  "/interests",
+  "/interests/",
   "/journal",
   "/calendar",
   "/recovery",
@@ -71,11 +71,12 @@ test("navigation contains only public pages and a useful skip link", () => {
   fireEvent.click(screen.getByRole("button", { name: "Toggle navigation" }));
   expect(
     within(screen.getByRole("navigation")).getAllByRole("link"),
-  ).toHaveLength(7);
+  ).toHaveLength(6);
   expect(screen.getByRole("link", { name: "Skip to content" })).toHaveAttribute(
     "href",
     "#main",
   );
+  expect(screen.queryByRole("link", { name: "Interests" })).not.toBeInTheDocument();
   expect(screen.getByText(/Browser-local by design/)).toBeInTheDocument();
 });
 test("mobile navigation closes after choosing a page", () => {

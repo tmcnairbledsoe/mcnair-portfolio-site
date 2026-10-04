@@ -41,7 +41,10 @@ for attempt in range(18):
 html, headers = read(base + "/")
 assert b'<div id="root"' in html, "Application HTML is missing"
 assert headers.get("X-Content-Type-Options") == "nosniff", "Missing security header"
-assert headers.get("Content-Security-Policy"), "Missing content security policy"
+csp = headers.get("Content-Security-Policy", "")
+assert "connect-src 'self' https://login.microsoftonline.com" in csp, "Missing Entra connections"
+assert "frame-src 'self' https://login.microsoftonline.com" in csp, "Missing Entra frames"
+assert "unsafe-inline" not in csp and "https://*" not in csp, "Overly broad portfolio CSP"
 assets = Assets()
 assets.feed(html.decode())
 assert assets.paths, "No application bundles found"
@@ -50,10 +53,11 @@ for asset in assets.paths:
     assert urlparse(asset_url).netloc == urlparse(base).netloc, "Unexpected external bundle"
     content, _ = read(asset_url)
     assert content, "Empty application asset"
-for route in ("/resume", "/projects", "/interests", "/tools", "/drawing", "/focus"):
+for route in ("/resume", "/projects", "/tools", "/drawing", "/focus"):
     content, _ = read(base + route)
     assert b'<div id="root"' in content, "Missing SPA route: " + route
-wedding, _ = read(base + "/weddingsite")
+wedding, wedding_headers = read(base + "/weddingsite")
+assert "connect-src 'none'" in wedding_headers.get("Content-Security-Policy", ""), "Wedding CSP changed"
 assert b"Charlotte" in wedding, "Wedding archive is missing"
 wedding_assets = Assets()
 wedding_assets.feed(wedding.decode())
@@ -65,7 +69,7 @@ for asset in wedding_assets.paths:
         assert content, "Empty wedding bundle"
 photo, _ = read(base + "/weddingsite/images/1.jpg")
 assert photo.startswith(b"\xff\xd8"), "Wedding photos are missing"
-for route in ("/not-a-page", "/journal", "/calendar", "/static/missing.js"):
+for route in ("/interests", "/interests/", "/not-a-page", "/journal", "/calendar", "/static/missing.js"):
     try:
         read(base + route)
     except HTTPError as error:
