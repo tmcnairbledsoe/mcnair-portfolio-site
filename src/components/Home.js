@@ -33,9 +33,7 @@ const Home = () => {
       </p>
       <p>
         This is a personal website built for a few objectives. To act as an easy to reach cv along with pages to show past and current works and interests. 
-      </p>
-      <p>
-        Resume, Projects, and Personal things are listed on the left sidebar.
+        Check out the Blog on the sidebar for up to date doings and the projects for random junk I have made.
       </p>
     </div>
   );
