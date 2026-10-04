@@ -351,7 +351,7 @@ export default function AboutUs(){
                 </div>
             </div>
             <div id="carousel">
-                <ImageGallery items={images} />
+                <ImageGallery items={images} showThumbnails={false} />
             </div>
             <br></br>
 
@@ -375,7 +375,7 @@ export default function AboutUs(){
                 heart.  I look forward to sharing many more great memories with them in the future.
             </p>
             <div id="carousel">
-                <ImageGallery items={friendimages} />
+                <ImageGallery items={friendimages} showThumbnails={false} />
             </div>
         </div>
     );

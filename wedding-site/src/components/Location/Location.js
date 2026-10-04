@@ -16,6 +16,11 @@ export default function Location( {user} ){
       <div className="location section" id="location">
         <h2>Locations</h2>
         <hr />
+        <ul className="image_grid">
+          <li role="img" aria-label="4th pres" className="small" />
+          <li role="img" aria-label="Falls Park" className="small" />
+          <li role="img" aria-label="Downtown" className="small" />
+        </ul>
         <p>
           The ceremony will be held at Fourth Presbyterian Church near downtown Greenville. The reception will be held at Zen, located downtown.
         </p>
