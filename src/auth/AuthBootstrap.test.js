@@ -6,7 +6,7 @@ import { AuthBootstrap, useAuthStartup } from "./AuthBootstrap";
 import { getAuthConfig, startAuthentication } from "./config";
 
 jest.mock("./config", () => ({ getAuthConfig: jest.fn(), startAuthentication: jest.fn() }));
-jest.mock("@azure/msal-react", () => ({ MsalProvider: ({ children }) => children }));
+jest.mock("@azure/msal-react", () => ({ MsalProvider: ({ children }) => children, useMsal: () => ({ instance: { getActiveAccount: () => null }, accounts: [] }) }));
 
 function Probe() {
   const { status, retry } = useAuthStartup();

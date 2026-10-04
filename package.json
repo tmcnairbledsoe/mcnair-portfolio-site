@@ -16,6 +16,12 @@
   "dependencies": {
     "@azure/msal-browser": "4.30.0",
     "@azure/msal-react": "3.0.29",
+    "@tiptap/core": "^2.27.3",
+    "@tiptap/extension-link": "^2.27.2",
+    "@tiptap/extension-underline": "^2.27.2",
+    "@tiptap/pm": "^2.27.3",
+    "@tiptap/react": "^2.27.2",
+    "@tiptap/starter-kit": "^2.27.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",

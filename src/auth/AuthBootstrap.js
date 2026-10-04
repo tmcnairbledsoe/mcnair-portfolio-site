@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { MsalProvider } from "@azure/msal-react";
+import { ContentSession } from "./ContentSession";
 import { getAuthConfig, startAuthentication } from "./config";
 
 const unavailable = { status: "unavailable" };
@@ -24,7 +26,7 @@ export function AuthBootstrap({ children }) {
   }, [attempt]);
   return (
     <AuthContext.Provider value={{ ...state, retry: () => setAttempt((value) => value + 1) }}>
-      {children}
+      {state.status === "ready" ? <MsalProvider instance={state.instance}><ContentSession>{children}</ContentSession></MsalProvider> : children}
     </AuthContext.Provider>
   );
 }

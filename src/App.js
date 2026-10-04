@@ -10,7 +10,11 @@ import PageHeading from "./components/PageHeading";
 import Sidebar from "./components/Sidebar";
 import PixelDrop from "./components/PixelDrop";
 
+import ContentPage from "./content/ContentPage";
+
 const titles = {
+  "/blog": "Blog",
+  "/journal": "Private Journal",
   "/": "Home",
   "/resume": "Résumé",
   "/projects": "Projects",
@@ -79,7 +83,7 @@ export default function App() {
   const main = useRef(null);
   const previousPath = useRef(pathname);
   useEffect(() => {
-    document.title = `${titles[pathname] || "Page not found"} · Thomas McNair Bledsoe`;
+    document.title = `${titles[pathname] || (pathname.startsWith("/blog/") ? "Blog" : "Page not found")} · Thomas McNair Bledsoe`;
     if (previousPath.current !== pathname) {
       main.current?.focus();
       window.scrollTo(0, 0);
@@ -102,6 +106,9 @@ export default function App() {
           <Route path="/drawing" element={<Drawing />} />
           <Route path="/drawingpage" element={<Drawing />} />
           <Route path="/focus" element={<FocusTimer />} />
+          <Route path="/blog" element={<ContentPage kind="blog" />} />
+          <Route path="/blog/:id" element={<ContentPage kind="blog" />} />
+          <Route path="/journal" element={<ContentPage kind="journal" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -1,0 +1,22 @@
+{
+  "name": "portfolio-content-api",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node scripts/schema.js",
+    "test": "node scripts/schema.js --check && node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.7.2",
+    "@supabase/supabase-js": "^2.57.4",
+    "jose": "^6.1.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  }
+}
