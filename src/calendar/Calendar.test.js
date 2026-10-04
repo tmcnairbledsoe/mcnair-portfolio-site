@@ -138,17 +138,38 @@ test("editing preserves versions and reminder recipients; switching account clea
 test("a selected reminder time and recipient are saved as a UTC instant", async () => {
   render(<Calendar />);
   await screen.findByRole("button", { name: "Edit" });
-  expect(screen.queryByRole("button", { name: "Edit Appointment" })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Edit Appointment" }),
+  ).not.toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Create" }));
-  fireEvent.change(screen.getByLabelText("Title"), { target: { value: "Reminder test" } });
+  fireEvent.change(screen.getByLabelText("Title"), {
+    target: { value: "Reminder test" },
+  });
   const selectedTime = `${today.getFullYear() + 1}-01-15T14:35`;
-  const reminder = screen.getByLabelText(/Reminder time/);
+  const reminder = screen.getByLabelText("Email reminder");
   expect(reminder).toBeEnabled();
-  fireEvent.change(reminder, { target: { value: selectedTime } });
-  fireEvent.change(screen.getByLabelText("Email reminder to"), { target: { value: "both" } });
+  fireEvent.click(reminder);
+  fireEvent.change(screen.getByLabelText("Reminder date"), {
+    target: { value: selectedTime.split("T")[0] },
+  });
+  fireEvent.change(screen.getByLabelText("Reminder time"), {
+    target: { value: selectedTime.split("T")[1] },
+  });
+  fireEvent.change(screen.getByLabelText("Email reminder to"), {
+    target: { value: "both" },
+  });
   fireEvent.click(screen.getByRole("button", { name: "Create" }));
-  await waitFor(() => expect(fetch.mock.calls.some(([, options]) => options.method === "POST")).toBe(true));
-  const [, options] = fetch.mock.calls.find(([, options]) => options.method === "POST");
-  expect(JSON.parse(options.body)).toMatchObject({ reminderAt: new Date(selectedTime).toISOString(), remindTo: "both" });
+  await waitFor(() =>
+    expect(
+      fetch.mock.calls.some(([, options]) => options.method === "POST"),
+    ).toBe(true),
+  );
+  const [, options] = fetch.mock.calls.find(
+    ([, options]) => options.method === "POST",
+  );
+  expect(JSON.parse(options.body)).toMatchObject({
+    reminderAt: new Date(selectedTime).toISOString(),
+    remindTo: "both",
+  });
 });
