@@ -4,6 +4,14 @@ The existing JavaScript Create React App website, retaining its original black b
 
 The original wedding website is preserved as a public keepsake at `/weddingsite`, with its photos and layout. Any username can sign in and select a guest, wedding party, rehearsal, or brunch layout. Guest choices and RSVP responses stay in the current browser tab; no guest database is connected. Its source lives in `wedding-site`; the build combines both applications into one deployable artifact.
 
+## Blog and journal storage at a glance
+
+The restored writing features use Supabase Free: Postgres stores titles and rich-text documents, and a private Storage bucket stores images. The existing Azure Static Web Apps Free backend connects them to the site. Microsoft remains the sign-in provider; users do not need a Supabase account. Anyone can read published blog posts, only the Owner can manage them, and every signed-in user has a separate private journal. The editor supports formatting, links, images, alt text and preview.
+
+Setup and verification are in progress on the restoration branch; this is not yet a claim that production storage is connected. The detailed setup below covers the migration, server settings, free-plan quotas, inactivity pausing and backups. Creating this integration does not enable a paid storage plan.
+
+This README documents setting names and placeholders only. Database passwords, Supabase secret keys, OpenAI keys, access tokens and private journal content must never appear in source, commits, pull requests, screenshots or logs. Supabase credentials belong only in the Azure backend application settings; the browser receives no database credential. Do not connect the optional Supabase GitHub integration for this setup: the existing workflow deploys the application, and the documented migration prepares the database separately.
+
 ## Local development
 
 Use Node.js 22:
