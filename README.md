@@ -17,6 +17,8 @@ npm run build
 
 No website runtime credentials are required. Keep local agent credentials in ignored `.env.local`; never put secrets in `REACT_APP_*` variables, which are embedded in browser code.
 
+For the optional development agent, see [agent setup and task profiles](agent-config/README.md). It reuses local credentials, supports separate maintenance/review/resume/photo-edit tasks, and does not run model inference during setup.
+
 ## Delivery
 
 Commits to `main` automatically install dependencies, test, build, deploy, and verify the resulting website. Pull requests validate without deploying. Deployment credentials and the verification target are configured in GitHub Actions Secrets, outside the repository. GitHub masks their values in workflow logs.

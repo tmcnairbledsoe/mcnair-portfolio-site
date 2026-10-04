@@ -1,0 +1,39 @@
+{
+  "name": "McNair Portfolio Agent",
+  "version": "1",
+  "defaultProfile": "maintenance",
+  "profiles": {
+    "maintenance": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "verbosity": "low",
+      "environment": "openai_hosted",
+      "format": "text",
+      "instructions": "Implement only the requested local changes. Obtain the specified current revision in the hosted workspace before editing. The hosted workspace is separate from the user's checkout. Preserve architecture and design. Run applicable tests and build checks, then produce a patch and concise verification report in /workspace/outputs. Do not commit, push, provision, or deploy unless explicitly authorized."
+    },
+    "review": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "verbosity": "low",
+      "environment": "none",
+      "format": "text",
+      "instructions": "Review the supplied current files or diff for functional regressions and explicitly requested design invariants. Do not edit or deploy. Report at most five actionable findings, each with severity, file/function, trigger, observed and expected behavior, evidence, and the smallest suggested fix. Distinguish code defects from behavior requiring browser verification. Do not report intentionally excluded features. If none are supported, say: No actionable defects found in the supplied files. Identify material evidence gaps. Example: RsvpForm.save retains hidden plus-one values after switching to the couple layout; normalize the fields when saving a couple response."
+    },
+    "resume": {
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "verbosity": "medium",
+      "environment": "none",
+      "format": "resume",
+      "instructions": "Rewrite only the supplied current resume using the output schema. Preserve every experience entry, employer, title, location, date, education entry, supported skill, and contact fact, in original order. Polish language without adding achievements, metrics, certifications, credentials, or stronger claims. Headline: name and supported professional description. Summary: one paragraph, approximately 90-140 words, including supplied location and contact facts. Skills: retain all unique supported skills. Experience: retain all roles and material responsibilities in concise bullets. Education: retain all entries. Example: 'Set up Azure DevOps pipelines to standardize deployments' may become 'Established Azure DevOps pipelines to standardize deployments'; 'Reduced deployment time by 50%' is unsupported. No tools, file edits, or external research. Return only the schema-defined object."
+    },
+    "photo-edit": {
+      "model": "gpt-6-luna",
+      "effort": "low",
+      "verbosity": "medium",
+      "environment": "none",
+      "format": "files",
+      "instructions": "Using only the two supplied current Location files, remove the image_grid markup for the three top location photos and CSS used exclusively by those photos. Preserve all other markup and CSS rules, the lower AboutUs galleries, fern hero, role layouts, printable map, links, and other content. Return exactly two files in the schema: wedding-site/src/components/Location/Location.js and wedding-site/src/components/Location/Location.css, with complete modified source strings. Do not double-escape source content. No tools, deployment, or unrelated formatting."
+    }
+  }
+}
