@@ -1,47 +1,9 @@
-.image_grid > li {
-    list-style: none;
-    height: 350px;
-    padding: 1rem;
-    background-clip: content-box;
-    background-size: cover;
-    background-position: center;
-  }
-
-  .image_grid > li.small {
-    flex-basis: 30%;
-  }
-
-  .image_grid > li.large {
-    flex-basis: 70%;
-  }
-
-  .image_grid {
-    width: 100%;
-    padding: 0 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
   hr {
     width: 250px;
     height: 2.5px;
     background-color: var(--green6);
     border: 0;
     margin-bottom: 50px;
-  }
-
-  .location .image_grid > li:first-child {
-    background-image: url("../../images/Mapimages/4thpres.jpg");
-  }
-
-  .location .image_grid > li:nth-child(2) {
-    background-image: url("../../images/Mapimages/Falls-Park.jpg");
-    background-position: top;
-  }
-
-  .location .image_grid > li:last-child {
-    background-image: url("../../images/Mapimages/Downtown.jpg");
   }
 
   #directions {
@@ -110,14 +72,6 @@
   }
 
   @media only screen and (max-width: 600px) {
-    .image_grid li.small {
-      flex-basis: 50%;
-    }
-
-    .image_grid li.large {
-      flex-basis: 50%;
-    }
-
     #directions {
       flex-wrap: wrap;
     }
