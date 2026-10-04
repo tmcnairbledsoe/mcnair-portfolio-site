@@ -77,7 +77,7 @@ test("navigation contains only public pages and a useful skip link", () => {
   expect(
     screen.queryByRole("link", { name: "Interests" }),
   ).not.toBeInTheDocument();
-  expect(screen.getByText(/Browser-local by design/)).toBeInTheDocument();
+  expect(screen.getByText(/shared sketchpad saves your marks online/)).toBeInTheDocument();
 });
 test("mobile navigation closes after choosing a page", () => {
   const originalWidth = window.innerWidth;

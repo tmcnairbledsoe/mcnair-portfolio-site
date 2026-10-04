@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSharedDrawing } from "../drawing/useSharedDrawing";
+import { useContentSession } from "../auth/ContentSession";
+import { recognizedRoles } from "../auth/config";
 
 const WIDTH = 1000,
   HEIGHT = 600;
@@ -7,10 +10,13 @@ export default function Drawing() {
   const canvasRef = useRef(null);
   const draft = useRef(null);
   const cursor = useRef({ x: WIDTH / 2, y: HEIGHT / 2 });
-  const [strokes, setStrokes] = useState([]);
+  const shared = useSharedDrawing();
+  const session = useContentSession();
+  const canClear = recognizedRoles(session.account).includes("Owner");
+  const strokes = shared.strokes;
   const [color, setColor] = useState("#245c49");
   const [width, setWidth] = useState(5);
-  const [message, setMessage] = useState("Ready to draw.");
+  const [notice, setMessage] = useState("");
   const [supported, setSupported] = useState(true);
   function paintStroke(context, stroke) {
     context.strokeStyle = stroke.color;
@@ -47,8 +53,10 @@ export default function Drawing() {
     }
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, WIDTH, HEIGHT);
-    strokes.forEach((stroke) => paintStroke(context, stroke));
+    strokes.forEach((entry) => paintStroke(context, entry.stroke));
+    if (draft.current) paintStroke(context, draft.current);
   }, [strokes]);
+  useEffect(() => { draft.current = null; }, [shared.generation]);
   function point(event) {
     const bounds = canvasRef.current.getBoundingClientRect();
     return {
@@ -69,6 +77,7 @@ export default function Drawing() {
     if (
       draft.current ||
       !supported ||
+      !shared.ready ||
       (event.pointerType === "mouse" && event.button !== 0)
     )
       return;
@@ -76,24 +85,34 @@ export default function Drawing() {
     event.currentTarget.focus();
     event.currentTarget.setPointerCapture(event.pointerId);
     draft.current = {
+      id: crypto.randomUUID(),
       color,
       width: Number(width),
       points: [point(event)],
       pointerId: event.pointerId,
     };
     paintStroke(canvasRef.current.getContext("2d"), draft.current);
+    shared.save(draft.current);
   }
   function move(event) {
     if (!draft.current || draft.current.pointerId !== event.pointerId) return;
-    draft.current.points.push(point(event));
+    const next = point(event);
+    const last = draft.current.points[draft.current.points.length - 1];
+    if (Math.hypot(next.x-last.x, next.y-last.y)<2) return;
+    if (draft.current.points.length >= 1024) {
+      shared.save(draft.current);
+      draft.current = {...draft.current,id:crypto.randomUUID(),points:[last]};
+    }
+    draft.current.points.push(next);
     paintStroke(canvasRef.current.getContext("2d"), draft.current);
+    shared.save(draft.current);
   }
   function finish(event) {
     if (!draft.current || draft.current.pointerId !== event.pointerId) return;
     const stroke = draft.current;
     draft.current = null;
-    setStrokes((previous) => [...previous, stroke]);
-    setMessage("Stroke added. Your drawing is only in this tab.");
+    shared.save(stroke);
+    setMessage("");
     if (event.currentTarget.hasPointerCapture(event.pointerId))
       event.currentTarget.releasePointerCapture(event.pointerId);
   }
@@ -104,7 +123,7 @@ export default function Drawing() {
       ArrowUp: [0, -10],
       ArrowDown: [0, 10],
     };
-    if (!supported || !offsets[event.key]) return;
+    if (!supported || !shared.ready || !offsets[event.key]) return;
     event.preventDefault();
     const [dx, dy] = offsets[event.key];
     const next = {
@@ -113,10 +132,7 @@ export default function Drawing() {
     };
     const from = { ...cursor.current };
     if (event.shiftKey)
-      setStrokes((previous) => [
-        ...previous,
-        { color, width: Number(width), points: [from, next] },
-      ]);
+      shared.save({ id:crypto.randomUUID(),color, width: Number(width), points: [from, next] });
     cursor.current = next;
     setMessage(
       `Keyboard cursor: ${next.x}, ${next.y}.${event.shiftKey ? " Line drawn." : " Hold Shift to draw."}`,
@@ -150,7 +166,7 @@ export default function Drawing() {
         <p className="eyebrow">Make a little room for creativity</p>
         <h1>Sketchpad</h1>
         <p className="lede">
-          A blank canvas, a few colors, and whatever comes to mind.
+          One shared canvas for everyone. Marks save automatically and appear for other visitors as you draw.
         </p>
       </div>
       <div className="tool-panel">
@@ -161,7 +177,7 @@ export default function Drawing() {
               type="color"
               value={color}
               onChange={(event) => setColor(event.target.value)}
-              disabled={!supported}
+              disabled={!supported || !shared.ready}
             />
           </label>
           <label htmlFor="brush">
@@ -170,7 +186,7 @@ export default function Drawing() {
               id="brush"
               value={width}
               onChange={(event) => setWidth(Number(event.target.value))}
-              disabled={!supported}
+              disabled={!supported || !shared.ready}
             >
               {[2, 5, 10, 20].map((size) => (
                 <option key={size} value={size}>
@@ -182,24 +198,24 @@ export default function Drawing() {
           <div className="actions">
             <button
               className="secondary"
-              disabled={!strokes.length}
+              disabled={!strokes.some(entry=>entry.mine) || !shared.ready}
               onClick={() => {
-                setStrokes((previous) => previous.slice(0, -1));
-                setMessage("Last stroke undone.");
+                const last = strokes.filter(entry=>entry.mine).slice(-1)[0];
+                if(last) shared.save({...last.stroke,id:last.id},true);
+                setMessage("");
               }}
             >
-              Undo
+              Undo my last mark
             </button>
-            <button
+            {canClear && <button
               className="secondary"
-              disabled={!strokes.length}
+              disabled={!strokes.length || shared.pending>0 || !shared.ready}
               onClick={() => {
-                setStrokes([]);
-                setMessage("Canvas cleared.");
+                if(window.confirm("Clear the shared canvas for everyone? This cannot be undone.")) shared.clear(session.token);
               }}
             >
               Clear canvas
-            </button>
+            </button>}
             <button disabled={!supported} onClick={download}>
               Download PNG ↓
             </button>
@@ -227,13 +243,13 @@ export default function Drawing() {
           Your browser does not support the drawing canvas.
         </canvas>
         <p role="status" className="tool-status">
-          {message}
+          {supported ? (notice || shared.message) : notice}
         </p>
       </div>
       <p className="local-note">
-        Browser-local: drawings are held only in this tab. Leaving or reloading
-        clears the canvas. Download a PNG to keep your work. Nothing is
-        uploaded.
+        This canvas is public and shared, including for signed-out visitors. Saved marks survive reloading.
+        Updates run only while this page is open and visible. Undo removes your own marks;
+        only the Owner can clear everyone’s canvas. Unsaved marks retry when you return to this page.
       </p>
     </>
   );

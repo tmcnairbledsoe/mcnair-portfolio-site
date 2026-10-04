@@ -138,4 +138,4 @@ function createService({ authenticate, getStore }) {
     }
   };
 }
-module.exports = { createService, imageType };
+module.exports = { createService, imageType, readBytes };
