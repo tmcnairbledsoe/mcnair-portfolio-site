@@ -13,17 +13,21 @@ const Projects = () => {
       </p>
       <h2>Websites</h2>
       <p>
-        Check out my wife's site I made in React featuring her art work: <a href="https://clt-art.com/" target="_blank" rel="noopener noreferrer">clt-art.com/</a>
+        Check out my wife's site I made in React featuring her art work: 
         <br></br>
+        <a href="https://clt-art.com/" target="_blank" rel="noopener noreferrer">clt-art.com/</a>
+        <br></br>
+      <p>
         My wedding website was one that I made for our guests to give and recieve information such as RSVP, song requests during reception, 
         and information on Greenville: 
         <br></br>
         <a href="/weddingsite" target="_blank" rel="noopener noreferrer">Wedding Page</a>
       </p>
+      </p>
       <p>
-        The githup repo is <a href="https://github.com/tmcnairbledsoe/clttmbwedding" target="_blank" rel="noopener noreferrer">clttmbwedding</a>.
+        The github repo uses firebase as a backend which is free and handy. It uses Google API to interact with maps. Its a create react app:
         <br></br>
-        It uses firebase as a backend which is free and pretty handy. It also uses Google API to interact with its maps. Its a create react app.
+        <a href="https://github.com/tmcnairbledsoe/clttmbwedding" target="_blank" rel="noopener noreferrer">clttmbwedding</a>
       </p>
       <h2>Data Science</h2>
       <p>

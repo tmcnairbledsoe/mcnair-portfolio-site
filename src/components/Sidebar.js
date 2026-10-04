@@ -4,7 +4,7 @@ import mbcLogo from "../assets/mbc.png";
 import SidebarAuth from "../auth/SidebarAuth";
 import { useContentSession } from "../auth/ContentSession";
 
-const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"], ["/tools", "Browser tools"], ["/blog", "Blog"]];
+const links = [["/", "Home"], ["/resume", "Resume"], ["/projects", "Projects"],  ["/blog", "Blog"], ["/tools", "Browser tools"]];
 export default function Sidebar({ expanded, setExpanded }) {
   const { journalAllowed } = useContentSession();
   const closeOnMobile = () => { if (window.innerWidth <= 768) setExpanded(false); };
