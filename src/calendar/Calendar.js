@@ -334,7 +334,7 @@ export function SharedCalendar({ session }) {
                 })
               }
             >
-              Add event or task
+              Create
             </button>
           )}
           {editor && (
@@ -453,7 +453,7 @@ export function SharedCalendar({ session }) {
               )}
               <div className="actions">
                 <button type="submit" disabled={busy}>
-                  Save entry
+                  {editor.id ? "Save" : "Create"}
                 </button>
                 <button
                   type="button"
@@ -493,10 +493,10 @@ export function SharedCalendar({ session }) {
                 )}
                 <div className="actions">
                   <button disabled={busy} onClick={() => edit(entry)}>
-                    Edit {entry.title}
+                    Edit
                   </button>
                   <button disabled={busy} onClick={() => remove(entry)}>
-                    Delete {entry.title}
+                    Delete
                   </button>
                 </div>
               </li>
