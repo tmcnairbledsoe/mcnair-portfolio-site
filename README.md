@@ -98,6 +98,18 @@ Account identity keys the entire content view. Switching account/unmounting clea
 
 The only frontend build configuration remains the existing public `REACT_APP_AZURE_AD_CLIENT_ID` and `REACT_APP_AZURE_AD_TENANT_ID`. The frontend computes `api://<REACT_APP_AZURE_AD_CLIENT_ID>/access_as_user`; no Supabase URL/key/anon key or extra public settings are needed. The API pins the tenant’s HTTPS JWKS, verifies RS256 signature, issuer `https://login.microsoftonline.com/<tenant>/v2.0`, exact GUID audience, lifetime, tid, oid, ver=2.0 and delegated scp. Graph tokens, ID tokens, wrong tenants/audiences, expired tokens and forged roles fail with 401. Supplying invalid authorization never downgrades a public request to anonymous. Generic errors do not expose raw SDK responses or credentials.
 
+### Optional operator connection in Codex
+
+The operator can connect Supabase's hosted MCP server to Codex, scoped to this project's reference. This is a local administration connection, separate from the website's backend credential and from the OpenAI development agent. It is not bundled into the website. Replace the placeholder locally; no actual project reference or OAuth credential is needed in this README.
+
+```sh
+codex mcp add supabase --url 'https://mcp.supabase.com/mcp?project_ref=<project-ref>&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching'
+codex mcp login supabase
+codex mcp list
+```
+
+Adding the server may start OAuth automatically; log in only if authentication is still pending. Complete the authorization in the operator's browser and verify the connection is enabled with OAuth. OAuth credentials stay in Codex's local credential storage, outside this repository. Approve only the intended organization and permissions. The optional Supabase agent-skills installation is not required. See [Codex MCP configuration](https://developers.openai.com/codex/mcp) for the supported connection workflow.
+
 ### API contract
 
 | Endpoint | Behavior |
