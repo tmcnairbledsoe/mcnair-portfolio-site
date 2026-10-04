@@ -48,7 +48,6 @@ test("public navigation reaches factual pages and moves focus to the main conten
 test.each([
   "/interests",
   "/interests/",
-  "/calendar",
   "/recovery",
   "/login",
   "/chessgame",

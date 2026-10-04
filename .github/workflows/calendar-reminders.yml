@@ -1,0 +1,20 @@
+name: Deliver calendar reminders
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: calendar-reminders
+  cancel-in-progress: false
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Process due reminders
+        env:
+          CALENDAR_REMINDER_SECRET: ${{ secrets.CALENDAR_REMINDER_SECRET }}
+        run: python .github/scripts/calendar_reminders.py

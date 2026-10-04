@@ -53,7 +53,7 @@ for asset in assets.paths:
     assert urlparse(asset_url).netloc == urlparse(base).netloc, "Unexpected external bundle"
     content, _ = read(asset_url)
     assert content, "Empty application asset"
-for route in ("/resume", "/projects", "/tools", "/drawing", "/focus", "/blog", "/journal"):
+for route in ("/resume", "/projects", "/tools", "/drawing", "/focus", "/blog", "/journal", "/calendar"):
     content, _ = read(base + route)
     assert b'<div id="root"' in content, "Missing SPA route: " + route
 wedding, wedding_headers = read(base + "/weddingsite")
@@ -69,7 +69,7 @@ for asset in wedding_assets.paths:
         assert content, "Empty wedding bundle"
 photo, _ = read(base + "/weddingsite/images/1.jpg")
 assert photo.startswith(b"\xff\xd8"), "Wedding photos are missing"
-for route in ("/interests", "/interests/", "/not-a-page", "/calendar", "/static/missing.js"):
+for route in ("/interests", "/interests/", "/not-a-page", "/static/missing.js"):
     try:
         read(base + route)
     except HTTPError as error:
@@ -89,3 +89,10 @@ except HTTPError as error:
 else:
     raise AssertionError("Anonymous journal unexpectedly accessible")
 print("Verified public blog API and unauthorized journal protection")
+try:
+    read(base + "/api/calendar?month=2026-10")
+except HTTPError as error:
+    assert error.code == 401, "Anonymous calendar must return 401"
+else:
+    raise AssertionError("Anonymous calendar unexpectedly accessible")
+print("Verified unauthorized calendar protection")

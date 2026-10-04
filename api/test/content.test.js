@@ -48,7 +48,9 @@ function fixture() {
   return { ...mock, call, seed, asset, store };
 }
 test('real signed access token validates tenant/issuer/audience/expiry/scope/oid/version; ID/Graph tokens and fake signatures fail', async t => {
-  assert.deepEqual(await verify(`Bearer ${await token(a, ['OwnerRole'])}`), { tid, oid: a, owner: true, journalAllowed: true });
+  assert.deepEqual(await verify(`Bearer ${await token(a, ['OwnerRole'])}`), { tid, oid: a, owner: true, calendarAllowed: true, journalAllowed: true });
+  assert.equal((await verify(`Bearer ${await token(a, ['WifeRole'])}`)).calendarAllowed, true);
+  assert.equal((await verify(`Bearer ${await token(a, ['FriendRole'])}`)).calendarAllowed, false);
   for (const changes of [{ aud: 'https://graph.microsoft.com' }, { aud: [clientId, 'other'] }, { iss: 'https://evil.example/v2.0' }, { tid: b }, { exp: Math.floor(Date.now()/1000)-60 }, { scp: undefined }, { scp: 'User.Read' }, { oid: undefined }, { oid: 'user@example.com' }, { ver: '1.0' }, { nbf: Math.floor(Date.now()/1000) + 3600 }]) {
     await t.test(JSON.stringify(changes), async () => assert.rejects(verify(`Bearer ${await token(a, ['OwnerRole'], changes)}`), e => e.status === 401));
   }

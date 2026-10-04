@@ -41,6 +41,10 @@
       "rewrite": "/index.html"
     },
     {
+      "route": "/calendar",
+      "rewrite": "/index.html"
+    },
+    {
       "route": "/weddingsite",
       "rewrite": "/weddingsite/index.html",
       "headers": {

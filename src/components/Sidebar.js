@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import mbcLogo from "../assets/mbc.png";
 import SidebarAuth from "../auth/SidebarAuth";
 import { useContentSession } from "../auth/ContentSession";
+import { recognizedRoles } from "../auth/config";
 
 const links = [
   ["/", "Home"],
@@ -12,7 +13,8 @@ const links = [
   ["/tools", "Browser tools"],
 ];
 export default function Sidebar({ expanded, setExpanded }) {
-  const { journalAllowed } = useContentSession();
+  const { journalAllowed, account } = useContentSession();
+  const calendarAllowed = recognizedRoles(account).some(role=>role==='Owner'||role==='Wife');
   const closeOnMobile = () => {
     if (window.innerWidth <= 768) setExpanded(false);
   };
@@ -48,6 +50,7 @@ export default function Sidebar({ expanded, setExpanded }) {
               Journal
             </NavLink>
           )}
+          {calendarAllowed && <NavLink to="/calendar" onClick={closeOnMobile}>Calendar</NavLink>}
           <NavLink to="/drawing" onClick={closeOnMobile}>
             Drawing Page
           </NavLink>
