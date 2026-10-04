@@ -74,7 +74,9 @@ test("navigation contains only public pages and a useful skip link", () => {
     "href",
     "#main",
   );
-  expect(screen.queryByRole("link", { name: "Interests" })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("link", { name: "Interests" }),
+  ).not.toBeInTheDocument();
   expect(screen.getByText(/Browser-local by design/)).toBeInTheDocument();
 });
 test("mobile navigation closes after choosing a page", () => {
@@ -86,10 +88,14 @@ test("mobile navigation closes after choosing a page", () => {
     // Touch browsers can synthesize mouse enter before their click event.
     fireEvent.mouseEnter(screen.getByRole("complementary"));
     fireEvent.click(toggle);
-    fireEvent.click(screen.getByRole("link", { name: "Projects", exact: true }));
+    fireEvent.click(
+      screen.getByRole("link", { name: "Projects", exact: true }),
+    );
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Revit Add-in" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Revit Add-in" }),
+    ).toBeInTheDocument();
   } finally {
     window.innerWidth = originalWidth;
   }

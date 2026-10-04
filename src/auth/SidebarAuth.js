@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { InteractionRequiredAuthError, InteractionStatus } from "@azure/msal-browser";
+import {
+  InteractionRequiredAuthError,
+  InteractionStatus,
+} from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { useAuthStartup } from "./AuthBootstrap";
 import { loginRequest, recognizedRoles } from "./config";
@@ -26,12 +29,24 @@ function AccountControls() {
     let reauthenticationRequired = false;
     async function renew(force = false) {
       const expiry = latestAccount.idTokenClaims?.exp;
-      if (renewing || reauthenticationRequired || (!force && expiry && expiry * 1000 > Date.now() + 300000)) return;
+      if (
+        renewing ||
+        reauthenticationRequired ||
+        (!force && expiry && expiry * 1000 > Date.now() + 300000)
+      )
+        return;
       renewing = true;
       setOperation(true);
       try {
-        const result = await instance.acquireTokenSilent({ ...loginRequest, account: latestAccount, forceRefresh: true });
-        if (!result.account || result.account.homeAccountId !== account.homeAccountId) {
+        const result = await instance.acquireTokenSilent({
+          ...loginRequest,
+          account: latestAccount,
+          forceRefresh: true,
+        });
+        if (
+          !result.account ||
+          result.account.homeAccountId !== account.homeAccountId
+        ) {
           throw new Error("MSAL renewal did not return the current account");
         }
         if (current) {
@@ -44,11 +59,14 @@ function AccountControls() {
         }
       } catch (failure) {
         if (current) {
-          reauthenticationRequired = failure instanceof InteractionRequiredAuthError;
+          reauthenticationRequired =
+            failure instanceof InteractionRequiredAuthError;
           setNeedsLogin(reauthenticationRequired);
-          setError(reauthenticationRequired
-            ? "Your session needs sign-in again to refresh roles."
-            : "Could not refresh account roles. Please retry.");
+          setError(
+            reauthenticationRequired
+              ? "Your session needs sign-in again to refresh roles."
+              : "Could not refresh account roles. Please retry.",
+          );
         }
       } finally {
         renewing = false;
@@ -75,31 +93,64 @@ function AccountControls() {
       if (signOut) await instance.logoutRedirect({ account });
       else await instance.loginRedirect(loginRequest);
     } catch (failure) {
-      setError(failure?.errorCode === "user_cancelled"
-        ? "Sign-in was cancelled. You can try again."
-        : `Could not ${signOut ? "sign out" : "sign in"}. Please retry.`);
+      setError(
+        failure?.errorCode === "user_cancelled"
+          ? "Sign-in was cancelled. You can try again."
+          : `Could not ${signOut ? "sign out" : "sign in"}. Please retry.`,
+      );
     } finally {
       setOperation(false);
     }
   }
 
-  const displayAccount = renewedAccount?.homeAccountId === account?.homeAccountId ? renewedAccount : account;
+  const displayAccount =
+    renewedAccount?.homeAccountId === account?.homeAccountId
+      ? renewedAccount
+      : account;
   const roles = recognizedRoles(displayAccount);
-  const expired = !displayAccount?.idTokenClaims?.exp || displayAccount.idTokenClaims.exp * 1000 <= Date.now();
+  const expired =
+    !displayAccount?.idTokenClaims?.exp ||
+    displayAccount.idTokenClaims.exp * 1000 <= Date.now();
   return (
     <>
-      {account ? <>
-        <p>{account.name || "Microsoft account"}</p>
-        <p>{needsLogin || error || expired ? "Roles unavailable until your session is refreshed."
-          : roles.length ? `Roles: ${roles.join(", ")}` : "No assigned role."}</p>
-        {(needsLogin || error || expired) && <button disabled={busy} onClick={() => redirect(false)}>Sign in again</button>}
-        <button disabled={busy} onClick={() => redirect(true)}>Sign out</button>
-      </> : <button disabled={busy} onClick={() => redirect(false)}>Sign in with Microsoft</button>}
+      {account ? (
+        <>
+          <p>{account.name || "Microsoft account"}</p>
+          <p>
+            {needsLogin || error || expired
+              ? "Roles unavailable until your session is refreshed."
+              : roles.length
+                ? `Roles: ${roles.join(", ")}`
+                : "No assigned role."}
+          </p>
+          {(needsLogin || error || expired) && (
+            <button disabled={busy} onClick={() => redirect(false)}>
+              Sign in again
+            </button>
+          )}
+          <button disabled={busy} onClick={() => redirect(true)}>
+            Sign out
+          </button>
+        </>
+      ) : (
+        <button disabled={busy} onClick={() => redirect(false)}>
+          Sign in with Microsoft
+        </button>
+      )}
       {busy && <p role="status">Please wait…</p>}
-      {error && <>
-        <p role="alert">{error}</p>
-        {account && !needsLogin && <button disabled={busy} onClick={() => setRefreshAttempt((value) => value + 1)}>Retry role refresh</button>}
-      </>}
+      {error && (
+        <>
+          <p role="alert">{error}</p>
+          {account && !needsLogin && (
+            <button
+              disabled={busy}
+              onClick={() => setRefreshAttempt((value) => value + 1)}
+            >
+              Retry role refresh
+            </button>
+          )}
+        </>
+      )}
     </>
   );
 }
@@ -109,9 +160,27 @@ export default function SidebarAuth() {
   return (
     <section className="sidebar-auth" aria-label="Microsoft account">
       <h2>Account</h2>
-      {status === "unavailable" && <p>Sign-in is unavailable: public Entra client and tenant IDs are missing or invalid. Public pages remain available.</p>}
-      {status === "starting" && <><button disabled>Sign in with Microsoft</button><p role="status">Preparing sign-in…</p></>}
-      {status === "failed" && <><p role="alert">Could not prepare sign-in or complete the login response. Please retry.</p><button onClick={retry}>Retry sign-in setup</button></>}
+      {status === "unavailable" && (
+        <p>
+          Sign-in is unavailable: public Entra client and tenant IDs are missing
+          or invalid. Public pages remain available.
+        </p>
+      )}
+      {status === "starting" && (
+        <>
+          <button disabled>Sign in with Microsoft</button>
+          <p role="status">Preparing sign-in…</p>
+        </>
+      )}
+      {status === "failed" && (
+        <>
+          <p role="alert">
+            Could not prepare sign-in or complete the login response. Please
+            retry.
+          </p>
+          <button onClick={retry}>Retry sign-in setup</button>
+        </>
+      )}
       {status === "ready" && <AccountControls />}
     </section>
   );

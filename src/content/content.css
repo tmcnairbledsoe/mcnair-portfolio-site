@@ -1,20 +1,94 @@
-.content-page { max-width: 850px; }
-.content-post { border-top: 1px solid #444; margin-top: 2rem; padding-top: 1rem; }
-.content-document img, .content-editor img { max-width: 100%; height: auto; }
-.content-editor { border: 1px solid #666; padding: 1rem; margin-top: 1rem; }
-.content-editor label { display: block; margin: .75rem 0; }
-.content-editor input { display: block; width: 100%; max-width: 100%; color: #fff; background: #111; border: 1px solid #777; padding: .5rem; }
-.editor-toolbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
-.editor-toolbar label { flex: 1 1 200px; }
-.content-page button { background: #111; color: #fff; border: 1px solid #777; padding: .5rem .75rem; cursor: pointer; }
-.content-page button:disabled { opacity: .5; cursor: default; }
-.content-page button[aria-pressed="true"] { background: #fff; color: #000; }
-.content-page button:focus-visible, .content-page input:focus-visible, .tiptap:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.editor-drop { border: 1px solid #777; }
-.tiptap { min-height: 200px; padding: 1rem; overflow-wrap: anywhere; }
-.content-document { overflow-wrap: anywhere; }
-.tiptap { white-space: pre-wrap; }
-.tiptap .ProseMirror-selectednode { outline: 2px solid #fff; }
-.tiptap .ProseMirror-gapcursor { display: none; pointer-events: none; position: absolute; }
-.tiptap .ProseMirror-gapcursor:after { content: ''; display: block; position: absolute; top: -2px; width: 20px; border-top: 1px solid #fff; }
-.tiptap.ProseMirror-focused .ProseMirror-gapcursor { display: block; }
+.content-page {
+  max-width: 850px;
+}
+.content-post {
+  border-top: 1px solid #444;
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+.content-document img,
+.content-editor img {
+  max-width: 100%;
+  height: auto;
+}
+.content-editor {
+  border: 1px solid #666;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.content-editor label {
+  display: block;
+  margin: 0.75rem 0;
+}
+.content-editor input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  color: #fff;
+  background: #111;
+  border: 1px solid #777;
+  padding: 0.5rem;
+}
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+.editor-toolbar label {
+  flex: 1 1 200px;
+}
+.content-page button {
+  background: #111;
+  color: #fff;
+  border: 1px solid #777;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+.content-page button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.content-page button[aria-pressed="true"] {
+  background: #fff;
+  color: #000;
+}
+.content-page button:focus-visible,
+.content-page input:focus-visible,
+.tiptap:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.editor-drop {
+  border: 1px solid #777;
+}
+.tiptap {
+  min-height: 200px;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+.content-document {
+  overflow-wrap: anywhere;
+}
+.tiptap {
+  white-space: pre-wrap;
+}
+.tiptap .ProseMirror-selectednode {
+  outline: 2px solid #fff;
+}
+.tiptap .ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+}
+.tiptap .ProseMirror-gapcursor:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 20px;
+  border-top: 1px solid #fff;
+}
+.tiptap.ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}

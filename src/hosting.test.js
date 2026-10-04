@@ -45,12 +45,18 @@ test("Entra CSP allowances are narrow and wedding policy stays isolated", () => 
   expect(csp).toContain("script-src 'self'; style-src 'self'");
   expect(csp).toContain("form-action 'none'");
   expect(csp).not.toMatch(/unsafe-inline|https:\/\/\*/);
-  for (const route of config.routes.filter(({ route }) => route.startsWith("/weddingsite"))) {
-    expect(route.headers["Content-Security-Policy"]).toBe("default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'");
+  for (const route of config.routes.filter(({ route }) =>
+    route.startsWith("/weddingsite"),
+  )) {
+    expect(route.headers["Content-Security-Policy"]).toBe(
+      "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'",
+    );
   }
 });
 
 test("API runtime and pass-through keep API out of SPA rewrites", () => {
   expect(config.platform.apiRuntime).toBe("node:22");
-  expect(config.routes.some(r => r.route.startsWith("/api") && r.rewrite)).toBe(false);
+  expect(
+    config.routes.some((r) => r.route.startsWith("/api") && r.rewrite),
+  ).toBe(false);
 });

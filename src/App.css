@@ -1,50 +1,278 @@
-body { background: black; color: #bfbfbf; font-size: 16px; line-height: 1.45; }
-* { box-sizing: border-box; }
-.pixel-background { position: fixed; inset: 0; background: black; z-index: 0; pointer-events: none; overflow: hidden; }
-.pixel-background span { position: absolute; width: 2px; height: 2px; background: white; }
-.sidebar { position: fixed; inset: 0 auto 0 0; width: 76px; background: black; color: white; border-right: 2px solid white; padding: 17px; z-index: 3; transition: width .3s ease; overflow-x: hidden; overflow-y: auto; }
-.sidebar.expanded { width: 240px; padding: 28px; }
-.menu-toggle { display: block; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.menu-toggle img { display: block; width: 40px; height: 40px; }
-.expanded .menu-toggle { margin: 0 auto 20px; }
-.expanded .menu-toggle img { width: 110px; height: auto; }
-.sidebar h2 { color: white; font-size: 24px; text-align: left; margin: 0 0 20px; }
-.sidebar nav { display: flex; flex-direction: column; gap: 10px; }
-.sidebar nav a { color: white; text-decoration: none; font-size: inherit; }
-.sidebar nav a.active { text-decoration: underline; }
-.social-links { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-.social-links a { font-size: inherit; }
-.sidebar-auth { margin-top: 28px; border-top: 1px solid #555; padding-top: 20px; overflow-wrap: anywhere; }
-.sidebar-auth h2 { margin-bottom: 12px; }
-.sidebar-auth p { font-size: 14px; }
-.sidebar-auth button { margin: 0 0 8px; width: 100%; }
-.site-shell main { position: relative; z-index: 1; margin-left: 76px; width: calc(100% - 76px); padding: 20px; transition: margin-left .3s ease, width .3s ease; min-height: 100vh; }
-.sidebar-open main { margin-left: 240px; width: calc(100% - 240px); }
-.skip-link { position: fixed; top: -100px; left: 86px; z-index: 5; background: black; padding: 10px; }
-.skip-link:focus { top: 10px; }
-:focus-visible { outline: 2px solid #2873bd; outline-offset: 4px; }
-main:focus { outline: none; }
-.page-heading { margin: 20px 0 30px; }
-.eyebrow { color: #bfbfbf; }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 20px; }
-.project-card, .tool-panel, .timer-panel { border: 1px solid #555; padding: 20px; background: #111; }
-.local-note, .footnote { font-size: 14px; line-height: 1.5; }
-.local-note { margin: 25px 0; }
-button, input, select { font: inherit; }
-button { cursor: pointer; padding: 8px 12px; background: #2873bd; color: white; border: 1px solid #777; }
-button:disabled { opacity: .5; cursor: default; }
-input, select { padding: 7px; color: #111; background: white; max-width: 100%; }
-.drawing-controls, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.drawing-controls label { display: flex; align-items: center; gap: 8px; }
-input[type=color] { width: 45px; height: 35px; padding: 2px; }
-canvas { display: block; background: white; width: 100%; height: auto; touch-action: none; }
-.timer-panel { max-width: 600px; margin: auto; text-align: center; }
-.timer-panel p { text-align: center; }
-.timer-display { font-size: clamp(42px,10vw,80px); color: white; font-variant-numeric: tabular-nums; }
-.timer-actions { justify-content: center; }
-.duration-form { margin-top: 20px; }
-.duration-form label { display: block; margin-bottom: 10px; }
-.duration-form input { width: 90px; margin-right: 10px; }
-@media (max-width: 768px) { .site-shell main { padding: 10px; } .sidebar-open main { margin-left: 76px; width: calc(100% - 76px); } .container { padding: 10px; margin-right: 0; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
-@media print { body { background: white; color: black; } .sidebar, .pixel-background, .skip-link { display: none; } .site-shell main { margin: 0; width: 100%; } .container { color: black; } a { color: black; } }
+body {
+  background: black;
+  color: #bfbfbf;
+  font-size: 16px;
+  line-height: 1.45;
+}
+* {
+  box-sizing: border-box;
+}
+.pixel-background {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.pixel-background span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+}
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 76px;
+  background: black;
+  color: white;
+  border-right: 2px solid white;
+  padding: 17px;
+  z-index: 3;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.sidebar.expanded {
+  width: 240px;
+  padding: 28px;
+}
+.menu-toggle {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.menu-toggle img {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.expanded .menu-toggle {
+  margin: 0 auto 20px;
+}
+.expanded .menu-toggle img {
+  width: 110px;
+  height: auto;
+}
+.sidebar h2 {
+  color: white;
+  font-size: 24px;
+  text-align: left;
+  margin: 0 0 20px;
+}
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sidebar nav a {
+  color: white;
+  text-decoration: none;
+  font-size: inherit;
+}
+.sidebar nav a.active {
+  text-decoration: underline;
+}
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.social-links a {
+  font-size: inherit;
+}
+.sidebar-auth {
+  margin-top: 28px;
+  border-top: 1px solid #555;
+  padding-top: 20px;
+  overflow-wrap: anywhere;
+}
+.sidebar-auth h2 {
+  margin-bottom: 12px;
+}
+.sidebar-auth p {
+  font-size: 14px;
+}
+.sidebar-auth button {
+  margin: 0 0 8px;
+  width: 100%;
+}
+.site-shell main {
+  position: relative;
+  z-index: 1;
+  margin-left: 76px;
+  width: calc(100% - 76px);
+  padding: 20px;
+  transition:
+    margin-left 0.3s ease,
+    width 0.3s ease;
+  min-height: 100vh;
+}
+.sidebar-open main {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 86px;
+  z-index: 5;
+  background: black;
+  padding: 10px;
+}
+.skip-link:focus {
+  top: 10px;
+}
+:focus-visible {
+  outline: 2px solid #2873bd;
+  outline-offset: 4px;
+}
+main:focus {
+  outline: none;
+}
+.page-heading {
+  margin: 20px 0 30px;
+}
+.eyebrow {
+  color: #bfbfbf;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+}
+.project-card,
+.tool-panel,
+.timer-panel {
+  border: 1px solid #555;
+  padding: 20px;
+  background: #111;
+}
+.local-note,
+.footnote {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.local-note {
+  margin: 25px 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  padding: 8px 12px;
+  background: #2873bd;
+  color: white;
+  border: 1px solid #777;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+input,
+select {
+  padding: 7px;
+  color: #111;
+  background: white;
+  max-width: 100%;
+}
+.drawing-controls,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.drawing-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+input[type="color"] {
+  width: 45px;
+  height: 35px;
+  padding: 2px;
+}
+canvas {
+  display: block;
+  background: white;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+}
+.timer-panel {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+.timer-panel p {
+  text-align: center;
+}
+.timer-display {
+  font-size: clamp(42px, 10vw, 80px);
+  color: white;
+  font-variant-numeric: tabular-nums;
+}
+.timer-actions {
+  justify-content: center;
+}
+.duration-form {
+  margin-top: 20px;
+}
+.duration-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+.duration-form input {
+  width: 90px;
+  margin-right: 10px;
+}
+@media (max-width: 768px) {
+  .site-shell main {
+    padding: 10px;
+  }
+  .sidebar-open main {
+    margin-left: 76px;
+    width: calc(100% - 76px);
+  }
+  .container {
+    padding: 10px;
+    margin-right: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .sidebar,
+  .pixel-background,
+  .skip-link {
+    display: none;
+  }
+  .site-shell main {
+    margin: 0;
+    width: 100%;
+  }
+  .container {
+    color: black;
+  }
+  a {
+    color: black;
+  }
+}

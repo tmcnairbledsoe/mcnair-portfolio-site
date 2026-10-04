@@ -1,4 +1,7 @@
-import { BrowserCacheLocation, PublicClientApplication } from "@azure/msal-browser";
+import {
+  BrowserCacheLocation,
+  PublicClientApplication,
+} from "@azure/msal-browser";
 
 export const loginRequest = { scopes: ["openid", "profile", "email"] };
 const guid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -19,7 +22,9 @@ export function getAuthConfig(
       navigateToLoginRequestUrl: false,
     },
     cache: { cacheLocation: BrowserCacheLocation.SessionStorage },
-    system: { loggerOptions: { loggerCallback: () => {}, piiLoggingEnabled: false } },
+    system: {
+      loggerOptions: { loggerCallback: () => {}, piiLoggingEnabled: false },
+    },
   };
 }
 
@@ -31,7 +36,10 @@ export function startAuthentication(config) {
       const instance = new PublicClientApplication(config);
       await instance.initialize();
       const response = await instance.handleRedirectPromise();
-      const account = response?.account || instance.getActiveAccount() || instance.getAllAccounts()[0];
+      const account =
+        response?.account ||
+        instance.getActiveAccount() ||
+        instance.getAllAccounts()[0];
       if (account) instance.setActiveAccount(account);
       return instance;
     })().catch((error) => {
@@ -42,10 +50,16 @@ export function startAuthentication(config) {
   return startup;
 }
 
-const roleLabels = { OwnerRole: "Owner", WifeRole: "Wife", FriendRole: "Friend" };
+const roleLabels = {
+  OwnerRole: "Owner",
+  WifeRole: "Wife",
+  FriendRole: "Friend",
+};
 export function recognizedRoles(account) {
   const roles = account?.idTokenClaims?.roles;
   return Array.isArray(roles)
-    ? Object.keys(roleLabels).filter((role) => roles.includes(role)).map((role) => roleLabels[role])
+    ? Object.keys(roleLabels)
+        .filter((role) => roles.includes(role))
+        .map((role) => roleLabels[role])
     : [];
 }

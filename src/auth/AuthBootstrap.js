@@ -19,14 +19,28 @@ export function AuthBootstrap({ children }) {
     }
     setState({ status: "starting" });
     startAuthentication(config).then(
-      (instance) => { if (current) setState({ status: "ready", instance }); },
-      () => { if (current) setState({ status: "failed" }); },
+      (instance) => {
+        if (current) setState({ status: "ready", instance });
+      },
+      () => {
+        if (current) setState({ status: "failed" });
+      },
     );
-    return () => { current = false; };
+    return () => {
+      current = false;
+    };
   }, [attempt]);
   return (
-    <AuthContext.Provider value={{ ...state, retry: () => setAttempt((value) => value + 1) }}>
-      {state.status === "ready" ? <MsalProvider instance={state.instance}><ContentSession>{children}</ContentSession></MsalProvider> : children}
+    <AuthContext.Provider
+      value={{ ...state, retry: () => setAttempt((value) => value + 1) }}
+    >
+      {state.status === "ready" ? (
+        <MsalProvider instance={state.instance}>
+          <ContentSession>{children}</ContentSession>
+        </MsalProvider>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 }

@@ -1,26 +1,26 @@
 .container {
-    padding: 20px;
-    color: #bfbfbf;
-    transition: margin-left 0.3s ease;
-    margin-right: 10px;
-  }
+  padding: 20px;
+  color: #bfbfbf;
+  transition: margin-left 0.3s ease;
+  margin-right: 10px;
+}
 
-  @media (min-width: 769px) {
-    .container {
-        margin-right: 30px;
-    }
+@media (min-width: 769px) {
+  .container {
+    margin-right: 30px;
   }
+}
 
-  h2 {
-    text-align: center;
-  }
+h2 {
+  text-align: center;
+}
 
-  p {
-    text-align: left;
-  }
+p {
+  text-align: left;
+}
 
-  a {
-    color: white;
-    text-decoration: underline;
-    font-size: 18px;
-  }
+a {
+  color: white;
+  text-decoration: underline;
+  font-size: 18px;
+}

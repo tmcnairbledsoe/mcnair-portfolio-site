@@ -107,7 +107,9 @@ test("exports a PNG locally and reports export failures", () => {
 test("reports unavailable canvas support without enabling drawing or export", () => {
   HTMLCanvasElement.prototype.getContext.mockReturnValue(null);
   setup();
-  expect(screen.getByRole("status")).toHaveTextContent("Drawing is unavailable");
+  expect(screen.getByRole("status")).toHaveTextContent(
+    "Drawing is unavailable",
+  );
   expect(screen.getByRole("button", { name: /Download PNG/ })).toBeDisabled();
   expect(screen.getByLabelText("Ink color")).toBeDisabled();
 });
