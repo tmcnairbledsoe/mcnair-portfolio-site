@@ -1,0 +1,42 @@
+.container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #bfbfbf;
+    transition: margin-left 0.3s ease;
+    margin-right: 10px;
+  }
+
+  @media (min-width: 769px) {
+    .container {
+        margin-right: 30px;
+    }
+  }
+
+  h1 {
+    text-align: center;
+    color: #2873bd;
+  }
+
+  h3 {
+    text-align: center;
+    color: #2873bd;
+  }
+
+  p {
+    text-align: left;
+  }
+
+  section h2 {
+    color: #2873bd;
+  }
+
+  section h3 {
+    text-align: left;
+    color: #bfbfbf;
+  }
+
+  a {
+    color: white;
+    text-decoration: underline;
+    font-size: 18px;
+  }
