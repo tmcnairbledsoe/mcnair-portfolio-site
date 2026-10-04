@@ -81,7 +81,7 @@ export function SharedCalendar({ session }) {
     }
   }, []);
   const load = useCallback(async () => {
-    if (!allowed) return;
+    if (!allowed || !session.ready) return;
     const sequence = ++loadSequence.current;
     setLoading(true);
     try {
@@ -96,7 +96,7 @@ export function SharedCalendar({ session }) {
     } finally {
       if (live.current && sequence === loadSequence.current) setLoading(false);
     }
-  }, [allowed, call, month, showError]);
+  }, [allowed, session.ready, call, month, showError]);
   useEffect(() => {
     load();
     const refresh = () => {
