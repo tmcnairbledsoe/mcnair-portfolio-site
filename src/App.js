@@ -31,7 +31,7 @@ function Tools() {
         title="A little space to make things."
       >
         Two simple tools for a creative pause or a focused session. No account
-        needed, and your work stays on your device.
+        needed. The sketchpad is shared with everyone; the timer stays on your device.
       </PageHeading>
       <div className="card-grid">
         <article className="project-card">
@@ -39,7 +39,7 @@ function Tools() {
           <h2>Sketchpad</h2>
           <p>
             Choose a color, draw with your mouse, pen, touch, or keyboard, and
-            download a PNG. Your drawing stays in this tab until you leave.
+            download a PNG. Marks save to a shared canvas and appear for other visitors as you draw.
           </p>
           <Link className="text-link" to="/drawing">
             Open sketchpad →
@@ -58,8 +58,7 @@ function Tools() {
         </article>
       </div>
       <div className="local-note">
-        Browser-local by design. Nothing you draw or time is sent to a server.
-        Reloading or leaving a tool resets it.
+        The shared sketchpad saves your marks online. The focus timer stays in this browser tab.
       </div>
     </>
   );

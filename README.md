@@ -1,6 +1,6 @@
 # Personal portfolio
 
-The existing JavaScript Create React App website, retaining its original black background, moving pixels, logo, sidebar, and public page layouts. Includes résumé, projects, a local drawing canvas, a focus timer, a public Blog, and a per-account Private Journal. Public pages require no sign-in. Microsoft Entra sign-in and sign-out are available in the expandable sidebar when configured.
+The existing JavaScript Create React App website, retaining its original black background, moving pixels, logo, sidebar, and public page layouts. Includes résumé, projects, a shared drawing canvas, a focus timer, a public Blog, and a per-account Private Journal. Public pages require no sign-in. Microsoft Entra sign-in and sign-out are available in the expandable sidebar when configured.
 
 The original wedding website is preserved as a public keepsake at `/weddingsite`, with its photos and layout. Any username can sign in and select a guest, wedding party, rehearsal, or brunch layout. Guest choices and RSVP responses stay in the current browser tab; no guest database is connected. Its source lives in `wedding-site`; the build combines both applications into one deployable artifact.
 
@@ -55,7 +55,7 @@ Do not commit account identifiers, DNS validation values, tokens, connection str
 
 ## Maintenance
 
-Public pages are in `src/components`; their original styles are retained. Sidebar and pixel animation are separate components; Entra initialization and sidebar controls are in `src/auth`. The drawing and timer tools keep state only for the current page visit. Downloads preserve drawings. Calendar, recovery, standalone login, and direct storage/database pages remain removed. Client navigation shows the existing not-found page on 404.
+Public pages are in `src/components`; their original styles are retained. Sidebar and pixel animation are separate components; Entra initialization and sidebar controls are in `src/auth`. The drawing canvas is public and persistent; the focus timer keeps state only for the current page visit. Downloads preserve drawings. Calendar, recovery, standalone login, and direct storage/database pages remain removed. Client navigation shows the existing not-found page on 404.
 
 Hosting routes and security headers are in `public/staticwebapp.config.json`. Add new public paths there as well as in React. Missing pages and assets return 404. Infrastructure is defined in `infra/main.bicep`; provisioning is optional after the site already exists.
 
@@ -128,3 +128,14 @@ Root and API have independent lockfiles. `npm ci` installs the portfolio and wed
 CI builds both static apps and packages the standalone API runtime source and lockfile in the same verified artifact. Deployment uses the prebuilt `build/` frontend with `skip_app_build: true`, `api_location: api`, and API build enabled so SWA installs the independent Node dependencies. `platform.apiRuntime` is `node:22`; the API `build` script uses its packaged validator if frontend source is absent. No `api/` route is rewritten to SPA HTML; Interests stays 404 and wedding CSP is unchanged. Deployment verification now includes a public blog API response and anonymous journal 401, without reading secret content. Configure the migration/appsettings before deploying; verification will fail if the public API is unavailable.
 
 The operator must still validate real Entra consent/role issuance, Supabase configuration/quotas, managed Functions packaging and end-to-end two-account isolation after applying and deploying. The local suite cannot prove those production settings. See [SWA build configuration](https://learn.microsoft.com/en-us/azure/static-web-apps/build-configuration), [SWA Node22 configuration](https://learn.microsoft.com/en-us/azure/static-web-apps/configuration), [Supabase RLS/service roles](https://supabase.com/docs/guides/database/postgres/row-level-security), [private Storage downloads](https://supabase.com/docs/reference/javascript/storage-from-download), and [Tiptap React installation](https://tiptap.dev/docs/editor/getting-started/install/react).
+
+
+## Shared drawing canvas
+
+`/drawing` and `/drawingpage` display one public canvas. Anyone can draw without signing in. Apply `supabase/migrations/002_shared_drawing.sql` to the existing Free project. The backend stores vector strokes in Postgres; no extra service, browser database credentials, or paid plan is needed. RLS and revoked client grants keep the database backend-only.
+
+`GET /api/drawing?after=<revision>&generation=<uuid>` fetches up to 50 changed strokes; the browser follows pages and checks for changes about once a second while the drawing page is visible. Updates stop when it is hidden or unmounted and catch up on return. Movement is batched into writes roughly twice a second, so other visitors usually see marks within about 1–2 seconds plus network latency. This is polling, not a guaranteed real-time delivery service.
+
+`POST /api/drawing` saves an idempotent versioned stroke or undo. A random browser capability is hashed on the server and never included in public results. It allows undoing only that browser’s marks; it is not an account login. Unsaved marks and that capability are kept locally for retry when this page is reopened. Failed writes are reported instead of claimed as saved. Stroke UUIDs and monotonic versions prevent duplicate retries and overwrite races; database writes are serialized to produce reliable change cursors. Clearing creates a new generation so delayed writes cannot restore old marks. `DELETE /api/drawing` requires verified OwnerRole and a current generation; the UI asks before permanently clearing everyone’s canvas.
+
+The public board accepts only bounded vector points, hex colors, and supported brush sizes. It is capped at 2,000 strokes including undo tombstones, 1,024 points per stroke, 80 KB per write, and 200 writes per 10-second database window. At the cap, marks are retained and writes stop until the Owner clears the board. Anonymous drawing can still be abused; these are storage and write-rate limits, not comprehensive anti-spam protection. This canvas is separate from blog/journal tables and private images.

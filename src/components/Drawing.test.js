@@ -2,6 +2,12 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Drawing from "./Drawing";
+jest.mock('../drawing/useSharedDrawing',()=>({useSharedDrawing:()=>{
+ const React=require('react');
+ const [strokes,setStrokes]=React.useState([]);
+ return {ready:true,pending:0,generation:'test',message:'Shared canvas up to date.',strokes,
+ save:(stroke,deleted=false)=>setStrokes(previous=>[...previous.filter(p=>p.id!==stroke.id),...(deleted?[]:[{id:stroke.id,stroke,mine:true}])])};
+}}));
 
 const context = {
   fillRect: jest.fn(),
@@ -15,6 +21,8 @@ const context = {
 let capture;
 beforeEach(() => {
   jest.clearAllMocks();
+  let id=0;
+  global.crypto={randomUUID:()=>`stroke-${++id}`};
   jest
     .spyOn(HTMLCanvasElement.prototype, "getContext")
     .mockReturnValue(context);
@@ -44,9 +52,9 @@ function setup() {
   });
   return canvas;
 }
-test("pointer strokes scale to canvas coordinates, and undo and clear remove work", () => {
+test("pointer strokes scale to canvas coordinates and undo removes your own work", () => {
   const canvas = setup();
-  expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Undo my last mark" })).toBeDisabled();
   fireEvent.change(screen.getByLabelText("Ink color"), {
     target: { value: "#ff0000" },
   });
@@ -61,25 +69,23 @@ test("pointer strokes scale to canvas coordinates, and undo and clear remove wor
   expect(context.strokeStyle).toBe("#ff0000");
   expect(context.lineWidth).toBe(10);
   expect(capture).toBe(false);
-  expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
-  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-  expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Undo my last mark" })).toBeEnabled();
+  fireEvent.click(screen.getByRole("button", { name: "Undo my last mark" }));
+  expect(screen.getByRole("button", { name: "Undo my last mark" })).toBeDisabled();
   fireEvent.pointerDown(canvas, { clientX: 30, clientY: 20 });
   fireEvent.pointerCancel(canvas);
   expect(context.arc).toHaveBeenCalledWith(20, 20, 5, 0, Math.PI * 2);
-  fireEvent.click(screen.getByRole("button", { name: "Clear canvas" }));
-  expect(screen.getByRole("button", { name: "Clear canvas" })).toBeDisabled();
-  expect(screen.getByRole("status")).toHaveTextContent("Canvas cleared");
+  expect(screen.queryByRole("button", { name: "Clear canvas" })).not.toBeInTheDocument();
 });
 test("keyboard drawing is usable without a pointer", () => {
   const canvas = setup();
   fireEvent.keyDown(canvas, { key: "ArrowRight" });
-  expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Undo my last mark" })).toBeDisabled();
   fireEvent.keyDown(canvas, { key: "ArrowDown", shiftKey: true });
   expect(context.moveTo).toHaveBeenCalledWith(510, 300);
   expect(context.lineTo).toHaveBeenCalledWith(510, 310);
   expect(screen.getByRole("status")).toHaveTextContent("Line drawn");
-  expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
+  expect(screen.getByRole("button", { name: "Undo my last mark" })).toBeEnabled();
 });
 test("exports a PNG locally and reports export failures", () => {
   setup();
