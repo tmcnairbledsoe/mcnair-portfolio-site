@@ -28,8 +28,9 @@ function fixture() {
   const mock = mockSupabase(); const store = createStore(mock.client, 'portfolio-images');
   const service = createService({ authenticate: verify, getStore: () => store });
   async function call(path, { bearer, method = 'GET', body, match, type } = {}) {
-    const headers = {};
-    if (bearer !== undefined) headers.Authorization = bearer.startsWith('Bearer ') ? bearer : `Bearer ${bearer}`;
+    // Azure's managed proxy owns Authorization, even for anonymous visitors.
+    const headers = { Authorization: 'Bearer Azure-platform-routing-token' };
+    if (bearer !== undefined) headers['X-Portfolio-Authorization'] = bearer.startsWith('Bearer ') ? bearer : `Bearer ${bearer}`;
     if (match !== undefined) headers['If-Match'] = match;
     if (type) headers['Content-Type'] = type;
     return service(new Request(`https://site.example/api/${path}`, { method, headers, ...(body === undefined ? {} : { body: Buffer.isBuffer(body) ? body : JSON.stringify(body) }) }));
