@@ -55,7 +55,7 @@ Do not commit account identifiers, DNS validation values, tokens, connection str
 
 ## Maintenance
 
-Public pages are in `src/components`; their original styles are retained. Sidebar and pixel animation are separate components; Entra initialization and sidebar controls are in `src/auth`. The drawing and timer tools keep state only for the current page visit. Downloads preserve drawings. Calendar, recovery, standalone login, and direct storage/database pages remain removed. Interests and its exclusive stylesheet were removed; `/interests` and `/interests/` return hosting 404 and client navigation shows the existing not-found page.
+Public pages are in `src/components`; their original styles are retained. Sidebar and pixel animation are separate components; Entra initialization and sidebar controls are in `src/auth`. The drawing and timer tools keep state only for the current page visit. Downloads preserve drawings. Calendar, recovery, standalone login, and direct storage/database pages remain removed. Client navigation shows the existing not-found page on 404.
 
 Hosting routes and security headers are in `public/staticwebapp.config.json`. Add new public paths there as well as in React. Missing pages and assets return 404. Infrastructure is defined in `infra/main.bicep`; provisioning is optional after the site already exists.
 
