@@ -8,23 +8,29 @@ const Projects = () => {
       <p>
         Anything I make is usually open for anyone to view on my GitHub. Private hubs i am currently updating to use
         secrets to store private information before I make them public. 
+        <br></br>
         <a href="https://github.com/tmcnairbledsoe" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
       <h2>Websites</h2>
       <p>
         Check out my wife's site I made in React featuring her art work: <a href="https://clt-art.com/" target="_blank" rel="noopener noreferrer">clt-art.com/</a>
+        <br></br>
+        My wedding website was one that I made for our guests to give and recieve information such as RSVP, song requests during reception, 
+        and information on Greenville: 
+        <br></br>
+        <a href="/weddingsite" target="_blank" rel="noopener noreferrer">Wedding Page</a>
       </p>
       <p>
-        My wedding website was one that I made for our guests to give and recieve information such as RSVP, song requests during reception, 
-        and information on Greenville: <a href="/weddingsite" target="_blank" rel="noopener noreferrer">Wedding Page</a>
         The githup repo is <a href="https://github.com/tmcnairbledsoe/clttmbwedding" target="_blank" rel="noopener noreferrer">clttmbwedding</a>.
+        <br></br>
         It uses firebase as a backend which is free and pretty handy. It also uses Google API to interact with its maps. Its a create react app.
       </p>
       <h2>Data Science</h2>
       <p>
          I am updating my old data science projects and scripts to be deployed and active. One example that is fun is a chess
          playing model that uses neural nets to make moves based on my past games. Essentially you are playing against me. 
-        Once I get the ui made and handle the mid game training I'll host it here. The github is: 
+         Once I get the ui made and handle the mid game training I'll host it here. The github is: 
+         <br></br>
          <a href="https://github.com/tmcnairbledsoe/chessModels" target="_blank" rel="noopener noreferrer">Chess Model Repo.</a>
       </p>
       <h2>Revit Add-in</h2>
@@ -32,6 +38,7 @@ const Projects = () => {
         I am working on a Revit Addin pattern manager. It previews all fill patterns. Metric, Empirical, Model, Drafting, etc.
         It draws out the pattern for a viewer So it can actually be seen. You can create a pattern in drafting view and then 
         save it as a pattern in the format you need it to be in, model, in inches, etc. It can save, import, export, etc:
+        <br></br>
         <a href="https://github.com/tmcnairbledsoe/McNairAddin" target="_blank" rel="noopener noreferrer">McNair's Add-in</a>
       </p>
       
@@ -51,6 +58,17 @@ const Projects = () => {
         and learn to harness. It's too powerful not too. The edge is too great and no one can compete against someone who uses this technology 
         properly.
       </p>
+      <p>
+        For now, here's some stuff that could be useful to someone interested in basics of data science, but its uncurated mess. More will be placed in the Blog or 
+        here when updated.
+      </p>
+        <br></br>
+        <a href="https://github.com/tmcnairbledsoe/stockPredictor" target="_blank" rel="noopener noreferrer">Stock trader using a nueral network predictor</a>
+        <br></br>
+        <a href="https://github.com/tmcnairbledsoe/BayesianModels" target="_blank" rel="noopener noreferrer">Bayesian Model</a>
+        <br></br>
+        <a href="https://github.com/tmcnairbledsoe/Code-Snippets/tree/main" target="_blank" rel="noopener noreferrer">Code Snippets (data science tools in Python)</a>
+        
     </div>
   );
 };
