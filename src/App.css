@@ -116,6 +116,21 @@ body {
   margin-left: 240px;
   width: calc(100% - 240px);
 }
+.site-shell main,
+.site-shell main :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, label, input, textarea, select, button) {
+  text-align: center;
+}
+.site-shell main ul,
+.site-shell main ol {
+  list-style-position: inside;
+  padding-inline: 0;
+}
+.site-shell main > .container {
+  margin-inline: 0;
+}
+.site-shell main > :where(.content-page, .shared-calendar) {
+  margin-inline: auto;
+}
 .skip-link {
   position: fixed;
   top: -100px;
