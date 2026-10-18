@@ -51,6 +51,7 @@ export default function Sidebar({ expanded, setExpanded }) {
             </NavLink>
           )}
           {calendarAllowed && <NavLink to="/calendar" onClick={closeOnMobile}>Calendar</NavLink>}
+          {journalAllowed && <NavLink to="/mcp" onClick={closeOnMobile}>MCP connections</NavLink>}
           <NavLink to="/drawing" onClick={closeOnMobile}>
             Drawing Page
           </NavLink>

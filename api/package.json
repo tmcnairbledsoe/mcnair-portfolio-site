@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@azure/functions": "^4.7.2",
+    "@modelcontextprotocol/sdk": "1.32.1",
     "@supabase/supabase-js": "^2.57.4",
     "jose": "^6.1.0",
     "sharp": "^0.35.5"

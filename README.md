@@ -45,7 +45,21 @@ Portfolio CSP allows connections and frames only to the tenant login origin `htt
 
 **Frontend role display is not backend authorization.** The content API verifies scoped Entra access tokens. Blog editor capability comes from the API response, never the sidebar’s ID-token role display. ID tokens are rejected by the API.
 
-## Delivery
+## Private MCP connection
+
+`/mcp` provides a connection guide visible to signed-in Owner, Wife, and Friend accounts. The sidebar link uses the same role gate. `https://mcnairscode.com/api/mcp` is an authenticated MCP Streamable HTTP endpoint on the existing managed Azure Functions backend; no additional hosting resource, database migration, or server setting is required. Every request independently verifies the existing Microsoft Entra API access token and its OwnerRole, WifeRole, or FriendRole claim. The server currently advertises an empty tools capability: initialization, initialized notifications, ping, and `tools/list` work; no tool calls, resources, prompts, journal content, or calendar content are exposed through MCP.
+
+Sign in, open MCP connections, and choose **Check connection & get token**. The page verifies initialization and tool discovery before offering the token. Copy it into a trusted client's private configuration as custom header `X-Portfolio-Authorization: Bearer <YOUR_ACCESS_TOKEN>`. The endpoint uses this header because Azure SWA owns the standard Authorization header. Clients must support custom headers and Streamable HTTP. This is manual token configuration, not MCP OAuth discovery or automatic agent token renewal; OAuth-only clients are not supported. The page includes a common `mcpServers` JSON example, with a placeholder rather than an embedded token.
+
+Tokens retain their Entra expiry and roles. They also authorize the user's existing website APIs, so share them only with trusted agents; this version does not mint narrower MCP-only personal tokens. Obtain a current token from the page when needed. Removing an Entra role takes effect when newly issued tokens reflect that change; signing out or clearing the page does not revoke a previously copied token before expiry. Credentials are hidden by default, revealed/copied only on request, cleared from page state on expiry/account change/unmount, and never stored by this page in localStorage, URLs, or logs. MSAL retains its existing sessionStorage cache. The page is an explicit exception to the sidebar's rule against displaying access tokens.
+
+The server uses the official MCP TypeScript SDK with a fresh stateless server/transport for every request, bounded 16 KiB bodies, JSON replies and no-store headers. GET/DELETE return 405 after authentication because standalone SSE and server sessions are not offered. Only the production apex/www browser Origins are allowed; native agents may omit Origin. There is no cross-origin browser access or CORS widening. For local browser testing, add an explicitly reviewed development Origin rather than allowing arbitrary origins. Future tools must use the verified server-side account identity and apply their own authorization; client-supplied account IDs must never select another user's data.
+
+Tests use locally signed Microsoft-shaped JWTs and an official MCP client through the actual Azure HttpRequest adapter. Deployment verification checks the `/mcp` route and anonymous GET/POST denial. A real eligible Microsoft account must additionally use the page's connection check to confirm production token issuance and authenticated behavior.
+
+Protocol reference: [MCP Streamable HTTP](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
+
+## Delivery pipeline
 
 Commits to `main` automatically install dependencies, test, build, deploy, and verify the resulting website. Pull requests validate without deploying. Deployment credentials and the verification target are configured in GitHub Actions Secrets, outside the repository. GitHub masks their values in workflow logs.
 

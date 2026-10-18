@@ -4,6 +4,7 @@ const { createVerifier, HttpError } = require('./auth');
 const { createStore } = require('./store');
 const { createService } = require('./service');
 const { createDrawingService } = require('./drawing');
+const { createMcpService } = require('./mcp');
 const { createCalendarService, createReminderService, createSenderReadiness } = require('./calendar');
 let verifier, store, client;
 const authenticate = header => {
@@ -32,12 +33,14 @@ const handler = createService({
   },
 });
 const drawingHandler = createDrawingService({ authenticate, getClient });
+const mcpHandler = createMcpService({ authenticate });
 const emailReady = createSenderReadiness({});
 const calendarHandler = createCalendarService({ authenticate, getClient, emailReady });
 const reminderHandler = createReminderService({ getClient, emailReady });
 app.setup({ enableHttpStream: true });
 app.http('content', { methods: ['GET', 'POST', 'PUT', 'DELETE'], authLevel: 'anonymous', route: '{*path}', handler: request => {
   const path = new URL(request.url).pathname;
+  if (path === '/api/mcp') return mcpHandler(request);
   if (path === '/api/calendar-reminders' && request.method === 'POST') return reminderHandler(request);
   if (path.startsWith('/api/calendar')) return calendarHandler(request);
   return path.startsWith('/api/drawing') ? drawingHandler(request) : handler(request);

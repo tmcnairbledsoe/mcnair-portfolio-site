@@ -12,8 +12,10 @@ import PixelDrop from "./components/PixelDrop";
 
 import ContentPage from "./content/ContentPage";
 import Calendar from "./calendar/Calendar";
+import McpPage from "./mcp/McpPage";
 
 const titles = {
+  "/mcp": "MCP connections",
   "/calendar": "Shared Calendar",
   "/blog": "Blog",
   "/journal": "Private Journal",
@@ -111,6 +113,7 @@ export default function App() {
           <Route path="/blog/:id" element={<ContentPage kind="blog" />} />
           <Route path="/journal" element={<ContentPage kind="journal" />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/mcp" element={<McpPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

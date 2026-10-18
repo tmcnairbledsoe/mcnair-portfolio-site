@@ -1,0 +1,10 @@
+.mcp-page { max-width: 900px; margin: 0 auto; }
+.mcp-page .project-card { margin: 1.5rem 0; }
+.mcp-page .button { margin: .4rem .6rem .4rem 0; min-height: 48px; }
+.mcp-page pre { text-align: left; overflow-x: auto; padding: 1.2rem; background: #111; border: 1px solid #444; border-radius: 12px; }
+.mcp-page code { overflow-wrap: anywhere; }
+.mcp-page pre code { overflow-wrap: normal; }
+.mcp-status { border: 1px solid #555; padding: 1rem; border-radius: 12px; }
+.mcp-token { border-top: 1px solid #555; margin-top: 1rem; padding-top: 1rem; }
+.mcp-token label { display: block; margin-top: 1rem; }
+.mcp-token textarea { width: 100%; min-height: 8rem; box-sizing: border-box; color: inherit; background: #111; border: 1px solid #888; padding: .8rem; resize: vertical; font-size: 1rem; }

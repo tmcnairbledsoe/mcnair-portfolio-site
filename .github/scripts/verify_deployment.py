@@ -53,7 +53,7 @@ for asset in assets.paths:
     assert urlparse(asset_url).netloc == urlparse(base).netloc, "Unexpected external bundle"
     content, _ = read(asset_url)
     assert content, "Empty application asset"
-for route in ("/resume", "/projects", "/tools", "/drawing", "/focus", "/blog", "/journal", "/calendar"):
+for route in ("/resume", "/projects", "/tools", "/drawing", "/focus", "/blog", "/journal", "/calendar", "/mcp"):
     content, _ = read(base + route)
     assert b'<div id="root"' in content, "Missing SPA route: " + route
 wedding, wedding_headers = read(base + "/weddingsite")
@@ -96,3 +96,11 @@ except HTTPError as error:
 else:
     raise AssertionError("Anonymous calendar unexpectedly accessible")
 print("Verified unauthorized calendar protection")
+for method in ("GET", "POST"):
+    try:
+        with urlopen(Request(base + "/api/mcp", method=method), timeout=20):
+            raise AssertionError("Anonymous MCP unexpectedly accessible")
+    except HTTPError as error:
+        assert error.code == 401, "Anonymous MCP must return 401"
+        assert error.headers.get("Cache-Control") == "no-store", "MCP error may be cached"
+print("Verified unauthorized MCP protection")
