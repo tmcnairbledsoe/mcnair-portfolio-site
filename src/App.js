@@ -13,9 +13,11 @@ import PixelDrop from "./components/PixelDrop";
 import ContentPage from "./content/ContentPage";
 import Calendar from "./calendar/Calendar";
 import McpPage from "./mcp/McpPage";
+import InfinityChat from "./infinity/InfinityChat";
 
 const titles = {
   "/mcp": "MCP connections",
+  "/infinity": "Commander",
   "/calendar": "Shared Calendar",
   "/blog": "Blog",
   "/journal": "Private Journal",
@@ -114,6 +116,7 @@ export default function App() {
           <Route path="/journal" element={<ContentPage kind="journal" />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/mcp" element={<McpPage />} />
+          <Route path="/infinity" element={<InfinityChat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

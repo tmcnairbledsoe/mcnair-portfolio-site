@@ -30,3 +30,14 @@ test('Calendar navigation is available to Owner/Wife and hidden for Friend or no
   expect(screen.getByRole('link',{name:'Calendar'})).toBeInTheDocument();
  }
 });
+test('Commander navigation exists only for the Owner role',()=>{
+ const view=()=> <MemoryRouter><Sidebar expanded setExpanded={jest.fn()}/></MemoryRouter>;
+ for(const account of [null,{idTokenClaims:{roles:['WifeRole']}},{idTokenClaims:{roles:['FriendRole']}},{idTokenClaims:{roles:[]}}]) {
+  useContentSession.mockReturnValue({account,journalAllowed:Boolean(account)});
+  render(view());
+  expect(screen.queryByRole('link',{name:'Commander'})).not.toBeInTheDocument();
+ }
+ useContentSession.mockReturnValue({account:{idTokenClaims:{roles:['OwnerRole']}},journalAllowed:true});
+ render(view());
+ expect(screen.getByRole('link',{name:'Commander'})).toHaveAttribute('href','/infinity');
+});

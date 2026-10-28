@@ -15,6 +15,7 @@ const links = [
 export default function Sidebar({ expanded, setExpanded }) {
   const { journalAllowed, account } = useContentSession();
   const calendarAllowed = recognizedRoles(account).some(role=>role==='Owner'||role==='Wife');
+  const ownerRole = recognizedRoles(account).some(role=>role==='Owner');
   const closeOnMobile = () => {
     if (window.innerWidth <= 768) setExpanded(false);
   };
@@ -52,6 +53,7 @@ export default function Sidebar({ expanded, setExpanded }) {
           )}
           {calendarAllowed && <NavLink to="/calendar" onClick={closeOnMobile}>Calendar</NavLink>}
           {journalAllowed && <NavLink to="/mcp" onClick={closeOnMobile}>MCP connections</NavLink>}
+          {ownerRole && <NavLink to="/infinity" onClick={closeOnMobile}>Commander</NavLink>}
           <NavLink to="/drawing" onClick={closeOnMobile}>
             Drawing Page
           </NavLink>

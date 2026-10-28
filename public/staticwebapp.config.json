@@ -5,6 +5,10 @@
       "rewrite": "/index.html"
     },
     {
+      "route": "/infinity",
+      "rewrite": "/index.html"
+    },
+    {
       "route": "/",
       "rewrite": "/index.html"
     },

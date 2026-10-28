@@ -15,6 +15,7 @@ test("Azure serves only known app routes, leaving unknown addresses and assets a
     "/journal",
     "/calendar",
     "/mcp",
+    "/infinity",
   ]) {
     expect(config.routes.find((route) => route.route === path)?.rewrite).toBe(
       "/index.html",

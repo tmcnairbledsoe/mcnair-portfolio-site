@@ -59,6 +59,18 @@ Tests use locally signed Microsoft-shaped JWTs and an official MCP client throug
 
 Protocol reference: [MCP Streamable HTTP](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
 
+## Commander on the website
+
+`/infinity` is an Owner-only chat with the personal Commander running on the owner's home PC. The sidebar link and the page appear only for an account whose Entra access token carries `OwnerRole`; Wife, Friend, and no-role accounts get a neutral "available only to the Owner account" page, and the API refuses them with 403. The browser sends the same `X-Portfolio-Authorization` access token used by the rest of the site, never the SWA routing header.
+
+The home PC never accepts inbound traffic. Infinity polls `GET /api/infinity/relay/inbox` on a timer and posts each answer to `/api/infinity/relay/reply`, authenticated by `INFINITY_RELAY_SECRET` in the Functions application settings. Relay requests carrying an `Origin` header are rejected, the secret is compared in constant time, and both endpoints are stateless. Set only `INFINITY_RELAY_SECRET` here; the matching URL and secret live in the home PC's environment and never in this repository.
+
+Prompts and replies are stored in `infinity_messages`; `infinity_relay` records the last successful contact so the page can say whether the home PC is online. Both tables are created by `supabase/migrations/005_infinity_commander.sql`, use `service_role` only, and have RLS enabled with no client policies. Sends carry a client-generated id, and replies are unique per prompt, so a retried browser send or relay delivery cannot duplicate a turn. Existing content tables are untouched.
+
+Limits: text only, one owner, no attachments, and Questions & Approvals must still be answered in the desktop app. Long work shows as "working" until Commander writes its answer.
+
+Tests cover the Owner gate, owner isolation, relay authentication and browser rejection, duplicate-send and duplicate-reply idempotency, size limits, and safe errors through the actual Azure `HttpRequest` adapter. A production round trip additionally needs the migration, the application setting, and the home relay configured; those are operator steps, not proven by local tests.
+
 ## Delivery pipeline
 
 Commits to `main` automatically install dependencies, test, build, deploy, and verify the resulting website. Pull requests validate without deploying. Deployment credentials and the verification target are configured in GitHub Actions Secrets, outside the repository. GitHub masks their values in workflow logs.
